@@ -42,7 +42,7 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    // Cant use `vite-plugin-webfont-dl` because of missing `transformIndexHtml` hook in Nuxt/Nitro
+    '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     '@nuxtjs/fontaine',
     '@nuxtjs/i18n',
@@ -53,6 +53,11 @@ export default defineNuxtConfig({
       nuxtLink: {
         trailingSlash: 'remove'
       }
+    }
+  },
+  eslint: {
+    config: {
+      stylistic: true
     }
   },
   devtools: { enabled: true },

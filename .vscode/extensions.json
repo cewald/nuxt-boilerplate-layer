@@ -3,8 +3,8 @@
     "bradlc.vscode-tailwindcss",
     "csstools.postcss",
     "dbaeumer.vscode-eslint",
-    "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
-    "tamasfe.even-better-toml"
+    "tamasfe.even-better-toml",
+    "vue.volar",
+    "wix.vscode-import-cost"
   ]
 }
