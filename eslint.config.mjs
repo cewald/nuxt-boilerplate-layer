@@ -26,7 +26,7 @@ export default withNuxt([
       '@stylistic/eol-last': [ 'error', 'always' ],
       '@stylistic/no-trailing-spaces': [ 'error' ],
       '@stylistic/brace-style': [ 'error', '1tbs', { allowSingleLine: true } ],
-      '@stylistic/array-bracket-spacing': [ 'error', 'always', { arraysInArrays: true, objectsInArrays: true } ],
+      '@stylistic/array-bracket-spacing': [ 'error', 'always' ],
     },
   },
 ])
