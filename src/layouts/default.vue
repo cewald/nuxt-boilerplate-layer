@@ -1,8 +1,7 @@
 <script setup lang="ts">
-
 const head = useLocaleHead({
   addDirAttribute: true,
-  addSeoAttributes: true
+  addSeoAttributes: true,
 })
 
 useHead({
@@ -19,8 +18,8 @@ useHead({
     return titleChunk ? `${titleChunk} @ ${suffix}` : suffix
   },
   meta: [
-    { name: 'description', content: 'In iaculis eget risus non hendrerit.' }
-  ]
+    { name: 'description', content: 'In iaculis eget risus non hendrerit.' },
+  ],
 })
 </script>
 

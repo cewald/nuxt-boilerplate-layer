@@ -14,8 +14,8 @@ export default defineNuxtConfig({
       { code: 'de', iso: 'de-DE', name: 'German', file: 'de-DE.json' },
     ],
     bundle: {
-      fullInstall: false
-    }
+      fullInstall: false,
+    },
   },
   googleFonts: {
     families: {
@@ -27,12 +27,12 @@ export default defineNuxtConfig({
         ital: [300, 400],
       },
     },
-    download: true
+    download: true,
   },
   vite: {
     plugins: [
       svgLoader(),
-    ]
+    ],
   },
   css: ['@/styles/main.scss'],
   postcss: {
@@ -51,18 +51,18 @@ export default defineNuxtConfig({
   experimental: {
     defaults: {
       nuxtLink: {
-        trailingSlash: 'remove'
-      }
-    }
+        trailingSlash: 'remove',
+      },
+    },
   },
   eslint: {
     config: {
-      stylistic: true
-    }
+      stylistic: true,
+    },
   },
   devtools: { enabled: true },
   devServer: {
     /** @see https://github.com/nuxt/cli/issues/181 */
-    host: '0.0.0.0'
-  }
+    host: '0.0.0.0',
+  },
 })

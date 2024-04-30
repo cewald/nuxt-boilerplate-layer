@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const err = useError() as any
+const err = useError() as unknown as Record<string, unknown>
 </script>
 
 <template>

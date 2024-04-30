@@ -7,7 +7,7 @@ export default defineNuxtModule({
   },
   defaults: {
     src: 'https://dummyjson.com/quotes',
-    urlKey: 'id'
+    urlKey: 'id',
   },
   async setup({ src, urlKey }) {
     const routes = await fetch(src)
@@ -16,12 +16,12 @@ export default defineNuxtModule({
           quotes: { quote: string, author: string, id: number }[]
         } = await v.json()
         if (!resp.quotes) return []
-        return resp.quotes.map(q => `/${q[urlKey as 'id']}`).slice(0,9)
+        return resp.quotes.map(q => `/${q[urlKey as 'id']}`).slice(0, 9)
       }).catch(e => {
         console.error(e)
         return []
       })
 
     addPrerenderRoutes(routes as string[])
-  }
+  },
 })

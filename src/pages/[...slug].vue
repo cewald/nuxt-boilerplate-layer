@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useQuotesStore } from '@/stores/quotes'
+
 const route = useRoute()
 const { t } = useI18n()
 const { fetchQuote } = useQuotesStore()
@@ -16,14 +17,14 @@ if (!quote) {
 useHead({
   title: quote?.author || 'Unknown',
   meta: [
-    { name: 'description', content: quote?.quote }
-  ]
+    { name: 'description', content: quote?.quote },
+  ],
 })
 
 definePageMeta({
   validate: async route => {
     return /^\d+$/.test(route.params.slug[0])
-  }
+  },
 })
 </script>
 
