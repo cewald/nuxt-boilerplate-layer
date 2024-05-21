@@ -11,7 +11,7 @@ const randomQuotePath = () => {
 <template>
   <nav class="flex items-center gap-4 font-mono text-xs uppercase">
     <NuxtLink :to="localePath('/')">
-      <HomeIcon class="mb-1 h-6 w-6" />
+      <HomeIcon class="mb-1 size-6" />
       <span class="sr-only">{{ $t('Home') }}</span>
     </NuxtLink>
     <NuxtLink
