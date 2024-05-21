@@ -1,18 +1,18 @@
 // @ts-check
 import stylistic from '@stylistic/eslint-plugin'
+// @ts-expect-error
+import pluginTailwindCSS from 'eslint-plugin-tailwindcss'
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-// import pluginTailwindCSS from 'eslint-plugin-tailwindcss'
-
 export default withNuxt([
-  // {
-  //   /**
-  //    * `eslint-plugin-tailwindcss` is not ported to the new eslint flat config syntax yet.
-  //    * @see https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/335
-  //    */
-  //   plugins: { 'tailwindcss': pluginTailwindCSS },
-  //   rules: pluginTailwindCSS.configs.recommended.rules
-  // },
+  /**
+   * `eslint-plugin-tailwindcss` is not ported to the new eslint flat config syntax yet.
+   * @see https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/335
+   */
+  {
+    plugins: { tailwindcss: pluginTailwindCSS },
+    rules: pluginTailwindCSS.configs.recommended.rules,
+  },
   {
     // @ts-expect-error
     plugins: { '@stylistic': stylistic },
