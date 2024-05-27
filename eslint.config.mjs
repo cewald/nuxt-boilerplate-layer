@@ -1,20 +1,10 @@
-// @ts-check
 import stylistic from '@stylistic/eslint-plugin'
-// @ts-expect-error
 import pluginTailwindCSS from 'eslint-plugin-tailwindcss'
 import withNuxt from './.nuxt/eslint.config.mjs'
 
 export default withNuxt([
-  /**
-   * `eslint-plugin-tailwindcss` is not ported to the new eslint flat config syntax yet.
-   * @see https://github.com/francoismassart/eslint-plugin-tailwindcss/issues/335
-   */
+  ...pluginTailwindCSS.configs['flat/recommended'],
   {
-    plugins: { tailwindcss: pluginTailwindCSS },
-    rules: pluginTailwindCSS.configs.recommended.rules,
-  },
-  {
-    // @ts-expect-error
     plugins: { '@stylistic': stylistic },
     rules: {
       '@stylistic/semi': [ 2, 'never' ],
