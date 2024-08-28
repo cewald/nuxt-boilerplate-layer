@@ -9,7 +9,7 @@ export const useQuotesStore = defineStore('quotes', () => {
 
     return await useFetch<Quote>(
       `https://dummyjson.com/quotes/${id}`,
-      { pick: [ 'quote', 'author', 'id' ] },
+      { pick: [ 'quote', 'author', 'id' ] }
     ).then(quote => {
       if (!quote.error.value && quote.data.value) {
         quotes.value.push(quote.data.value)
