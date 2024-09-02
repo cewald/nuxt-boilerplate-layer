@@ -4,16 +4,17 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "tuesday"
     groups:
       production-dependencies:
         dependency-type: "production"
       development-dependencies:
         dependency-type: "development"
     pull-request-branch-name:
-      separator: "/"
+      separator: "-"
     commit-message:
       prefix: fix
-      prefix-development: chore
+      prefix-development: fix
       include: scope
     reviewers:
       - cewald
