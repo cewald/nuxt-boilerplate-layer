@@ -5,6 +5,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "tuesday"
+      time: "08:00"
     groups:
       production-dependencies:
         dependency-type: "production"
