@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@cewald/eslint-config": "^1.1.2",
+    "@cewald/nuxt-boilerplate-module": "file:../nuxt-boilerplate-module",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@nuxt/devtools": "^1.6.0",
@@ -23,6 +24,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "npm:@nuxtjs/i18n-edge@8.0.0-rc.6-28359903.bcd6198",
     "@pinia/nuxt": "^0.5.5",
+    "@vueuse/core": "^11.1.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.13.0",
     "husky": "^9.1.6",

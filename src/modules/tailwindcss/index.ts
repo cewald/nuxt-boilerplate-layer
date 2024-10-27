@@ -1,9 +1,6 @@
-import { addImports, defineNuxtModule } from '@nuxt/kit'
-
+import { defineNuxtModule, createResolver } from '@nuxt/kit'
+import type { Config } from 'tailwindcss'
 import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config.js'
-
-const fullConfig = resolveConfig(tailwindConfig)
 
 /**
  * Export tailwind configs to appConfig to be able to read TailwindCSS variables as screen sizes
@@ -16,14 +13,16 @@ export default defineNuxtModule({
     configKey: 'tailwindCSSCustom',
   },
   async setup(o, nuxt) {
-    Object.assign(nuxt.options.appConfig, {
-      screens: fullConfig.theme.screens,
-    })
+    const { resolve } = createResolver(import.meta.url)
+    const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
+    const twConfig: Config = await import(twConfigPath)
+      .then(m => m.default).catch(() => {
+        throw new Error(`Cannot read TailwindCSS config file at "${twConfigPath}".`)
+      })
 
-    addImports({
-      name: 'default',
-      as: 'useScreens',
-      from: '~/modules/tailwindcss/composables/useScreens',
-    })
+    const fullConfig = resolveConfig(twConfig)
+    const twScreens = { screens: fullConfig.theme.screens }
+
+    Object.assign(nuxt.options.appConfig, twScreens)
   },
 })

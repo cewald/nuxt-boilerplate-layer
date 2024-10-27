@@ -1,8 +1,8 @@
 import svgLoader from 'vite-svg-loader'
 
 export default defineNuxtConfig({
-
   modules: [
+    '@cewald/nuxt-boilerplate-module',
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     '@nuxtjs/fontaine',
@@ -10,17 +10,18 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   ssr: true,
-
   devtools: { enabled: true },
-
   css: [ '@/styles/main.scss' ],
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    },
+  },
   srcDir: 'src',
-
   devServer: {
     /** @see https://github.com/nuxt/cli/issues/181 */
     host: '0.0.0.0',
   },
-
   experimental: {
     defaults: {
       nuxtLink: {
@@ -28,28 +29,32 @@ export default defineNuxtConfig({
       },
     },
   },
-
   compatibilityDate: '2024-10-27',
-
   vite: {
     plugins: [
       svgLoader(),
     ],
+    // Remove SASS deprecation message
+    // @see https://github.com/vitejs/vite/issues/18164
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+        },
+      },
+    },
   },
-
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
-
   eslint: {
     config: {
       stylistic: true,
     },
   },
-
   googleFonts: {
     families: {
       // 'Fira Code': {
@@ -62,12 +67,10 @@ export default defineNuxtConfig({
     },
     download: true,
   },
-
   i18n: {
     strategy: 'prefix',
     defaultLocale: 'en',
     langDir: 'i18n/lang',
-    baseUrl: 'https://https://cewald-nuxt-boilerplate.netlify.app',
     locales: [
       { code: 'en', iso: 'en-US', name: 'English', file: 'en-US.json', isCatchallLocale: true },
       { code: 'de', iso: 'de-DE', name: 'German', file: 'de-DE.json' },
