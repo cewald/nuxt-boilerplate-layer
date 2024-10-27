@@ -2,6 +2,7 @@
   "name": "@cewald/nuxt-boilerplate",
   "private": true,
   "type": "module",
+  "main": "./nuxt.config.ts",
   "scripts": {
     "prepare": "husky",
     "build": "nuxt build",

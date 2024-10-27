@@ -1,9 +1,68 @@
 import svgLoader from 'vite-svg-loader'
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
+  modules: [
+    '@nuxt/eslint',
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/fontaine',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+  ],
   ssr: true,
+
+  devtools: { enabled: true },
+
+  css: [ '@/styles/main.scss' ],
   srcDir: 'src',
+
+  devServer: {
+    /** @see https://github.com/nuxt/cli/issues/181 */
+    host: '0.0.0.0',
+  },
+
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        trailingSlash: 'remove',
+      },
+    },
+  },
+
+  compatibilityDate: '2024-10-27',
+
+  vite: {
+    plugins: [
+      svgLoader(),
+    ],
+  },
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
+
+  googleFonts: {
+    families: {
+      // 'Fira Code': {
+      //   wght: [ 400, 500, 700 ],
+      // },
+      // 'Noto Serif': {
+      //   wght: [ 300, 400 ],
+      //   ital: [ 300, 400 ],
+      // },
+    },
+    download: true,
+  },
+
   i18n: {
     strategy: 'prefix',
     defaultLocale: 'en',
@@ -16,53 +75,5 @@ export default defineNuxtConfig({
     bundle: {
       fullInstall: false,
     },
-  },
-  googleFonts: {
-    families: {
-      'Fira Code': {
-        wght: [ 400, 500, 700 ],
-      },
-      'Noto Serif': {
-        wght: [ 300, 400 ],
-        ital: [ 300, 400 ],
-      },
-    },
-    download: true,
-  },
-  vite: {
-    plugins: [
-      svgLoader(),
-    ],
-  },
-  css: [ '@/styles/main.scss' ],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
-  modules: [
-    '@nuxt/eslint',
-    '@nuxtjs/google-fonts',
-    '@nuxtjs/fontaine',
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-  ],
-  experimental: {
-    defaults: {
-      nuxtLink: {
-        trailingSlash: 'remove',
-      },
-    },
-  },
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
-  devtools: { enabled: true },
-  devServer: {
-    /** @see https://github.com/nuxt/cli/issues/181 */
-    host: '0.0.0.0',
   },
 })
