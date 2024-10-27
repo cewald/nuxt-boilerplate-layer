@@ -52,13 +52,7 @@ export default defineNuxtConfig({
   },
   eslint: {
     config: {
-      stylistic: {
-        /**
-         * Rename module import in eslint.config.mjs otherwise it
-         * might conflict with our rules from '@cewald/eslint-config'
-         */
-        pluginName: '@nuxt-stylistic',
-      },
+      stylistic: true,
     },
   },
   googleFonts: {

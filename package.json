@@ -14,7 +14,7 @@
     "lint:fix": "eslint --fix"
   },
   "devDependencies": {
-    "@cewald/eslint-config": "^1.1.2",
+    "@cewald/eslint-config": "^1.2.0",
     "@cewald/nuxt-boilerplate-module": "file:../nuxt-boilerplate-module",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",

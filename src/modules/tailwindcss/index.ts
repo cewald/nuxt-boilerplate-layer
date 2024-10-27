@@ -16,8 +16,8 @@ export default defineNuxtModule({
     const { resolve } = createResolver(import.meta.url)
     const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
     const twConfig: Config = await import(twConfigPath)
-      .then(m => m.default).catch(() => {
-        throw new Error(`Cannot read TailwindCSS config file at "${twConfigPath}".`)
+      .then(m => m.default).catch(e => {
+        throw new Error(`Cannot read TailwindCSS config file at "${twConfigPath}": ` + e.message)
       })
 
     const fullConfig = resolveConfig(twConfig)
