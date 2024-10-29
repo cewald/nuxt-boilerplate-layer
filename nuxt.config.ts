@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     '@nuxtjs/fontaine',
-    '@nuxtjs/i18n',
     '@pinia/nuxt',
   ],
   ssr: true,
@@ -50,6 +49,9 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  boilerplate: {
+    i18n: true,
+  },
   eslint: {
     config: {
       stylistic: true,
@@ -72,8 +74,8 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
     langDir: 'i18n/lang',
     locales: [
-      { code: 'en', iso: 'en-US', name: 'English', file: 'en-US.json', isCatchallLocale: true },
-      { code: 'de', iso: 'de-DE', name: 'German', file: 'de-DE.json' },
+      { code: 'en', language: 'en-US', name: 'English', file: 'en-US.json', isCatchallLocale: true },
+      { code: 'de', language: 'de-DE', name: 'German', file: 'de-DE.json' },
     ],
     bundle: {
       fullInstall: false,
