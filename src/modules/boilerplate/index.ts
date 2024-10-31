@@ -110,7 +110,7 @@ export default defineNuxtModule<ModuleOptions>({
           getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
         })
       } else {
-        console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options'
+        console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options '
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
     }

@@ -175,7 +175,7 @@ export class SbComponentsToTypes {
                     .forEach(c => acc.add(c))
                   return acc
                 }, new Set<string>())
-              return [ ...getComponentsWithFolders ].join('\n  | ')
+              return `(${[ ...getComponentsWithFolders ].join('\n  | ')})[]`
             }
             case 'tags': {
               const getComponentsWithTags = blockSchema.component_tag_whitelist
@@ -186,12 +186,14 @@ export class SbComponentsToTypes {
                     .forEach(c => acc.add(c))
                   return acc
                 }, new Set<string>())
-              return [ ...getComponentsWithTags ].join('\n  | ')
+              return `(${[ ...getComponentsWithTags ].join('\n  | ')})[]`
             }
-            case '':
-              return blockSchema.component_whitelist
+            case '': {
+              const getComponents = blockSchema.component_whitelist
                 .map(c => this.getTypeNameByComponentName(c))
                 .join('\n  | ')
+              return `(${getComponents})[]`
+            }
             default:
               return 'unknown'
           }
