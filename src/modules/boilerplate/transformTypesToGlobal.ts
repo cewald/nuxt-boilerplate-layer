@@ -1,38 +1,6 @@
 import { Project, SyntaxKind } from 'ts-morph'
 import type { SourceFile, ModuleDeclaration } from 'ts-morph'
 
-export const transformTypesToGlobal = (filePath: string) => {
-  const project = new Project()
-
-  const sourceFile = project.addSourceFileAtPath(filePath)
-  const output = project.createSourceFile('')
-
-  const imports = sourceFile.getImportDeclarations()
-  output.addStatements(imports.map(s => s.getText()))
-
-  const globalMod = output.addModule({
-    name: 'global',
-    hasDeclareKeyword: true,
-  })
-
-  translateExports(sourceFile, globalMod)
-
-  const types = sourceFile.getStatements()
-    .filter(s => [
-      SyntaxKind.InterfaceDeclaration,
-      SyntaxKind.TypeAliasDeclaration,
-    ].includes(s.getKind()))
-  globalMod.addStatements(types.map(s => s.getText()))
-
-  output.getStatements().forEach(s => {
-    if (s.getKind() === SyntaxKind.ModuleDeclaration) {
-      s.replaceWithText(s.getText().replace('declare namespace', 'declare'))
-    }
-  })
-
-  return output.getText()
-}
-
 const translateExports = <T extends ModuleDeclaration>(source: SourceFile, globalMod: T) => {
   const importMap: Record<string, { name: string, from: string }> = {}
   source.getImportDeclarations().forEach(d =>
@@ -59,6 +27,38 @@ const translateExports = <T extends ModuleDeclaration>(source: SourceFile, globa
     })
     declaration.replaceWithText(declaration.getText().replace(';', ''))
   })
+}
+
+export const transformTypesToGlobal = (filePath: string, additionTypes?: string) => {
+  const project = new Project()
+
+  const sourceFile = project.addSourceFileAtPath(filePath)
+  const output = project.createSourceFile('')
+
+  const imports = sourceFile.getImportDeclarations()
+  output.addStatements(imports.map(s => s.getText()))
+
+  const globalMod = output.addModule({
+    name: 'global',
+    hasDeclareKeyword: true,
+  })
+
+  globalMod.replaceWithText(globalMod.getText().replace('declare namespace', 'declare'))
+
+  translateExports(sourceFile, globalMod)
+
+  const types = sourceFile.getStatements()
+    .filter(s => [
+      SyntaxKind.InterfaceDeclaration,
+      SyntaxKind.TypeAliasDeclaration,
+    ].includes(s.getKind()))
+  globalMod.addStatements(types.map(s => s.getText()))
+
+  if (additionTypes) {
+    globalMod.addStatements(additionTypes)
+  }
+
+  return output.getText()
 }
 
 export default transformTypesToGlobal
