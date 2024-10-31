@@ -83,8 +83,8 @@ export default defineNuxtModule<ModuleOptions>({
       // Add basic types
       addImportsDir(resolve('./runtime/storyblok/types'))
       addTypeTemplate({
-        filename: 'types/storyblok.components.d.ts',
-        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.d.ts')),
+        filename: 'types/storyblok.components.base.d.ts',
+        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
       })
 
       // Add dynamic content types
