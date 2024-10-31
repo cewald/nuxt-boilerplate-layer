@@ -60,7 +60,7 @@ export default defineNuxtModule<ModuleOptions>({
      */
     if (options.storyblok) {
       if (!options.storyblok?.apiKey) {
-        console.error('The "storyblok.apiUrl" option is required in @cewald/nuxt-boilerplate configuration.')
+        console.error('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
       }
 
       const sbImports = [
