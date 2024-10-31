@@ -8,6 +8,8 @@ import {
   installModule,
 } from '@nuxt/kit'
 
+import { transformTypesToGlobal } from './transformTypesToGlobal'
+
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
@@ -53,7 +55,7 @@ export default defineNuxtModule<ModuleOptions>({
      */
     if (options.storyblok) {
       if (!options.storyblok?.apiKey) {
-        console.error('The "storyblok.apiUrl" option is required in @cewald/nuxt-boilerplate-module configuration.')
+        console.error('The "storyblok.apiUrl" option is required in @cewald/nuxt-boilerplate configuration.')
       }
 
       const sbImports = [
@@ -68,14 +70,14 @@ export default defineNuxtModule<ModuleOptions>({
       addImportsDir([ 'composables', 'stores' ].map(name => resolve('./runtime/storyblok/' + name)))
 
       addComponentsDir({
-        path: resolve('../../Components/Storyblok'),
+        path: resolve('./runtime/storyblok/components'),
         prefix: 'Sb',
         global: true,
       })
 
       addTypeTemplate({
         filename: 'types/storyblok.components.d.ts',
-        src: resolve('./runtime/storyblok/types/storyblok.components.d.ts'),
+        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.d.ts')),
       })
     }
 

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-defineProps<SbComponentNavigationItemInternal>()
+import { computed, resolveComponent } from 'vue'
+import type { SbComponentNavigationItemInternal as Props } from '../../types/storyblok.components'
+import { useAppConfig } from '#imports'
+
+defineProps<Props>()
 
 const { i18n } = useAppConfig()
 const LinkComponent = computed(() =>

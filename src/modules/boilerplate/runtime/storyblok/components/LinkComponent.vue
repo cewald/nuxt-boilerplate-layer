@@ -4,9 +4,9 @@ const { link } = defineProps<{
 }>()
 
 const linkMap = {
-  link_external: resolveComponent('StoryblockLinkExternal'),
-  link_internal: resolveComponent('StoryblockLinkInternal'),
-  link_mailto: resolveComponent('StoryblockLinkMailto'),
+  link_external: resolveComponent('SbLinkExternal'),
+  link_internal: resolveComponent('SbLinkInternal'),
+  link_mailto: resolveComponent('SbLinkMailto'),
 }
 
 const component = computed(() => {
