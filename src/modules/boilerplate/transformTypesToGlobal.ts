@@ -31,6 +31,9 @@ export const transformTypesToGlobal = (filePath: string, ignoreImports = false) 
 
   globalMod.addStatements(types.map(s => s.getText()))
 
+  const defaultExport = output.addExportDeclaration({ namedExports: [] })
+  defaultExport.replaceWithText(defaultExport.getText().replace(';', ''))
+
   return output.getText()
 }
 
