@@ -29,7 +29,7 @@ const translateExports = <T extends ModuleDeclaration>(source: SourceFile, globa
   })
 }
 
-export const transformTypesToGlobal = (filePath: string, additionTypes?: string) => {
+export const transformTypesToGlobal = (filePath: string) => {
   const project = new Project()
 
   const sourceFile = project.addSourceFileAtPath(filePath)
@@ -53,10 +53,6 @@ export const transformTypesToGlobal = (filePath: string, additionTypes?: string)
       SyntaxKind.TypeAliasDeclaration,
     ].includes(s.getKind()))
   globalMod.addStatements(types.map(s => s.getText()))
-
-  if (additionTypes) {
-    globalMod.addStatements(additionTypes)
-  }
 
   return output.getText()
 }

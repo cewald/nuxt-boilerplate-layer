@@ -213,6 +213,20 @@ export class SbComponentsToTypes {
   public async generateTypes() {
     const components = await this.getComponents()
 
+    this.types
+      .addTypeAliases([
+        {
+          isExported: true,
+          name: 'SbComponentName',
+          type: this.getAllComponentNames().map(n => `'${n}'`).join(' | '),
+        },
+        {
+          isExported: true,
+          name: 'SbComponentAlias',
+          type: this.components.map(c => this.getTypeNameByComponentName(c.name)).join(' | '),
+        },
+      ])
+
     components.forEach(component => {
       const properties: Record<string, string> = {}
       for (const [ name, schema ] of Object.entries(component.schema)) {
@@ -235,6 +249,12 @@ export class SbComponentsToTypes {
     })
 
     return this.types.getText()
+  }
+
+  public addTypesToFile(filePath: string, types: string) {
+    const source = this.typesProject.addSourceFileAtPath(filePath)
+    source.addStatements(types)
+    source.saveSync()
   }
 }
 

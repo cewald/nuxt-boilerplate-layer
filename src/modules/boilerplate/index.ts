@@ -80,27 +80,30 @@ export default defineNuxtModule<ModuleOptions>({
         global: true,
       })
 
-      let SbContentTypes = ''
+      addImportsDir(resolve('./runtime/storyblok/types'))
+
       const { fetchTypes, oauthToken, spaceId, region } = options.storyblok
       if (fetchTypes && oauthToken && spaceId) {
-        addImportsDir(resolve('./runtime/storyblok/types'))
-        SbContentTypes = await sbComponentsToTypesFactory(
+        const SbComponents = await sbComponentsToTypesFactory(
           oauthToken,
           spaceId,
           region
-        ).generateTypes()
+        )
+        const SbComponentTypes = await SbComponents.generateTypes()
+          .catch(error => {
+            console.error('Error fetching Storyblok components:', error)
+            return '// Types couldn\'t be loaded from Storyblok Management API.'
+          })
+
+        SbComponents.addTypesToFile(resolve('./runtime/storyblok/types/storyblok.components.d.ts'), SbComponentTypes)
       } else {
-        SbContentTypes = '// Types couldn\'t be loaded from Storyblok Management API.'
         console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options'
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
 
       addTypeTemplate({
         filename: 'types/storyblok.components.d.ts',
-        getContents: () => transformTypesToGlobal(
-          resolve('./runtime/storyblok/types/storyblok.components.d.ts'),
-          SbContentTypes
-        ),
+        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.d.ts')),
       })
     }
 
