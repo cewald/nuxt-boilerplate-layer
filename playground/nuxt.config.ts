@@ -7,6 +7,8 @@ export default defineNuxtConfig({
   boilerplate: {
     storyblok: {
       apiKey: import.meta.env.VITE_STORYBLOK_ACCESS_TOKEN,
+      oauthToken: import.meta.env.VITE_STORYBLOK_OAUTH_TOKEN,
+      spaceId: import.meta.env.VITE_STORYBLOK_SPACE_ID,
     },
     i18n: true,
   },

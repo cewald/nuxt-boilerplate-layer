@@ -9,10 +9,14 @@ import {
 } from '@nuxt/kit'
 
 import { transformTypesToGlobal } from './transformTypesToGlobal'
+import { sbComponentsToTypesFactory } from './fetchSbComponentTypes'
 
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
+    oauthToken?: string
+    spaceId?: string | number
+    fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
   } | false
   tailwindcss?: {
@@ -32,6 +36,7 @@ export default defineNuxtModule<ModuleOptions>({
   defaults: {
     storyblok: {
       region: 'eu',
+      fetchTypes: true,
     },
     tailwindcss: {
       configFile: 'tailwind.config.js',
@@ -75,9 +80,27 @@ export default defineNuxtModule<ModuleOptions>({
         global: true,
       })
 
+      let SbContentTypes = ''
+      const { fetchTypes, oauthToken, spaceId, region } = options.storyblok
+      if (fetchTypes && oauthToken && spaceId) {
+        addImportsDir(resolve('./runtime/storyblok/types'))
+        SbContentTypes = await sbComponentsToTypesFactory(
+          oauthToken,
+          spaceId,
+          region
+        ).generateTypes()
+      } else {
+        SbContentTypes = '// Types couldn\'t be loaded from Storyblok Management API.'
+        console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options'
+          + 'are required in @cewald/nuxt-boilerplate configuration.')
+      }
+
       addTypeTemplate({
         filename: 'types/storyblok.components.d.ts',
-        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.d.ts')),
+        getContents: () => transformTypesToGlobal(
+          resolve('./runtime/storyblok/types/storyblok.components.d.ts'),
+          SbContentTypes
+        ),
       })
     }
 

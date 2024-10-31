@@ -87,7 +87,7 @@ export class SbComponentsToTypes {
 
   protected typesProject: Project
   protected types: SourceFile
-  protected TYPE_PREFIX = 'SbComponent'
+  protected typePrefix = 'SbComponent'
 
   protected components: SbApiComponent[] = []
 
@@ -99,7 +99,7 @@ export class SbComponentsToTypes {
   }
 
   protected async fetchComponents() {
-    return await this.api.get('spaces/298011/components')
+    return await this.api.get(`spaces/${this.spaceId}/components`)
       .then(({ data }: { data: SbApiComponentResponse }) => {
         this.components = data.components
       })
@@ -114,6 +114,22 @@ export class SbComponentsToTypes {
       await this.fetchComponents()
     }
     return this.components
+  }
+
+  protected getAllComponentNames() {
+    return this.components.map(component => component.name)
+  }
+
+  protected getTypeNameByComponentName(name: string) {
+    return this.typePrefix + this.snakeToPascal(name)
+  }
+
+  protected snakeToPascal(snakeStr: string) {
+    return snakeStr
+      .toLowerCase()
+      .split('_')
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join('')
   }
 
   protected mapComponentFieldToProperty(
@@ -148,14 +164,41 @@ export class SbComponentsToTypes {
         return 'SbImage'
       case 'multiasset':
         return 'SbImage[]'
-      // case 'bloks':
-        // return 'unknown'
+      case 'bloks': {
+        const blockSchema = schema as SbApiComponentSchemaBloks
+        if (blockSchema?.restrict_components) {
+          switch (blockSchema.restrict_type) {
+            case 'groups':
+              return 'unknown'
+            case 'tags': {
+              const getComponentsWithTags = blockSchema.component_tag_whitelist.reduce((acc, tagId) => {
+                this.components
+                  .filter(c => c.internal_tags_list.some(t => t.id === tagId))
+                  .map(c => this.getTypeNameByComponentName(c.name))
+                  .forEach(c => acc.add(c))
+                return acc
+              }, new Set<string>())
+              return [ ...getComponentsWithTags ].join(' | ')
+            }
+            case '':
+              return blockSchema.component_whitelist
+                .map(c => this.getTypeNameByComponentName(c))
+                .join(' | ')
+            default:
+              return 'unknown'
+          }
+        }
+
+        return this.getAllComponentNames()
+          .map(c => this.getTypeNameByComponentName(c))
+          .join(' | ')
+      }
       // case 'multilink':
-        // return 'unknown'
+      // return 'unknown'
       // case 'markdown':
-        // return 'unknown'
+      // return 'unknown'
       // case 'table':
-        // return 'unknown'
+      // return 'unknown'
       default:
         return 'unknown'
     }
@@ -163,6 +206,8 @@ export class SbComponentsToTypes {
 
   public async generateTypes() {
     const components = await this.getComponents()
+
+    console.log(JSON.stringify(this.components))
 
     components.forEach(component => {
       const properties: Record<string, string> = {}
@@ -179,7 +224,7 @@ export class SbComponentsToTypes {
 
       const typeAlias = this.types.addTypeAlias({
         isExported: true,
-        name: this.TYPE_PREFIX + component.name,
+        name: this.getTypeNameByComponentName(component.name),
         type: `SbComponent<'${component.name}', {\n${propString}\n}>`,
       })
       typeAlias.replaceWithText(typeAlias.getText().replace(';', ''))
