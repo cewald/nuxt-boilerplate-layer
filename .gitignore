@@ -26,3 +26,6 @@ logs
 
 # Local Netlify folder
 .netlify
+
+# Our types
+src/modules/boilerplate/runtime/storyblok/types/storyblok.components.d.ts
