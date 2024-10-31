@@ -1,3 +1,9 @@
+import type {
+  ISbComponentType as SbComponentType,
+  ISbStoryData as SbStoryData,
+  ISbLinkURLObject,
+} from 'storyblok-js-client'
+
 declare global {
 
   export type {
@@ -66,3 +72,5 @@ declare global {
     | SbComponentNavigationItemExternal
     | SbComponentNavigationItemMailTo
 }
+
+export {}
