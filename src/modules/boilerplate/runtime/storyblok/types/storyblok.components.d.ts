@@ -50,22 +50,3 @@ export type SbComponent<
   Name extends string,
   Options extends Record<string, unknown>
 > = SbComponentType<Name> & Options
-
-export type SbComponentNavigationItemInternal = SbComponent<'link_internal', {
-  title: string
-  path: string
-}>
-
-export type SbComponentNavigationItemExternal = SbComponent<'link_external', {
-  title: string
-  path: string
-}>
-
-export type SbComponentNavigationItemMailTo = SbComponent<'link_mailto', {
-  title: string
-  email: string
-}>
-
-export type SbComponentLink = SbComponentNavigationItemInternal
-  | SbComponentNavigationItemExternal
-  | SbComponentNavigationItemMailTo
