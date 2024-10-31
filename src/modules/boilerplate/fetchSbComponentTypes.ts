@@ -139,10 +139,6 @@ export class SbComponentsToTypes {
   ) {
     if (!componentFieldTypes.includes(schema.type) || schema.type === 'section') return
 
-    if (schema.type === 'bloks') {
-      console.log('blocks', schema)
-    }
-
     switch (schema.type) {
       case 'text':
       case 'textarea':
@@ -168,16 +164,26 @@ export class SbComponentsToTypes {
         const blockSchema = schema as SbApiComponentSchemaBloks
         if (blockSchema?.restrict_components) {
           switch (blockSchema.restrict_type) {
-            case 'groups':
-              return 'unknown'
+            case 'groups':{
+              const getComponentsWithFolders = blockSchema.component_group_whitelist
+                .reduce((acc, folderId) => {
+                  this.components
+                    .filter(c => c.component_group_uuid === folderId)
+                    .map(c => this.getTypeNameByComponentName(c.name))
+                    .forEach(c => acc.add(c))
+                  return acc
+                }, new Set<string>())
+              return [ ...getComponentsWithFolders ].join(' | ')
+            }
             case 'tags': {
-              const getComponentsWithTags = blockSchema.component_tag_whitelist.reduce((acc, tagId) => {
-                this.components
-                  .filter(c => c.internal_tags_list.some(t => t.id === tagId))
-                  .map(c => this.getTypeNameByComponentName(c.name))
-                  .forEach(c => acc.add(c))
-                return acc
-              }, new Set<string>())
+              const getComponentsWithTags = blockSchema.component_tag_whitelist
+                .reduce((acc, tagId) => {
+                  this.components
+                    .filter(c => c.internal_tags_list.some(t => t.id === tagId))
+                    .map(c => this.getTypeNameByComponentName(c.name))
+                    .forEach(c => acc.add(c))
+                  return acc
+                }, new Set<string>())
               return [ ...getComponentsWithTags ].join(' | ')
             }
             case '':
@@ -206,8 +212,6 @@ export class SbComponentsToTypes {
 
   public async generateTypes() {
     const components = await this.getComponents()
-
-    console.log(JSON.stringify(this.components))
 
     components.forEach(component => {
       const properties: Record<string, string> = {}
