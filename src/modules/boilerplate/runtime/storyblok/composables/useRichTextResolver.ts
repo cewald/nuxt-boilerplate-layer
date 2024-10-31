@@ -1,6 +1,5 @@
 import { RichtextSchema, RichtextResolver } from 'storyblok-js-client'
 import type { ISbRichtext, ISbNode } from 'storyblok-js-client'
-import { cloneDeep } from '../../shared/utils/cloneDeep'
 
 export type RteClasses = {
   italic?: string
