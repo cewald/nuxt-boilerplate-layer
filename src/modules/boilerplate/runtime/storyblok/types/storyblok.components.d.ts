@@ -24,6 +24,14 @@ export type SbImage = {
   is_external_url: boolean
 }
 
+export type SbLink = {
+  id: string
+  url: string
+  linktype: 'url' | 'story'
+  fieldtype: 'multilink'
+  cached_url: string
+}
+
 export interface ISbStory<Content = SbComponentType<string>> {
   data: {
     cv: number

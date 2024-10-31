@@ -145,7 +145,7 @@ export class SbComponentsToTypes {
       case 'datetime':
         return 'string'
       case 'number':
-        return 'number'
+        return 'string'
       case 'boolean':
         return 'boolean'
       case 'option':
@@ -199,12 +199,12 @@ export class SbComponentsToTypes {
           .map(c => this.getTypeNameByComponentName(c))
           .join(' | ')
       }
-      // case 'multilink':
-      // return 'unknown'
-      // case 'markdown':
-      // return 'unknown'
-      // case 'table':
-      // return 'unknown'
+      case 'multilink':
+        return 'SbLink'
+      case 'markdown':
+        return 'string'
+      case 'table':
+        return 'unknown'
       default:
         return 'unknown'
     }
