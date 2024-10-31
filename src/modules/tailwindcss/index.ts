@@ -17,8 +17,12 @@ export default defineNuxtModule({
     const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
     const twConfig: Config = await import(twConfigPath)
       .then(m => m.default).catch(e => {
-        throw new Error(`Cannot read TailwindCSS config file at "${twConfigPath}": ` + e.message)
+        console.debug(`Cannot read TailwindCSS config file at "${twConfigPath}": ` + e.message)
+        console.debug('Please make sure you have a valid TailwindCSS config file at the root of your project.')
+        return false
       })
+
+    if (!twConfig) return
 
     const fullConfig = resolveConfig(twConfig)
     const twScreens = { screens: fullConfig.theme.screens }
