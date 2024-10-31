@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addImportsDir } from '@nuxt/kit'
 import type { Config } from 'tailwindcss'
 import resolveConfig from 'tailwindcss/resolveConfig'
 
@@ -24,5 +24,7 @@ export default defineNuxtModule({
     const twScreens = { screens: fullConfig.theme.screens }
 
     Object.assign(nuxt.options.appConfig, twScreens)
+
+    addImportsDir([ 'composables' ].map(name => resolve('./runtime/' + name)))
   },
 })
