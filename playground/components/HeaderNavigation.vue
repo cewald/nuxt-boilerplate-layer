@@ -1,7 +1,6 @@
 <script setup lang="ts">
 defineProps<{
   links: (SbComponentLinkExternal | SbComponentLinkInternal | SbComponentLinkMailto)[]
-  test?: SbComponentHeadline
 }>()
 </script>
 

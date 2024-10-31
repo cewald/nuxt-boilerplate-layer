@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const mockSbNavi: SbComponentLink[] = [
+const mockSbNavi: SbComponentLinkInternal [] = [
   {
     _uid: '1',
     path: '/',
