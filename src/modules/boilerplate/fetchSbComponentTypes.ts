@@ -138,11 +138,7 @@ export class SbComponentsToTypes {
       .join('')
   }
 
-  protected mapComponentFieldToProperty(
-    component: SbApiComponent,
-    name: string,
-    schema: SbApiComponentSchema
-  ) {
+  protected mapComponentFieldToProperty(schema: SbApiComponentSchema) {
     if (!componentFieldTypes.includes(schema.type) || schema.type === 'section') return
 
     switch (schema.type) {
@@ -228,7 +224,7 @@ export class SbComponentsToTypes {
         },
         {
           isExported: true,
-          name: 'SbComponentAlias',
+          name: 'SbComponents',
           type: this.components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
         },
       ])
@@ -237,7 +233,7 @@ export class SbComponentsToTypes {
     components.forEach(component => {
       const properties: Record<string, string> = {}
       for (const [ name, schema ] of Object.entries(component.schema)) {
-        const propertyType = this.mapComponentFieldToProperty(component, name, schema)
+        const propertyType = this.mapComponentFieldToProperty(schema)
         if (propertyType) {
           Object.assign(properties, { [name]: propertyType })
         }
