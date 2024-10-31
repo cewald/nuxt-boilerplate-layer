@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { SbComponentNavigationItemMailTo as Props } from '../../types/storyblok.components'
-
-defineProps<Props>()
+defineProps<SbComponentLinkMailto>()
 </script>
 
 <template>

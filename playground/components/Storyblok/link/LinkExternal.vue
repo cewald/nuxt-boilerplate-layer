@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { SbComponentNavigationItemExternal as Props } from '../../types/storyblok.components'
-
-defineProps<Props>()
+defineProps<SbComponentLinkExternal>()
 </script>
 
 <template>

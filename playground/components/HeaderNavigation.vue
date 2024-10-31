@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  links: SbComponentLink[]
+  links: (SbComponentLinkExternal | SbComponentLinkInternal | SbComponentLinkMailto)[]
+  test?: SbComponentHeadline
 }>()
 </script>
 
@@ -10,7 +11,7 @@ defineProps<{
       v-for="link in links"
       :key="link._uid"
     >
-      <SbLinkComponent :link="link" /> |
+      <StoryblokLinkComponent :link="link" /> |
     </template>
     <SwitchLocalePathLink locale="de">
       German
