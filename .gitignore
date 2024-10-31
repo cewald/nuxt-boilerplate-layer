@@ -28,4 +28,4 @@ logs
 .netlify
 
 # Our types
-src/modules/boilerplate/runtime/storyblok/types/storyblok.components.d.ts
+src/modules/boilerplate/runtime/storyblok/types/storyblok.components.content.d.ts

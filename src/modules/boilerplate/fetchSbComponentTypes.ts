@@ -252,7 +252,7 @@ export class SbComponentsToTypes {
   }
 
   public addTypesToFile(filePath: string, types: string) {
-    const source = this.typesProject.addSourceFileAtPath(filePath)
+    const source = this.typesProject.createSourceFile(filePath, '', { overwrite: true })
     source.addStatements(types)
     source.saveSync()
   }
