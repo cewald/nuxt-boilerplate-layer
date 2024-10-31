@@ -21,6 +21,7 @@
     "nuxt.config.ts",
     "vite-env.d.ts",
     "tsconfig.json",
+    "package-lock.json",
     "README.md"
   ],
   "scripts": {
