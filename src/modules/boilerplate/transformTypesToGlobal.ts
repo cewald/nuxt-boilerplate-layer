@@ -1,13 +1,15 @@
 import { Project, SyntaxKind } from 'ts-morph'
 
-export const transformTypesToGlobal = (filePath: string) => {
+export const transformTypesToGlobal = (filePath: string, ignoreImports = false) => {
   const project = new Project()
 
   const source = project.addSourceFileAtPath(filePath)
   const output = project.createSourceFile('')
 
-  const imports = source.getImportDeclarations()
-  output.addStatements(imports.map(s => s.getText()))
+  if (!ignoreImports) {
+    const imports = source.getImportDeclarations()
+    output.addStatements(imports.map(s => s.getText()))
+  }
 
   const globalMod = output.addModule({
     name: 'global',

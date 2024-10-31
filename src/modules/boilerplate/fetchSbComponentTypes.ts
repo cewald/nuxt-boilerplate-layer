@@ -215,6 +215,13 @@ export class SbComponentsToTypes {
   public async generateTypes() {
     const components = await this.getComponents()
 
+    const baseImport = this.types.addImportDeclaration({
+      moduleSpecifier: './storyblok.components.base',
+      namedImports: [ 'SbComponent' ],
+      isTypeOnly: true,
+    })
+    baseImport.replaceWithText(baseImport.getText().replace(';', ''))
+
     const nameTypes = this.types
       .addTypeAliases([
         {

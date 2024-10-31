@@ -107,7 +107,7 @@ export default defineNuxtModule<ModuleOptions>({
 
         addTypeTemplate({
           filename: SbContentTypesFile,
-          getContents: () => transformTypesToGlobal(SbContentTypesPath),
+          getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
         })
       } else {
         console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options'
