@@ -1,14 +1,8 @@
-import type {
-  ISbComponentType as SbComponentType,
-  ISbStoryData as SbStoryData,
-  ISbRichtext as SbRichText,
-  ISbLinkURLObject } from 'storyblok-js-client'
+import type { ISbComponentType, ISbStoryData, ISbRichtext, ISbLinkURLObject } from 'storyblok-js-client'
 
-export type {
-  SbComponentType,
-  SbStoryData,
-  SbRichText,
-}
+export type SbComponentType = ISbComponentType
+export type SbStoryData = ISbStoryData
+export type SbRichText = ISbRichtext
 
 export type SbImage = {
   id: number
