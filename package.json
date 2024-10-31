@@ -17,12 +17,15 @@
   "type": "module",
   "main": "./nuxt.config.ts",
   "scripts": {
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "npm run build && npm run prepare && nuxi prepare playground",
+    "dev:layer": "nuxt dev",
     "prepare": "husky && nuxt prepare",
+    "postinstall": "npm run prepare",
     "build": "nuxt build",
-    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
