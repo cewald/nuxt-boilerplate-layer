@@ -1,6 +1,6 @@
 import StoryblokClient from 'storyblok-js-client'
 import type { SourceFile } from 'ts-morph'
-import { Project } from 'ts-morph'
+import { Project, IndentationText, QuoteKind } from 'ts-morph'
 
 export interface SbApiComponentResponse {
   component_groups: SbApiComponentGroup[]
@@ -94,8 +94,14 @@ export class SbComponentsToTypes {
   constructor(oauthToken: string, spaceId: number | string, region?: string) {
     this.spaceId = spaceId
     this.api = new StoryblokClient({ oauthToken, region })
-    this.typesProject = new Project()
-    this.types = this.typesProject.createSourceFile('')
+
+    this.typesProject = new Project({ manipulationSettings: {
+      indentationText: IndentationText.TwoSpaces,
+      useTrailingCommas: false,
+      quoteKind: QuoteKind.Single,
+    } })
+
+    this.types = this.typesProject.createSourceFile('', '')
   }
 
   protected async fetchComponents() {
@@ -173,7 +179,7 @@ export class SbComponentsToTypes {
                     .forEach(c => acc.add(c))
                   return acc
                 }, new Set<string>())
-              return [ ...getComponentsWithFolders ].join(' | ')
+              return [ ...getComponentsWithFolders ].join('\n  | ')
             }
             case 'tags': {
               const getComponentsWithTags = blockSchema.component_tag_whitelist
@@ -184,12 +190,12 @@ export class SbComponentsToTypes {
                     .forEach(c => acc.add(c))
                   return acc
                 }, new Set<string>())
-              return [ ...getComponentsWithTags ].join(' | ')
+              return [ ...getComponentsWithTags ].join('\n  | ')
             }
             case '':
               return blockSchema.component_whitelist
                 .map(c => this.getTypeNameByComponentName(c))
-                .join(' | ')
+                .join('\n  | ')
             default:
               return 'unknown'
           }
@@ -213,19 +219,20 @@ export class SbComponentsToTypes {
   public async generateTypes() {
     const components = await this.getComponents()
 
-    this.types
+    const nameTypes = this.types
       .addTypeAliases([
         {
           isExported: true,
           name: 'SbComponentName',
-          type: this.getAllComponentNames().map(n => `'${n}'`).join(' | '),
+          type: this.getAllComponentNames().map(n => `'${n}'`).join('\n| '),
         },
         {
           isExported: true,
           name: 'SbComponentAlias',
-          type: this.components.map(c => this.getTypeNameByComponentName(c.name)).join(' | '),
+          type: this.components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
         },
       ])
+    nameTypes.forEach(type => type.replaceWithText(type.getText().replace(';', '')))
 
     components.forEach(component => {
       const properties: Record<string, string> = {}
@@ -243,7 +250,7 @@ export class SbComponentsToTypes {
       const typeAlias = this.types.addTypeAlias({
         isExported: true,
         name: this.getTypeNameByComponentName(component.name),
-        type: `SbComponent<'${component.name}', {\n${propString}\n}>`,
+        type: `SbComponent<'${component.name}', {\n${propString} }>`,
       })
       typeAlias.replaceWithText(typeAlias.getText().replace(';', ''))
     })
