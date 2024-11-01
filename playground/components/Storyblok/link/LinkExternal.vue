@@ -1,14 +1,14 @@
 <script setup lang="ts">
-defineProps<SbComponentLinkExternal>()
+defineProps<{ link: SbComponentLinkExternal }>()
 </script>
 
 <template>
   <a
-    :href="path"
-    :aria-label="title"
+    :href="link.path"
+    :aria-label="link.title"
     target="_blank"
     v-bind="$attrs"
   >
-    <slot>{{ title }}</slot>
+    <slot>{{ link.title }}</slot>
   </a>
 </template>

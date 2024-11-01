@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<SbComponentLinkInternal>()
+defineProps<{ link: SbComponentLinkInternal }>()
 
 const { i18n } = useAppConfig()
 const LinkComponent = computed(() =>
@@ -11,10 +11,10 @@ const LinkComponent = computed(() =>
 <template>
   <component
     :is="LinkComponent"
-    :to="path"
-    :aria-label="title"
+    :to="link.path"
+    :aria-label="link.title"
     v-bind="$attrs"
   >
-    <slot>{{ title }}</slot>
+    <slot>{{ link.title }}</slot>
   </component>
 </template>

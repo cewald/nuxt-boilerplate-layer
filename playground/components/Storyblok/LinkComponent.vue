@@ -17,6 +17,6 @@ const component = computed(() => {
 <template>
   <component
     :is="component"
-    v-bind="link"
+    :link="link"
   />
 </template>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-defineProps<SbComponentLinkMailto>()
+defineProps<{ link: SbComponentLinkMailto }>()
 </script>
 
 <template>
   <a
-    :href="`mailto:${email}`"
-    :aria-label="title"
+    :href="`mailto:${link.email}`"
+    :aria-label="link.title"
     target="_blank"
   >
-    <slot>{{ title }}</slot>
+    <slot>{{ link.title }}</slot>
   </a>
 </template>
