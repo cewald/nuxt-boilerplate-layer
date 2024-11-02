@@ -54,15 +54,6 @@ export default defineNuxtConfig({
     },
   },
   googleFonts: {
-    families: {
-      // 'Fira Code': {
-      //   wght: [ 400, 500, 700 ],
-      // },
-      // 'Noto Serif': {
-      //   wght: [ 300, 400 ],
-      //   ital: [ 300, 400 ],
-      // },
-    },
     download: true,
   },
 })
