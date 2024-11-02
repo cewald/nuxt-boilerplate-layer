@@ -1,4 +1,5 @@
-import dayjs from 'dayjs'
+// We need to import the esm module or it wont work when imported as a package
+import dayjs from 'dayjs/esm'
 
 export const useDayJS = () => {
   const { dayjs: dayjsConfig } = useAppConfig()
