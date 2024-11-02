@@ -14,8 +14,12 @@ export const useDayJS = () => {
   }
 
   const currentDateInFormat = (format: string = defaultDateFormat) => {
-    return formatDate(dayjs(), format)
+    return formatDate(now(), format)
   }
 
-  return { dayjs, currentDateInFormat, toDate, formatDate }
+  const now = () => dayjs()
+
+  const dayjsFactory = (o: dayjs.ConfigType) => dayjs(o)
+
+  return { dayjs: dayjsFactory, now, currentDateInFormat, toDate, formatDate }
 }
