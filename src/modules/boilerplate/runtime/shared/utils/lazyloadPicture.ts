@@ -1,4 +1,4 @@
-export const lazyload = (picture: HTMLPictureElement, callback?: (p: typeof picture) => void) => {
+export const lazyloadPicture = (picture: HTMLPictureElement, callback?: (p: typeof picture) => void) => {
   const observer = new IntersectionObserver(([ { isIntersecting } ]) => {
     if (isIntersecting) {
       ([ ...picture.children ] as (HTMLSourceElement | HTMLImageElement)[]).forEach(e => {
@@ -21,4 +21,4 @@ export const lazyload = (picture: HTMLPictureElement, callback?: (p: typeof pict
   observer.observe(picture)
 }
 
-export default lazyload
+export default lazyloadPicture

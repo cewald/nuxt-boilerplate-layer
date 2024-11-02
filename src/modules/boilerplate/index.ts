@@ -23,6 +23,9 @@ export interface ModuleOptions {
     configFile: string
   }
   i18n?: boolean
+  dayjs?: {
+    defaultDateFormat: string
+  }
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -42,6 +45,9 @@ export default defineNuxtModule<ModuleOptions>({
       configFile: 'tailwind.config.js',
     },
     i18n: false,
+    dayjs: {
+      defaultDateFormat: 'YYYY-MM-DD',
+    },
   },
   async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
@@ -72,7 +78,8 @@ export default defineNuxtModule<ModuleOptions>({
         addImports({ name, as: 'Sb' + as, from: 'storyblok-js-client' })
       }
 
-      addImportsDir([ 'composables', 'stores' ].map(name => resolve('./runtime/storyblok/' + name)))
+      addImportsDir([ 'composables', 'stores', 'utils' ]
+        .map(name => resolve('./runtime/storyblok/' + name)))
 
       addComponentsDir({
         path: resolve('./runtime/storyblok/components'),
@@ -81,7 +88,6 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       // Add basic types
-      addImportsDir(resolve('./runtime/storyblok/types'))
       addTypeTemplate({
         filename: 'types/storyblok.components.base.d.ts',
         getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
@@ -118,6 +124,9 @@ export default defineNuxtModule<ModuleOptions>({
     /*
      * Add /shared setup
      */
-    addImportsDir(resolve('./runtime/shared/utils'))
+    addImportsDir([ 'composables', 'utils' ]
+      .map(name => resolve('./runtime/shared/' + name)))
+
+    Object.assign(nuxt.options.appConfig, { dayjs: options.dayjs })
   },
 })

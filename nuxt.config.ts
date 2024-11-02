@@ -2,7 +2,6 @@ import svgLoader from 'vite-svg-loader'
 
 export default defineNuxtConfig({
   modules: [
-    '@pinia/nuxt',
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     '@nuxtjs/fontaine',
