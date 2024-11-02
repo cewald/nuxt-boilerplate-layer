@@ -13,9 +13,9 @@ export const useDayJS = () => {
     return date.format(format)
   }
 
-  const currentDate = (format: string = defaultDateFormat) => {
-    return dayjs().format(format)
+  const currentDateInFormat = (format: string = defaultDateFormat) => {
+    return formatDate(dayjs(), format)
   }
 
-  return { dayjs, currentDate, toDate, formatDate }
+  return { dayjs, currentDateInFormat, toDate, formatDate }
 }
