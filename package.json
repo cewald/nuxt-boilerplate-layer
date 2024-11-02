@@ -38,6 +38,9 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
+  "dependencies": {
+    "@nuxt/kit": "^3.13.2"
+  },
   "devDependencies": {
     "@cewald/eslint-config": "^1.2.0",
     "@commitlint/cli": "^19.5.0",
