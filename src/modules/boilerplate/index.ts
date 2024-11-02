@@ -57,6 +57,9 @@ export default defineNuxtModule<ModuleOptions>({
      */
     if (options.i18n) {
       await installModule('@nuxtjs/i18n')
+
+      addImportsDir([ 'composables' ]
+        .map(name => resolve('./runtime/i18n/' + name)))
     }
 
     Object.assign(nuxt.options.appConfig, { i18n: options.i18n })
