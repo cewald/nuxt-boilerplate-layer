@@ -8,8 +8,11 @@ import {
   installModule,
 } from '@nuxt/kit'
 
-import { transformTypesToGlobal } from './transformTypesToGlobal'
-import { sbComponentsToTypesFactory } from './fetchSbComponentTypes'
+import {
+  transformTypesToGlobal,
+  sbComponentsToTypesFactory,
+  prerenderSbPages,
+} from './lib'
 
 export interface ModuleOptions {
   storyblok?: {
@@ -18,6 +21,10 @@ export interface ModuleOptions {
     spaceId?: string | number
     fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
+    prerender?: {
+      components: string[]
+      aliasMap: Record<string, string[]>
+    }
   } | false
   tailwindcss?: {
     configFile: string
@@ -40,6 +47,10 @@ export default defineNuxtModule<ModuleOptions>({
     storyblok: {
       region: 'eu',
       fetchTypes: true,
+      prerender: {
+        components: [],
+        aliasMap: {},
+      },
     },
     tailwindcss: {
       configFile: 'tailwind.config.js',
@@ -122,6 +133,8 @@ export default defineNuxtModule<ModuleOptions>({
         console.warn('The "storyblok.oauthToken" and "storyblok.spaceId" options '
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
+
+      await prerenderSbPages(options)
     }
 
     /*
