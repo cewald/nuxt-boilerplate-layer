@@ -69,7 +69,7 @@ export default defineNuxtModule<ModuleOptions>({
      */
     if (options.storyblok) {
       if (!options.storyblok?.apiKey) {
-        console.error('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
+        console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
       }
 
       const sbImports = [
@@ -119,7 +119,7 @@ export default defineNuxtModule<ModuleOptions>({
           getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
         })
       } else {
-        console.error('The "storyblok.oauthToken" and "storyblok.spaceId" options '
+        console.warn('The "storyblok.oauthToken" and "storyblok.spaceId" options '
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
     }
