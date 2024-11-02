@@ -13,5 +13,5 @@ export const useDayJS = () => {
     return date.format(format)
   }
 
-  return { toDate, formatDate }
+  return { dayjs, toDate, formatDate }
 }
