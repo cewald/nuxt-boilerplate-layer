@@ -1,7 +1,6 @@
 export default defineNuxtConfig({
   extends: [ '../' ],
   devtools: { enabled: true },
-  css: [ '@/styles/main.scss' ],
   srcDir: './',
   compatibilityDate: '2024-10-28',
   boilerplate: {

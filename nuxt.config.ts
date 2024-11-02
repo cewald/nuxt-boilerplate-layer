@@ -3,13 +3,13 @@ import svgLoader from 'vite-svg-loader'
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     '@nuxtjs/fontaine',
     '@pinia/nuxt',
   ],
   ssr: true,
   devtools: { enabled: true },
-  css: [ '@/styles/main.scss' ],
   router: {
     options: {
       scrollBehaviorType: 'smooth',
