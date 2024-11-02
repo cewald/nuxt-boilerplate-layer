@@ -83,6 +83,7 @@ export default defineNuxtModule<ModuleOptions>({
         console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
       }
 
+      // Add dynamic imports
       const sbImports = [
         { name: 'RichtextResolver', as: 'RichTextResolver' },
         { name: 'RichtextSchema', as: 'RichTextSchema' },
@@ -134,6 +135,7 @@ export default defineNuxtModule<ModuleOptions>({
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
 
+      // Add prerendering
       await prerenderSbPages(options)
     }
 
