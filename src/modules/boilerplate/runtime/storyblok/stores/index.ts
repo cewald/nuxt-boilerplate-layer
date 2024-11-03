@@ -7,6 +7,9 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
   const { storyblok } = useAppConfig()
   const { accessToken, region } = storyblok
 
+  const { locale, localeProperties, defaultLocale } = useI18n()
+  const language = computed(() => locale.value === defaultLocale ? 'default' : localeProperties.value.language)
+
   if (!api) {
     api = new StoryblokClient({
       accessToken,
@@ -16,11 +19,12 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
   }
 
   const requestDefaults = computed<SbStoryParams>(() => ({
+    language: language.value,
     version: import.meta.env.DEV === true ? 'draft' : 'published',
     cv: cv.value,
   }))
 
-  return { api, requestDefaults, cv }
+  return { api, requestDefaults, cv, language }
 })
 
 export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
@@ -32,11 +36,13 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   items: Ref<SbStoryData<C>[]>
   notFound: Ref<string[]>
 }) => {
-  const { requestDefaults, api: sb, cv } = toRefs(useStoryblokApiStore())
+  const SbApiStore = useStoryblokApiStore()
+  const { api, requestDefaults } = SbApiStore
+  const { cv } = toRefs(SbApiStore)
 
   const load = async (params: SbStoriesParams = {}) => {
-    return sb.value?.getStories({
-      ...requestDefaults.value,
+    return api?.getStories({
+      ...requestDefaults,
       cv: cv.value,
       starts_with: path,
       ...params,
@@ -54,8 +60,8 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     const checkIfNotFound = notFound.value?.find(s => s === slug)
     if (checkIfNotFound) return Promise.reject(new Error('Not found'))
 
-    return sb.value?.getStory(`${path}/${slug}`, {
-      ...requestDefaults.value,
+    return api?.getStory(`${path}/${slug}`, {
+      ...requestDefaults,
       cv: cv.value,
     }).then(resp => {
       cv.value = resp?.data.cv
@@ -83,8 +89,8 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
 
     const searchForSlugs = slugs.filter(s => !checkNotFound.includes(s) && !existing.find(e => e.slug === s))
 
-    return sb.value?.getStories({
-      ...requestDefaults.value,
+    return api?.getStories({
+      ...requestDefaults,
       cv: cv.value,
       by_slugs: searchForSlugs.join(','),
       starts_with: path,
