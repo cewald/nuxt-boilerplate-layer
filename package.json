@@ -36,7 +36,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "typecheck": "npx nuxi typecheck"
   },
   "devDependencies": {
     "@cewald/eslint-config": "^1.2.0",
