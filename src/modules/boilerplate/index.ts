@@ -22,7 +22,7 @@ export interface ModuleOptions {
     fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
     prerender?: {
-      components: string[]
+      types: string[]
       aliasMap: Record<string, string[]>
     }
   } | false
@@ -48,7 +48,7 @@ export default defineNuxtModule<ModuleOptions>({
       region: 'eu',
       fetchTypes: true,
       prerender: {
-        components: [],
+        types: [],
         aliasMap: {},
       },
     },

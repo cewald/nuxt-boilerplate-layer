@@ -4,7 +4,7 @@ import type { ModuleOptions } from '../'
 
 export const prerenderSbPages = async (options: ModuleOptions) => {
   if (!options?.storyblok || !options?.storyblok?.prerender) return
-  const { components, aliasMap } = options.storyblok.prerender
+  const { types, aliasMap } = options.storyblok.prerender
 
   const api = new StoryblokClient({
     accessToken: options.storyblok.apiKey,
@@ -20,7 +20,7 @@ export const prerenderSbPages = async (options: ModuleOptions) => {
     ...requestDefaults as unknown as Record<string, unknown>,
   }).then(resp => {
     return resp.data.stories
-      .filter(s => components.includes(s.content.component as string))
+      .filter(s => types.includes(s.content.component as string))
       .map(s => `/${s.full_slug}`)
   }).catch(e => {
     console.error(e)
