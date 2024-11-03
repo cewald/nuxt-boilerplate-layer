@@ -1,14 +1,5 @@
 import StoryblokClient from 'storyblok-js-client'
 
-import type {
-  ISbStory,
-  ISbStoryParams,
-  ISbStories,
-  ISbStoriesParams,
-  ISbStoryData,
-  ISbComponentType,
-} from 'storyblok-js-client'
-
 let api: StoryblokClient
 
 export const useStoryblokApiStore = defineStore('storyblok', () => {
@@ -21,7 +12,7 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
     })
   }
 
-  const requestDefaults = computed<ISbStoryParams>(() => ({
+  const requestDefaults = computed<SbStoryParams>(() => ({
     version: import.meta.env.DEV === true ? 'draft' : 'published',
     cv: cv.value,
   }))
@@ -29,18 +20,18 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
   return { api, requestDefaults, cv }
 })
 
-export const SbStoreUtilityFactory = <C = ISbComponentType<string>>({
+export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   path = '',
   items,
   notFound,
 }: {
   path?: string
-  items: Ref<ISbStoryData<C>[]>
+  items: Ref<SbStoryData<C>[]>
   notFound: Ref<string[]>
 }) => {
   const { requestDefaults, api: sb, cv } = toRefs(useStoryblokApiStore())
 
-  const load = async (params: ISbStoriesParams = {}) => {
+  const load = async (params: SbStoriesParams = {}) => {
     return sb.value?.getStories({
       ...requestDefaults.value,
       cv: cv.value,
@@ -48,7 +39,7 @@ export const SbStoreUtilityFactory = <C = ISbComponentType<string>>({
       ...params,
     }).then(resp => {
       cv.value = resp?.data.cv
-      items.value = (resp as ISbStories<C>).data.stories
+      items.value = (resp as SbStories<C>).data.stories
       return items.value
     })
   }
@@ -65,7 +56,7 @@ export const SbStoreUtilityFactory = <C = ISbComponentType<string>>({
       cv: cv.value,
     }).then(resp => {
       cv.value = resp?.data.cv
-      const story = (resp as ISbStory<C>).data.story
+      const story = (resp as SbStory<C>).data.story
       items.value?.push(story)
       return story
     }).catch(err => {

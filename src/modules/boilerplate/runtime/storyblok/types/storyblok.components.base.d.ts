@@ -1,4 +1,41 @@
-import type { ISbComponentType, ISbStoryData, ISbRichtext, ISbLinkURLObject } from 'storyblok-js-client'
+import type {
+  ISbComponentType,
+  ISbStoryData,
+  ISbRichtext,
+  ISbLinkURLObject,
+  ISbStoryParams,
+  ISbStoriesParams,
+} from 'storyblok-js-client'
+
+export type SbStoryParams = ISbStoryParams
+export type SbStoriesParams = ISbStoriesParams
+
+export interface SbStory<Content = SbComponentType<string>> {
+  data: {
+    cv: number
+    links: (SbStoryData<Content> | ISbLinkURLObject)[]
+    rels: SbStoryData<Content>[]
+    story: SbStoryData<Content>
+  }
+  headers: unknown
+}
+
+export interface SbStories<Content = SbComponentType<string>> {
+  data: {
+    cv: number
+    links: (SbStoryData<Content> | ISbLinkURLObject)[]
+    rels: SbStoryData<Content>[]
+    stories: SbStoryData<Content>[]
+  }
+  perPage: number
+  total: number
+  headers: unknown
+}
+
+export type SbComponent<
+  Name extends string,
+  Options extends Record<string, unknown>
+> = SbComponentType<Name> & Options
 
 export type SbComponentType<T> = ISbComponentType<T>
 export type SbStoryData<C> = ISbStoryData<C>
@@ -28,30 +65,3 @@ export type SbLink = {
   fieldtype: 'multilink'
   cached_url: string
 }
-
-export interface ISbStory<Content = SbComponentType<string>> {
-  data: {
-    cv: number
-    links: (SbStoryData<Content> | ISbLinkURLObject)[]
-    rels: SbStoryData<Content>[]
-    story: SbStoryData<Content>
-  }
-  headers: unknown
-}
-
-export interface ISbStories<Content = SbComponentType<string>> {
-  data: {
-    cv: number
-    links: (SbStoryData<Content> | ISbLinkURLObject)[]
-    rels: SbStoryData<Content>[]
-    stories: SbStoryData<Content>[]
-  }
-  perPage: number
-  total: number
-  headers: unknown
-}
-
-export type SbComponent<
-  Name extends string,
-  Options extends Record<string, unknown>
-> = SbComponentType<Name> & Options
