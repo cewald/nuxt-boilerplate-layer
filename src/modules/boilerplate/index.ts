@@ -83,6 +83,13 @@ export default defineNuxtModule<ModuleOptions>({
         console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
       }
 
+      // Add configs to appConfig
+      const { apiKey, region } = options.storyblok
+      Object.assign(
+        nuxt.options.appConfig,
+        { storyblok: { accessToken: apiKey || '', region } }
+      )
+
       // Add dynamic imports
       const sbImports = [
         { name: 'RichtextResolver', as: 'RichTextResolver' },
@@ -109,7 +116,7 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       // Add dynamic content types
-      const { fetchTypes, oauthToken, spaceId, region } = options.storyblok
+      const { fetchTypes, oauthToken, spaceId } = options.storyblok
       if (fetchTypes && oauthToken && spaceId) {
         const SbComponents = await sbComponentsToTypesFactory(
           oauthToken,

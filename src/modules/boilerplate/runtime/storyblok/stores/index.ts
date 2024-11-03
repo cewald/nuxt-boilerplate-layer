@@ -4,10 +4,13 @@ let api: StoryblokClient
 
 export const useStoryblokApiStore = defineStore('storyblok', () => {
   const cv = ref<number>(Date.now())
+  const { storyblok } = useAppConfig()
+  const { accessToken, region } = storyblok
 
   if (!api) {
     api = new StoryblokClient({
-      accessToken: import.meta.env.VITE_STORYBLOK_ACCESS_TOKEN,
+      accessToken,
+      region,
       cache: { type: 'memory', clear: 'auto' },
     })
   }
