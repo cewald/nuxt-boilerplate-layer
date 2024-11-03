@@ -38,7 +38,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     return sb.value?.getStories({
       ...requestDefaults.value,
       cv: cv.value,
-      starts_with: `${path}`,
+      starts_with: path,
       ...params,
     }).then(resp => {
       cv.value = resp?.data.cv
@@ -47,7 +47,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  const loadByKey = async (slug: string) => {
+  const loadBySlug = async (slug: string) => {
     const checkIfExists = items.value?.find(s => s.slug === slug)
     if (checkIfExists) return Promise.resolve(checkIfExists)
 
@@ -64,7 +64,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       return story
     }).catch(err => {
       if (err.status !== 404) {
-        console.error('Storyblok returned and error:', JSON.stringify(err))
+        console.error('Storyblok returned an error:', JSON.stringify(err))
       }
 
       notFound.value?.push(slug)
@@ -72,5 +72,51 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  return { load, loadByKey }
+  const loadBySlugs = async (slugs: string[]) => {
+    const existing = items.value?.filter(s => slugs.includes(s.slug))
+    if (existing.length === slugs.length) return Promise.resolve(existing)
+
+    const checkNotFound = notFound.value?.filter(s => slugs.includes(s))
+    if (slugs.length - existing.length === checkNotFound.length) {
+      return Promise.reject(new Error(`Items "${checkNotFound.join('", "')}" already in not found list`))
+    }
+
+    const searchForSlugs = slugs.filter(s => !checkNotFound.includes(s) && !existing.find(e => e.slug === s))
+
+    return sb.value?.getStories({
+      ...requestDefaults.value,
+      cv: cv.value,
+      by_slugs: searchForSlugs.join(','),
+      starts_with: path,
+    }).then(resp => {
+      cv.value = resp?.data.cv
+      const stories = (resp as SbStories<C>).data.stories
+      items.value?.push(...stories)
+      notFound.value?.push(...searchForSlugs.filter(s => !stories.find(st => st.slug === s)))
+      return stories
+    }).catch(err => {
+      if (err.status !== 404) {
+        console.error('Storyblok returned an error:', JSON.stringify(err))
+      }
+
+      notFound.value?.push(...searchForSlugs)
+      return Promise.reject(new Error('Not found'))
+    })
+  }
+
+  return { load, loadBySlug, loadBySlugs, loadByKey: loadBySlug }
+}
+
+export const SbStoreFactory = <Component extends SbComponentType<string>>(name: string) => {
+  return defineStore(name, () => {
+    const items = ref<SbStoryData<Component>[]>([])
+    const notFound = ref<string[]>([])
+    const { load, loadBySlugs }
+      = SbStoreUtilityFactory<Component>({
+        items: (items as unknown as Ref<SbStoryData<Component>[]>),
+        notFound,
+      })
+
+    return { items, notFound, load, loadBySlugs }
+  })
 }
