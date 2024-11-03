@@ -23,6 +23,7 @@ export type SbLink = {
   url: string
   linktype: 'url' | 'story' | 'email'
   anchor: string
+  email: string
   cached_url: string
   fieldtype: 'multilink'
   cached_url: string
