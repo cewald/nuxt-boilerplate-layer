@@ -21,7 +21,9 @@ export type SbImage = {
 export type SbLink = {
   id: string
   url: string
-  linktype: 'url' | 'story'
+  linktype: 'url' | 'story' | 'email'
+  anchor: string
+  cached_url: string
   fieldtype: 'multilink'
   cached_url: string
 }
