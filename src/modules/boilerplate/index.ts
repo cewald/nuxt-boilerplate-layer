@@ -55,7 +55,7 @@ export default defineNuxtModule<ModuleOptions>({
     tailwindcss: {
       configFile: 'tailwind.config.js',
     },
-    i18n: false,
+    i18n: true,
     dayjs: {
       defaultDateFormat: 'YYYY-MM-DD',
     },

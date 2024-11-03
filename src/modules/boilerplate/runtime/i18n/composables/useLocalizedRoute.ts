@@ -1,7 +1,6 @@
 import { useI18n } from 'vue-i18n'
 
 export const useLocalizedRoute = () => {
-  // @ts-expect-error localeProperties might not defined, depending on the i18n setup
   const { locale, localeProperties } = useI18n()
 
   const iso = computed(() => localeProperties.value.language?.toLowerCase())
