@@ -111,12 +111,12 @@ export const SbStoreFactory = <Component extends SbComponentType<string>>(name: 
   return defineStore(name, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
-    const { load, loadBySlugs }
+    const { load, loadBySlug, loadBySlugs }
       = SbStoreUtilityFactory<Component>({
         items: (items as unknown as Ref<SbStoryData<Component>[]>),
         notFound,
       })
 
-    return { items, notFound, load, loadBySlugs }
+    return { items, notFound, load, loadBySlug, loadBySlugs }
   })
 }
