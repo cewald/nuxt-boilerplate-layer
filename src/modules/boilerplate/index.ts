@@ -143,16 +143,16 @@ export default defineNuxtModule<ModuleOptions>({
           + 'are required in @cewald/nuxt-boilerplate configuration.')
       }
 
-      // Mock i18n methods if not installed
-      if (!options.i18n) {
-        addImportsSources({
-          from: resolve('./lib/mocks/i18n'),
-          imports: [ 'useI18n', '$t' ],
-        })
-      }
-
       // Add prerendering
       await prerenderSbPages(options)
+    }
+
+    // Mock i18n methods if not installed
+    if (!options.i18n) {
+      addImportsSources({
+        from: resolve('./lib/mocks/i18n'),
+        imports: [ 'useI18n', '$t' ],
+      })
     }
 
     /*
