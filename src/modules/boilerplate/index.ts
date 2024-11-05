@@ -3,6 +3,7 @@ import {
   addImports,
   createResolver,
   addImportsDir,
+  addImportsSources,
   addComponentsDir,
   addTypeTemplate,
   installModule,
@@ -140,6 +141,14 @@ export default defineNuxtModule<ModuleOptions>({
       } else {
         console.warn('The "storyblok.oauthToken" and "storyblok.spaceId" options '
           + 'are required in @cewald/nuxt-boilerplate configuration.')
+      }
+
+      // Mock i18n methods if not installed
+      if (!options.i18n) {
+        addImportsSources({
+          from: resolve('./lib/mocks/i18n'),
+          imports: [ 'useI18n', '$t' ],
+        })
       }
 
       // Add prerendering
