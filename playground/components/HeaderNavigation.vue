@@ -1,11 +1,17 @@
+<script setup lang="ts">
+defineProps<{
+  links: (SbComponentLinkExternal | SbComponentLinkInternal | SbComponentLinkMailto)[]
+}>()
+</script>
+
 <template>
   <div>
-    <NuxtLinkLocale to="/">
-      Home
-    </NuxtLinkLocale> |
-    <NuxtLinkLocale to="/test">
-      Test
-    </NuxtLinkLocale> |
+    <template
+      v-for="link in links"
+      :key="link._uid"
+    >
+      <StoryblokLinkComponent :link="link" /> |
+    </template>
     <SwitchLocalePathLink locale="de">
       German
     </SwitchLocalePathLink> |
