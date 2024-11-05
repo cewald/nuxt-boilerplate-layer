@@ -7,7 +7,16 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
   const { storyblok } = useAppConfig()
   const { accessToken, region } = storyblok
 
-  const { locale, localeProperties, defaultLocale } = useI18n()
+  /**
+   * This is a simple way to get the current locale and language from the i18n module if it exists
+   * and mock its output if it doesn't. This is useful for the Storyblok API to know which language
+   * is currently being used in the application. I didn't want to make the i18n module a dependency,
+   * but still this should be considered.
+   */
+  const { locale, localeProperties, defaultLocale } = typeof useI18n === 'function'
+    ? useI18n()
+    : { locale: ref('en'), localeProperties: ref({ language: 'en-US' }), defaultLocale: 'en' }
+
   const language = computed(() => locale.value === defaultLocale ? 'default' : localeProperties.value.language)
 
   if (!api) {
@@ -19,7 +28,7 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
   }
 
   const requestDefaults = computed<SbStoryParams>(() => ({
-    language: language.value,
+    language: language.value?.toLowerCase(),
     version: import.meta.env.DEV === true ? 'draft' : 'published',
     cv: cv.value,
   }))
