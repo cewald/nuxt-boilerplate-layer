@@ -37,12 +37,17 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   notFound: Ref<string[]>
 }) => {
   const SbApiStore = useStoryblokApiStore()
-  const { api, requestDefaults } = SbApiStore
-  const { cv } = toRefs(SbApiStore)
+  const { api } = SbApiStore
+  const { cv, requestDefaults } = toRefs(SbApiStore)
 
+  /**
+   * This is just a proxy method of the Storyblok API getStories method.
+   * It will load stories from the Storyblok API and store them in the items ref.
+   * But will not look after them in the store before.
+   */
   const load = async (params: SbStoriesParams = {}) => {
     return api?.getStories({
-      ...requestDefaults,
+      ...requestDefaults.value,
       cv: cv.value,
       starts_with: path,
       ...params,
@@ -53,15 +58,19 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
+  const filterItemsBy = (value: string | string[], key: keyof typeof items.value[number] = 'slug') =>
+    items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
+      && i['lang'] === requestDefaults.value.language)
+
   const loadBySlug = async (slug: string) => {
-    const checkIfExists = items.value?.find(s => s.slug === slug)
-    if (checkIfExists) return Promise.resolve(checkIfExists)
+    const checkIfExists = filterItemsBy(slug)
+    if (checkIfExists.length > 0) return Promise.resolve(checkIfExists)
 
     const checkIfNotFound = notFound.value?.find(s => s === slug)
     if (checkIfNotFound) return Promise.reject(new Error('Not found'))
 
     return api?.getStory(`${path}/${slug}`, {
-      ...requestDefaults,
+      ...requestDefaults.value,
       cv: cv.value,
     }).then(resp => {
       cv.value = resp?.data.cv
@@ -79,7 +88,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   }
 
   const loadBySlugs = async (slugs: string[]) => {
-    const existing = items.value?.filter(s => slugs.includes(s.slug))
+    const existing = filterItemsBy(slugs)
     if (existing.length === slugs.length) return Promise.resolve(existing)
 
     const checkNotFound = notFound.value?.filter(s => slugs.includes(s))
@@ -90,7 +99,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     const searchForSlugs = slugs.filter(s => !checkNotFound.includes(s) && !existing.find(e => e.slug === s))
 
     return api?.getStories({
-      ...requestDefaults,
+      ...requestDefaults.value,
       cv: cv.value,
       by_slugs: searchForSlugs.join(','),
       starts_with: path,
@@ -110,19 +119,19 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  return { load, loadBySlug, loadBySlugs }
+  return { load, loadBySlug, loadBySlugs, filterItemsBy }
 }
 
 export const SbStoreFactory = <Component extends SbComponentType<string>>(storeName: string) => {
   return defineStore(storeName, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
-    const { load, loadBySlug, loadBySlugs }
+    const { load, loadBySlug, loadBySlugs, filterItemsBy }
       = SbStoreUtilityFactory<Component>({
         items: (items as unknown as Ref<SbStoryData<Component>[]>),
         notFound,
       })
 
-    return { items, notFound, load, loadBySlug, loadBySlugs }
+    return { items, notFound, load, loadBySlug, loadBySlugs, filterItemsBy }
   })
 }
