@@ -8,7 +8,7 @@ This is a personal-preference boilerplate for [Nuxt](https://nuxt.com/) projects
 
 ## Configs
 
-You can set all configruations in your `nuxt.config.ts` over the `boilerplate` config-name. A full list of configurations, you can see in the `module/index.ts` of the [main local module](A component to serve `SbImage` images as they are stored in Storyblok) of the boilerplate-layer.
+You can set all configruations in your `nuxt.config.ts` over the `boilerplate` config-name. A full list of configurations, you can see in the `module/index.ts` of the [main local module](https://github.com/cewald/nuxt-boilerplate-layer/blob/main/src/modules/boilerplate/index.ts#L18-L37) of the boilerplate-layer.
 
 ## Features
 
