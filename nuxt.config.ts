@@ -54,5 +54,6 @@ export default defineNuxtConfig({
   },
   svgo: {
     componentPrefix: 'icon',
+    customComponent: 'SvgIcon',
   },
 })
