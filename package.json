@@ -22,7 +22,8 @@
     "vite-env.d.ts",
     "tsconfig.json",
     "package-lock.json",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "nuxi dev playground",
