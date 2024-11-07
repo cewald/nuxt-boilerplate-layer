@@ -38,12 +38,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
   eslint: {
     config: {
       stylistic: true,
