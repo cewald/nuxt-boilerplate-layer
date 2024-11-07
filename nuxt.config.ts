@@ -1,10 +1,9 @@
-import svgLoader from 'vite-svg-loader'
-
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
+    'nuxt-svgo',
     '@nuxtjs/fontaine',
     '@pinia/nuxt',
   ],
@@ -29,9 +28,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-10-27',
   vite: {
-    plugins: [
-      svgLoader(),
-    ],
     // Remove SASS deprecation message
     // @see https://github.com/vitejs/vite/issues/18164
     css: {
@@ -55,5 +51,8 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     download: true,
+  },
+  svgo: {
+    componentPrefix: 'icon',
   },
 })
