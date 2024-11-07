@@ -81,7 +81,7 @@ export default defineNuxtModule<ModuleOptions>({
      */
     if (options.storyblok) {
       if (!options.storyblok?.apiKey) {
-        console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate configuration.')
+        console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration.')
       }
 
       // Add configs to appConfig
@@ -140,7 +140,7 @@ export default defineNuxtModule<ModuleOptions>({
         })
       } else {
         console.warn('The "storyblok.oauthToken" and "storyblok.spaceId" options '
-          + 'are required in @cewald/nuxt-boilerplate configuration.')
+          + 'are required in @cewald/nuxt-boilerplate-layer configuration.')
       }
 
       // Add prerendering

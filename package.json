@@ -1,5 +1,5 @@
 {
-  "name": "@cewald/nuxt-boilerplate",
+  "name": "@cewald/nuxt-boilerplate-layer",
   "version": "0.0.0",
   "description": "Personal boilerplate layer for nuxt projects",
   "author": "Ewald <me@ewaldewald.com>",
@@ -9,10 +9,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cewald/nuxt-boilerplate.git"
+    "url": "git+https://github.com/cewald/nuxt-boilerplate-layer.git"
   },
   "bugs": {
-    "url": "https://github.com/cewald/nuxt-boilerplate/issues"
+    "url": "https://github.com/cewald/nuxt-boilerplate-layer/issues"
   },
   "type": "module",
   "main": "./nuxt.config.ts",
