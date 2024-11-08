@@ -122,8 +122,12 @@ export class SbComponentsToTypes {
     return this.components
   }
 
+  protected getComponentNames(components: SbApiComponent<SbApiComponentSchema>[]) {
+    return components.map(component => component.name)
+  }
+
   protected getAllComponentNames() {
-    return this.components.map(component => component.name)
+    return this.getComponentNames(this.components)
   }
 
   protected getTypeNameByComponentName(name: string) {
@@ -224,18 +228,31 @@ export class SbComponentsToTypes {
     })
     baseImport.replaceWithText(baseImport.getText().replace(';', ''))
 
+    if (components.length === 0) {
+      return this.types.getText()
+    }
+
+    const nestableComponents = components.filter(c => c.is_nestable)
+    const contentTypeComponents = components.filter(c => !c.is_nestable)
+
+    const commonTypeFactory = (components: SbApiComponent[], name?: string) => ([
+      {
+        isExported: true,
+        name: 'Sb' + (name || '') + 'ComponentNames',
+        type: this.getComponentNames(components).map(n => `'${n}'`).join('\n| '),
+      },
+      {
+        isExported: true,
+        name: 'Sb' + (name || '') + 'Components',
+        type: components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
+      },
+    ])
+
     const nameTypes = this.types
       .addTypeAliases([
-        {
-          isExported: true,
-          name: 'SbComponentName',
-          type: this.getAllComponentNames().map(n => `'${n}'`).join('\n| '),
-        },
-        {
-          isExported: true,
-          name: 'SbComponents',
-          type: this.components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
-        },
+        ...commonTypeFactory(this.components),
+        ...commonTypeFactory(nestableComponents, 'Nestable'),
+        ...commonTypeFactory(contentTypeComponents, 'ContentType'),
       ])
     nameTypes.forEach(type => type.replaceWithText(type.getText().replace(';', '')))
 
