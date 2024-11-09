@@ -59,12 +59,12 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   }
 
   const filterItemsBy = (value: string | string[], key: keyof typeof items.value[number] = 'slug') =>
-    items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
-      && i['lang'] === requestDefaults.value.language)
+    computed(() => items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
+      && i['lang'] === requestDefaults.value.language))
 
   const loadBySlug = async (slug: string) => {
     const checkIfExists = filterItemsBy(slug)
-    if (checkIfExists.length > 0) return Promise.resolve(checkIfExists[0])
+    if (checkIfExists.value.length > 0) return Promise.resolve(checkIfExists.value[0])
 
     const checkIfNotFound = notFound.value?.find(s => s === slug)
     if (checkIfNotFound) return Promise.reject(new Error('Not found'))
@@ -89,14 +89,14 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
 
   const loadBySlugs = async (slugs: string[]) => {
     const existing = filterItemsBy(slugs)
-    if (existing.length === slugs.length) return Promise.resolve(existing)
+    if (existing.value.length === slugs.length) return Promise.resolve(existing)
 
     const checkNotFound = notFound.value?.filter(s => slugs.includes(s))
-    if (slugs.length - existing.length === checkNotFound.length) {
+    if (slugs.length - existing.value.length === checkNotFound.length) {
       return Promise.reject(new Error(`Items "${checkNotFound.join('", "')}" already in not found list`))
     }
 
-    const searchForSlugs = slugs.filter(s => !checkNotFound.includes(s) && !existing.find(e => e.slug === s))
+    const searchForSlugs = slugs.filter(s => !checkNotFound.includes(s) && !existing.value.find(e => e.slug === s))
 
     return api?.getStories({
       ...requestDefaults.value,
