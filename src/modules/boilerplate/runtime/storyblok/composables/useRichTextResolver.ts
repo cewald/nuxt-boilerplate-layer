@@ -39,8 +39,8 @@ export const useSbRichTextResolver = (
     [MarkTypes.STRIKE]: [ 's', 'line-through' ],
     [MarkTypes.LINK]: [ 'a', 'underline underline-offset-8' ],
     [BlockTypes.PARAGRAPH]: [ 'p', 'mb-8' ],
-    [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal list-inside' ],
-    [BlockTypes.UL_LIST]: [ 'ul', 'list-disc list-inside' ],
+    [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
+    [BlockTypes.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
   }
 
   for (const key in classes) {
@@ -95,12 +95,20 @@ export const useSbRichTextResolver = (
           href = `mailto:${href}`
         }
 
+        if (linktype === LinkTypes.STORY) {
+          return h(
+            LinkComponent || 'a',
+            { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
+            LinkComponent
+              ? () => node.children || node.text
+              : node.children || node.text
+          )
+        }
+
         return h(
-          linktype === LinkTypes.STORY ? LinkComponent || 'a' : 'a',
+          'a',
           { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
-          LinkComponent
-            ? () => node.children || node.text
-            : node.children || node.text
+          node.children || node.text
         )
       },
     },
