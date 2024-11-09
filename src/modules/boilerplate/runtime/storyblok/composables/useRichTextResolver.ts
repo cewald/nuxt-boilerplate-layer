@@ -63,8 +63,9 @@ export const useSbRichTextResolver = (classes: RteClasses = {}) => {
         }
       }
 
-      return { tag: [
-        { tag: `${tagMap[key]}${n?.attrs?.level || ''}`, attrs: { ...orgResolved?.tag[0]?.attrs, ...classValue(n) } },
+      return { tag: [ {
+        tag: `${tagMap[key] ?? orgResolved?.tag ?? 'p'}${n?.attrs?.level ?? ''}`,
+        attrs: { ...orgResolved?.tag[0]?.attrs, ...classValue(n) } },
       ] }
     }
   }
