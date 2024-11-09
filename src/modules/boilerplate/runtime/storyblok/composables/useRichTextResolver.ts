@@ -98,7 +98,9 @@ export const useSbRichTextResolver = (
         return h(
           linktype === LinkTypes.STORY ? LinkComponent || 'a' : 'a',
           { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
-          node.children || node.text
+          LinkComponent
+            ? () => node.children || node.text
+            : node.children || node.text
         )
       },
     },
