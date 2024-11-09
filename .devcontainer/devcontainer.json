@@ -1,6 +1,6 @@
 {
   "name": "@cewald/nuxt-boilerplate-layer",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bullseye",
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers-contrib/features/netlify-cli:1": {},
