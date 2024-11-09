@@ -58,12 +58,12 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  const filterItemsBy = (value: string | string[], key: keyof typeof items.value[number] = 'slug') =>
+  const itemsBy = (value: string | string[], key: keyof typeof items.value[number] = 'slug') =>
     computed(() => items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
       && i['lang'] === requestDefaults.value.language))
 
   const loadBySlug = async (slug: string) => {
-    const checkIfExists = filterItemsBy(slug)
+    const checkIfExists = itemsBy(slug)
     if (checkIfExists.value.length > 0) return Promise.resolve(checkIfExists.value[0])
 
     const checkIfNotFound = notFound.value?.find(s => s === slug)
@@ -88,7 +88,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   }
 
   const loadBySlugs = async (slugs: string[]) => {
-    const existing = filterItemsBy(slugs)
+    const existing = itemsBy(slugs)
     if (existing.value.length === slugs.length) return Promise.resolve(existing)
 
     const checkNotFound = notFound.value?.filter(s => slugs.includes(s))
@@ -119,20 +119,20 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  return { load, loadBySlug, loadBySlugs, filterItemsBy }
+  return { load, loadBySlug, loadBySlugs, itemsBy }
 }
 
 export const SbStoreFactory = <Component extends SbComponentType<string>>(storeName: string, path?: string) => {
   return defineStore(storeName, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
-    const { load, loadBySlug, loadBySlugs, filterItemsBy }
+    const { load, loadBySlug, loadBySlugs, itemsBy }
       = SbStoreUtilityFactory<Component>({
         path,
         items: (items as unknown as Ref<SbStoryData<Component>[]>),
         notFound,
       })
 
-    return { items, notFound, load, loadBySlug, loadBySlugs, filterItemsBy }
+    return { items, notFound, load, loadBySlug, loadBySlugs, itemsBy }
   })
 }
