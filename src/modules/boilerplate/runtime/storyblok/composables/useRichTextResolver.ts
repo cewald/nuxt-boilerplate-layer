@@ -1,81 +1,112 @@
-import { RichtextSchema, RichtextResolver } from 'storyblok-js-client'
-import type { ISbRichtext, ISbNode } from 'storyblok-js-client'
+import { h, createTextVNode } from 'vue'
+import type { VNode } from 'vue'
 
-export type RteClasses = {
-  italic?: string
-  strong?: string
-  bold?: string
-  strike?: string
-  underline?: string
-  paragraph?: string
-  link?: string
-  textStyle?: string
-  heading?: Record<string, string>
+import {
+  richTextResolver,
+  MarkTypes,
+  BlockTypes,
+  LinkTypes,
+} from '@storyblok/richtext'
+
+import type {
+  StoryblokRichTextOptions,
+  StoryblokRichTextNodeResolver,
+  StoryblokRichTextNodeTypes,
+} from '@storyblok/richtext'
+
+export type NodesKeys = StoryblokRichTextNodeTypes | HeadingTypes
+export type RteSchema = Partial<Record<NodesKeys, [string, string]>>
+export type RteClasses = Partial<Record<NodesKeys, string>>
+
+export enum HeadingTypes {
+  H1 = 'h1',
+  H2 = 'h2',
+  H3 = 'h3',
+  H4 = 'h4',
+  H5 = 'h5',
+  H6 = 'h6'
 }
 
-export const useSbRichTextResolver = (classes: RteClasses = {}) => {
-  const schema = cloneDeep(RichtextSchema)
-
-  classes = {
-    italic: 'font-italic',
-    bold: 'font-semibold',
-    strong: 'font-semibold',
-    underline: 'underline-offset-8',
-    strike: 'line-through',
-    paragraph: 'mb-8',
-    link: 'underline underline-offset-8',
-    ...classes,
+export const useSbRichTextResolver = (
+  classes: RteClasses = {},
+  LinkComponent?: ReturnType<typeof resolveComponent>
+) => {
+  const schemaMap: RteSchema = {
+    [MarkTypes.ITALIC]: [ 'em', 'font-italic' ],
+    [MarkTypes.BOLD]: [ 'strong', 'font-semibold' ],
+    [MarkTypes.STRONG]: [ 'strong', 'font-semibold' ],
+    [MarkTypes.UNDERLINE]: [ 'u', 'underline-offset-8' ],
+    [MarkTypes.STRIKE]: [ 's', 'line-through' ],
+    [MarkTypes.LINK]: [ 'a', 'underline underline-offset-8' ],
+    [BlockTypes.PARAGRAPH]: [ 'p', 'mb-8' ],
+    [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal list-inside' ],
+    [BlockTypes.UL_LIST]: [ 'ul', 'list-disc list-inside' ],
   }
 
-  const tagMap: Record<string, string> = {
-    italic: 'i',
-    strong: 'strong',
-    bold: 'strong',
-    strike: 'strike',
-    underline: 'u',
-    paragraph: 'p',
-    heading: 'h',
-    link: 'a',
-    textStyle: '',
+  for (const key in classes) {
+    if (Object.values(HeadingTypes).includes(key as HeadingTypes)) continue
+
+    const tag = schemaMap[key as NodesKeys]?.[0]
+    const classNames = classes[key as NodesKeys]
+    if (!tag || !classNames) continue
+
+    schemaMap[key as NodesKeys] = [ tag, classNames ]
   }
 
-  for (const row of Object.entries(classes)) {
-    const [ key, value ] = row as [ keyof RteClasses, RteClasses[keyof RteClasses]]
-    const schemaKey: keyof (typeof schema) = Object.keys(schema.nodes).includes(key) ? 'nodes' : 'marks'
-    const classValue = (n: ISbNode) => {
-      if (typeof value === 'object' && n?.attrs?.level) {
-        return value[n?.attrs?.level] ? { class: value[n?.attrs?.level] } : {}
-      }
-      return { class: value as string }
+  const tailwindResolvers: Partial<Record<NodesKeys, StoryblokRichTextNodeResolver<VNode>>> = {}
+  for (const key in schemaMap) {
+    if (!schemaMap[key as StoryblokRichTextNodeTypes]) continue
+    const resolver: StoryblokRichTextNodeResolver<VNode> = node => {
+      return h(
+        schemaMap[key as StoryblokRichTextNodeTypes]?.[0] || 'div',
+        { ...node.attrs, class: schemaMap[key as StoryblokRichTextNodeTypes]?.[1] },
+        node.children || node.text
+      )
     }
+    tailwindResolvers[key as StoryblokRichTextNodeTypes] = resolver
+  }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (schema as any)[schemaKey][key] = (n: ISbNode) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const orgResolved = (RichtextSchema as any)[schemaKey][key](n)
+  const test: string = 'blok'
+  schemaMap[test as NodesKeys] = [ 'div', '' ]
 
-      if (key === 'link') {
-        const { linktype } = n.attrs
-        if (linktype === 'story') {
-          (orgResolved?.tag[0] || {}).attrs.href = orgResolved?.tag[0]?.attrs.href
-        } else {
-          (orgResolved?.tag[0] || {}).attrs.target = '_blank'
+  const rteOptions: StoryblokRichTextOptions<VNode> = {
+    renderFn: h,
+    textFn: createTextVNode,
+    resolvers: {
+      ...tailwindResolvers,
+      [MarkTypes.STYLED]: node => {
+        return node.text as unknown as VNode
+      },
+      [MarkTypes.TEXT_STYLE]: node => {
+        return node.text as unknown as VNode
+      },
+      [BlockTypes.HEADING]: node => {
+        const { level, ...rest } = node.attrs || {}
+        const attributes = { ...rest, class: classes[`h${level}` as NodesKeys] }
+        return h(`h${level}`, attributes, node.children)
+      },
+      [MarkTypes.LINK]: node => {
+        const { anchor, linktype, href: href1, ...rest } = node.attrs || {}
+        let { href } = node.attrs || {}
+
+        if (anchor) {
+          href = `${href}#${anchor}`
+        } else if (linktype === LinkTypes.EMAIL) {
+          href = `mailto:${href}`
         }
-      }
 
-      return { tag: [ {
-        tag: `${tagMap[key] ?? orgResolved?.tag ?? 'p'}${n?.attrs?.level ?? ''}`,
-        attrs: { ...orgResolved?.tag[0]?.attrs, ...classValue(n) } },
-      ] }
-    }
+        return h(
+          linktype === LinkTypes.STORY ? LinkComponent || 'a' : 'a',
+          { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
+          node.children || node.text
+        )
+      },
+    },
   }
 
-  const rteResolver = new RichtextResolver(schema)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const render = (data?: ISbRichtext, options?: any) => {
-    return rteResolver.render(data, options)
+  const render = <C extends VNode, T extends SbRichText<C>>(data: T) => {
+    return richTextResolver(rteOptions).render(data)
   }
 
-  return { rteResolver, render }
+  return { render }
 }

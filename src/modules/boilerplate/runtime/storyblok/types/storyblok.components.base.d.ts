@@ -1,7 +1,9 @@
+import type { VNode } from 'vue'
+import type { StoryblokRichTextNode } from '@storyblok/richtext'
+
 import type {
   ISbComponentType,
   ISbStoryData,
-  ISbRichtext,
   ISbLinkURLObject,
   ISbStoryParams,
   ISbStoriesParams,
@@ -39,7 +41,7 @@ export type SbComponent<
 
 export type SbComponentType<T> = ISbComponentType<T>
 export type SbStoryData<C> = ISbStoryData<C>
-export type SbRichText = ISbRichtext
+export type SbRichText<T = VNode> = StoryblokRichTextNode<T>
 
 export type SbImage = {
   id: number

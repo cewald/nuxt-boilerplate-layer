@@ -8,9 +8,14 @@ const { tag = 'div', content, classes = {} } = defineProps<{
 }>()
 
 const $attrs = useAttrs()
+const { i18n } = useAppConfig()
 
-const { render: richtextRender } = useSbRichTextResolver(classes)
-const RenderedRichtext = () => h(tag, { ...$attrs, innerHTML: richtextRender(content) })
+const LinkComponent = i18n == true
+  ? resolveComponent('NuxtLinkLocale')
+  : resolveComponent('NuxtLink')
+
+const { render: richtextRender } = useSbRichTextResolver(classes, LinkComponent)
+const RenderedRichtext = () => h(tag, { ...$attrs }, richtextRender(content))
 </script>
 
 <template>
