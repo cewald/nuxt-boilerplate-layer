@@ -33,6 +33,7 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 
 * `useScreen`: TailwindCSS based media-query helper which uses the project TW config
 * `useDayJs`: `dayjs` lib composable
+* `useHideWhileScrolling`: hide elements while scrolling is in progress
 * `useLoadScript`: helper to load and init external scripts
 * `useLocalizedRoute`: helper to modify and transform paths using `vue-i18n`
 
