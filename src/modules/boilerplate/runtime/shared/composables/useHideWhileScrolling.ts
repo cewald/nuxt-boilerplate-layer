@@ -18,5 +18,5 @@ export function useHideWhileScrolling() {
     }
   })
 
-  return { visible, isScrolling }
+  return { visible, isScrolling, toTop, onTop: top, onBottom: bottom }
 }
