@@ -65,4 +65,5 @@ export type SbLink = {
   url: string
   anchor?: string
   email?: string
+  target?: string
 }
