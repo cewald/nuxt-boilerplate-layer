@@ -161,6 +161,11 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir([ 'composables', 'utils' ]
       .map(name => resolve('./runtime/shared/' + name)))
 
+    addComponentsDir({
+      path: resolve('./runtime/shared/components'),
+      global: true,
+    })
+
     Object.assign(nuxt.options.appConfig, { dayjs: options.dayjs })
   },
 })
