@@ -37,7 +37,7 @@ export interface SbStories<Content = SbComponentType<string>> {
 export type SbComponent<
   Name extends string,
   Options extends Record<string, unknown>
-> = SbComponentType<Name> & Options
+> = SbComponentType<Name> & Options & { _uid: string, component: Name }
 
 export type SbComponentType<T> = ISbComponentType<T>
 export type SbStoryData<C> = ISbStoryData<C>
