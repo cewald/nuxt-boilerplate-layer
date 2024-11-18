@@ -166,6 +166,17 @@ export default defineNuxtModule<ModuleOptions>({
       global: true,
     })
 
+    /**
+     * Add zod and its types + folder for auto-imports
+     */
+    addImports({ name: 'z', from: 'zod' })
+
+    nuxt.hook('prepare:types', ({ references }) => {
+      references.push({ types: 'zod' })
+    })
+
+    addImportsDir(resolve(nuxt.options.rootDir, 'schemas'))
+
     Object.assign(nuxt.options.appConfig, { dayjs: options.dayjs })
   },
 })
