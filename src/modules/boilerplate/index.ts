@@ -182,7 +182,9 @@ export default defineNuxtModule<ModuleOptions>({
      * This is to prevent and ESM import error for thos libs
      */
     extendViteConfig(c => {
-      c.optimizeDeps?.include?.push('dayjs', 'fast-deep-equal')
+      c.optimizeDeps = c.optimizeDeps || {}
+      c.optimizeDeps.include = c.optimizeDeps.include || []
+      c.optimizeDeps.include.push('dayjs', 'fast-deep-equal')
     })
 
     /**
