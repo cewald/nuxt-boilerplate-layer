@@ -37,6 +37,12 @@ export default defineNuxtConfig({
         },
       },
     },
+    optimizeDeps: {
+      include: [
+        'dayjs',
+        'fast-deep-equal',
+      ],
+    },
   },
   eslint: {
     config: {
