@@ -7,6 +7,7 @@ import {
   addComponentsDir,
   addTypeTemplate,
   installModule,
+  extendViteConfig,
 } from '@nuxt/kit'
 
 import {
@@ -177,6 +178,16 @@ export default defineNuxtModule<ModuleOptions>({
 
     addImportsDir(resolve(nuxt.options.srcDir, 'schemas'))
 
+    /**
+     * This is to prevent and ESM import error for thos libs
+     */
+    extendViteConfig(c => {
+      c.optimizeDeps?.include?.push('dayjs', 'fast-deep-equal')
+    })
+
+    /**
+     * Add dayjs to appConfig
+     */
     Object.assign(nuxt.options.appConfig, { dayjs: options.dayjs })
   },
 })
