@@ -175,7 +175,7 @@ export default defineNuxtModule<ModuleOptions>({
       references.push({ types: 'zod' })
     })
 
-    addImportsDir(resolve(nuxt.options.rootDir, 'schemas'))
+    addImportsDir(resolve(nuxt.options.srcDir, 'schemas'))
 
     Object.assign(nuxt.options.appConfig, { dayjs: options.dayjs })
   },
