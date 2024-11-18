@@ -179,7 +179,7 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolve(nuxt.options.srcDir, 'schemas'))
 
     /**
-     * This is to prevent and ESM import error for thos libs
+     * This is to prevent an ESM import error for thos libs
      */
     extendViteConfig(c => {
       c.optimizeDeps = c.optimizeDeps || {}
