@@ -3,10 +3,15 @@ const model = defineModel<undefined>()
 </script>
 
 <template>
-  <input
-    v-model="model"
-    type="text"
-    :name="hpFieldName"
-    class="hidden"
-  >
+  <div class="relative">
+    <input
+      v-model="model"
+      :name="hpFieldName"
+      type="text"
+      class="invisible absolute left-[1000px] top-0"
+      aria-hidden="true"
+      autocomplete="off"
+      tabindex="-1"
+    >
+  </div>
 </template>
