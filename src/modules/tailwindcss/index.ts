@@ -29,6 +29,22 @@ export default defineNuxtModule({
 
     Object.assign(nuxt.options.appConfig, twScreens)
 
+    /**
+     * Add TailwindCSS custom screens to the TailwindCSS config
+     */
     addImportsDir([ 'composables' ].map(name => resolve('./runtime/' + name)))
+
+    /**
+     * Add boilerplate files to TailwindCSS config to be able to purge unused classes
+     */
+    nuxt.hook('tailwindcss:config', c => {
+      if (!c.content) return
+      const boilerplatePath = resolve('../boilerplate/**/*.{vue,js,jsx,mjs,ts,tsx}')
+      if ('files' in c.content) {
+        c.content.files.push(boilerplatePath)
+      } else if (Array.isArray(c.content)) {
+        c.content.push(boilerplatePath)
+      }
+    })
   },
 })
