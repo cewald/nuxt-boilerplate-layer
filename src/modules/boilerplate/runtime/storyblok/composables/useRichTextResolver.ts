@@ -41,6 +41,7 @@ export const useSbRichTextResolver = (
     [BlockTypes.PARAGRAPH]: [ 'p', 'mb-8' ],
     [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
     [BlockTypes.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
+    [BlockTypes.LIST_ITEM]: [ 'li', '' ],
   }
 
   for (const key in classes) {

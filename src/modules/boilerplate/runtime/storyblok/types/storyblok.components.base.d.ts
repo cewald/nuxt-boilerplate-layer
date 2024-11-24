@@ -1,5 +1,5 @@
 import type { VNode } from 'vue'
-import type { StoryblokRichTextNode } from '@storyblok/richtext'
+import type { StoryblokRichTextNode, LinkTypes } from '@storyblok/richtext'
 
 import type {
   ISbComponentType,
@@ -58,7 +58,7 @@ export type SbImage = {
 }
 
 export type SbLink = {
-  linktype: 'url' | 'story' | 'email'
+  linktype: LinkTypes
   fieldtype: 'multilink'
   id: string
   cached_url: string
