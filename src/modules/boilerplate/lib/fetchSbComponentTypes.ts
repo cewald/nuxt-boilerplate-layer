@@ -212,7 +212,7 @@ export class SbComponentsToTypes {
       case 'markdown':
         return 'string'
       case 'table':
-        return 'unknown'
+        return 'SbTable'
       default:
         return 'unknown'
     }

@@ -67,3 +67,28 @@ export type SbLink = {
   email?: string
   target?: string
 }
+
+export type SbTable = {
+  tbody: SbTableRow[]
+  thead: SbTableHead[]
+  fieldtype: 'table'
+}
+
+type SbBaseTableRow = {
+  _uid: string
+  body: SbTableCol[]
+}
+
+export type SbTableRow = SbBaseTableRow & {
+  component: '_table_row'
+}
+
+export type SbTableHead = SbBaseTableRow & {
+  component: '_table_head'
+}
+
+export type SbTableCol = {
+  _uid: string
+  value: string
+  component: string
+}
