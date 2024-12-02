@@ -74,21 +74,20 @@ export type SbTable = {
   fieldtype: 'table'
 }
 
-type SbBaseTableRow = {
+export type SbTableRow = {
   _uid: string
   body: SbTableCol[]
-}
-
-export type SbTableRow = SbBaseTableRow & {
   component: '_table_row'
 }
 
-export type SbTableHead = SbBaseTableRow & {
+export type SbTableHead = {
+  _uid: string
+  value: string
   component: '_table_head'
 }
 
 export type SbTableCol = {
   _uid: string
   value: string
-  component: string
+  component: '_table_col'
 }
