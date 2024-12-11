@@ -26,6 +26,7 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 
 * `dayjs`
 * `storyblok-js-client` (optional)
+* `zod`
 * `@vueuse/core`
 * `@cewald/eslint-config`
 
@@ -36,6 +37,14 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 * `useHideWhileScrolling`: hide elements while scrolling is in progress
 * `useLoadScript`: helper to load and init external scripts
 * `useLocalizedRoute`: helper to modify and transform paths using `vue-i18n`
+* `useValidation`: validate a set of refs using a `zod` schema
+* `useModalStore`: store for modal-handling in combination with the `ModalWrapper` component
+
+### Components
+
+* `AccordionWrapper`/`AccordionItem`: modular accordion component
+* `ModalWrapper`: wrapper for a modal based on `useModalStore` store
+* `FormHoneypotInput`: form-input for honey-pot-form validation
 
 ### Utils
 
