@@ -235,18 +235,20 @@ export class SbComponentsToTypes {
     const nestableComponents = components.filter(c => c.is_nestable)
     const contentTypeComponents = components.filter(c => !c.is_nestable)
 
-    const commonTypeFactory = (components: SbApiComponent[], name?: string) => ([
-      {
-        isExported: true,
-        name: 'Sb' + (name || '') + 'ComponentNames',
-        type: this.getComponentNames(components).map(n => `'${n}'`).join('\n| '),
-      },
-      {
-        isExported: true,
-        name: 'Sb' + (name || '') + 'Components',
-        type: components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
-      },
-    ])
+    const commonTypeFactory = (components: SbApiComponent[], name?: string) => (components.length > 0
+      ? [
+          {
+            isExported: true,
+            name: 'Sb' + (name || '') + 'ComponentNames',
+            type: this.getComponentNames(components).map(n => `'${n}'`).join('\n| '),
+          },
+          {
+            isExported: true,
+            name: 'Sb' + (name || '') + 'Components',
+            type: components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
+          },
+        ]
+      : [])
 
     const nameTypes = this.types
       .addTypeAliases([
