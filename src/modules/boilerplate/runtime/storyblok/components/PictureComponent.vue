@@ -176,7 +176,7 @@ onMounted(() => {
       :alt="sbImage.alt || sbImage.title"
       :width="size.width"
       :height="size.height"
-      :class="imgClass || 'bg-slate-100 w-full max-w-full text-transparent'"
+      :class="imgClass || 'w-full max-w-full text-transparent'"
       :aria-label=" title || sbImage.title || sbImage.alt"
       role="image"
     >
