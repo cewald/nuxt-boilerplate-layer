@@ -8,6 +8,7 @@ import {
   addTypeTemplate,
   installModule,
   extendViteConfig,
+  addServerScanDir,
 } from '@nuxt/kit'
 
 import {
@@ -27,6 +28,7 @@ export interface ModuleOptions {
       types: string[]
       aliasMap: Record<string, string[]>
     }
+    netlifyBuildHookUrl?: string
   } | false
   tailwindcss?: {
     configFile: string
@@ -146,6 +148,15 @@ export default defineNuxtModule<ModuleOptions>({
 
       // Add prerendering
       await prerenderSbPages(options)
+
+      // Add server imports
+      addServerScanDir(resolve('./runtime/storyblok/server'))
+
+      // Add Netlify build hook URL
+      nuxt.options.runtimeConfig.app = {
+        ...nuxt.options.runtimeConfig.app,
+        netlifyBuildHookUrl: options.storyblok.netlifyBuildHookUrl,
+      }
     }
 
     // Mock i18n methods if not installed
