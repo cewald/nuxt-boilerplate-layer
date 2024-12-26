@@ -1,15 +1,12 @@
 import { addPrerenderRoutes } from '@nuxt/kit'
-import StoryblokClient from 'storyblok-js-client'
 import type { ModuleOptions } from '../'
+import { clientFactory } from './'
 
 export const prerenderSbPages = async (options: ModuleOptions) => {
-  if (!options?.storyblok || !options?.storyblok?.prerender) return
+  if (!options?.storyblok || !options?.storyblok?.prerender || !options.storyblok?.apiKey) return
   const { types, aliasMap } = options.storyblok.prerender
 
-  const api = new StoryblokClient({
-    accessToken: options.storyblok.apiKey,
-    cache: { type: 'memory', clear: 'auto' },
-  })
+  const api = clientFactory(options.storyblok.apiKey)
 
   const requestDefaults = {
     version: import.meta.env.DEV === true ? 'draft' : 'published',

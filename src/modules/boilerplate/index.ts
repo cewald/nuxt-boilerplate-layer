@@ -15,13 +15,13 @@ import {
   transformTypesToGlobal,
   sbComponentsToTypesFactory,
   prerenderSbPages,
+  clientFactory as storyblokClient,
 } from './lib'
 
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
     oauthToken?: string
-    spaceId?: string | number
     fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
     prerender?: {
@@ -81,18 +81,29 @@ export default defineNuxtModule<ModuleOptions>({
     Object.assign(nuxt.options.appConfig, { i18n: options.i18n })
 
     /*
-     * Add /storyblok setup
-     */
-    if (options.storyblok) {
-      if (!options.storyblok?.apiKey) {
-        console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration.')
-      }
+    * Add /storyblok setup
+    */
+    if (options?.storyblok && !options?.storyblok?.apiKey) {
+      console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration.'
+        + 'Storyblok features will not be installed.')
+    }
+
+    if (options.storyblok && options.storyblok?.apiKey) {
+      const { apiKey, region } = options.storyblok
+
+      // Fetch Storyblok SpaceId
+      const api = storyblokClient(apiKey)
+      const spaceId = await api.get('cdn/spaces/me')
+        .then(({ data }: { data: { space: { id: number } } }) => data.space.id)
+        .catch(() => {
+          console.error('Couldn\'t fetch Storyblok space-id.')
+          return undefined
+        })
 
       // Add configs to appConfig
-      const { apiKey, region } = options.storyblok
       Object.assign(
         nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', region } }
+        { storyblok: { accessToken: apiKey || '', spaceId, region } }
       )
 
       // Add dynamic imports
@@ -121,7 +132,7 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       // Add dynamic content types
-      const { fetchTypes, oauthToken, spaceId } = options.storyblok
+      const { fetchTypes, oauthToken } = options.storyblok
       if (fetchTypes && oauthToken && spaceId) {
         const SbComponents = await sbComponentsToTypesFactory(
           oauthToken,
@@ -143,7 +154,7 @@ export default defineNuxtModule<ModuleOptions>({
           getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
         })
       } else {
-        console.warn('The "storyblok.oauthToken" and "storyblok.spaceId" options '
+        console.warn('The "storyblok.oauthToken" options '
           + 'are required in @cewald/nuxt-boilerplate-layer configuration.')
       }
 
