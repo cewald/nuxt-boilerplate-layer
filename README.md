@@ -78,6 +78,10 @@ This module can automatically generate types from the components of your Storybl
 
 If you are using prerendering for specific routes this module can automatically load content URLs of specific component-types from Storyblok and add them using `addPrerenderRoutes`.
 
+#### Prerendering by build-hook
+
+If you are using Netlify and want to automatically update your prerendered content, you can use a [Storyblok web-hook](https://www.storyblok.com/docs/guide/in-depth/webhooks) to trigger a build using a [Netlify build-hook](https://docs.netlify.com/configure-builds/build-hooks/). There are two config-params necessary for it: `netlifyBuildHookUrl` & `netlifyBuildHookSecret`. The `netlifyBuildHookSecret` is a random secret string to secure the URL from outside-calls and the `netlifyBuildHookUrl` is the URL of the Netlify build-hook we mentioned earlier. If you have configured those two params you can serve the `/api/storyblok/webhook/[your-secret]` endpoint as a webhook in Storyblok and a new build is triggered each time you save a story.
+
 ## Installation
 
 1. Just install the package using your package manager:

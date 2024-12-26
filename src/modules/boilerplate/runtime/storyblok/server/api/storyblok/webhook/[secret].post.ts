@@ -9,16 +9,23 @@ const SbWebHook = z.object({
 })
 
 export default defineEventHandler(async event => {
+  const config = useRuntimeConfig(event)
+  const { netlifyBuildHookSecret, netlifyBuildHookUrl } = config.app
+  const requestSecret = getRouterParam(event, 'secret')
+
+  if (!requestSecret || !netlifyBuildHookSecret || requestSecret !== netlifyBuildHookSecret) {
+    return createError({ statusMessage: 'Invalid secret', status: 403 })
+  }
+
   const result = await readValidatedBody(event, body => SbWebHook.safeParse(body))
   if (result.error) {
     return createError({ statusMessage: 'Invalid request body', status: 500, data: result.error })
   }
 
-  const config = useRuntimeConfig(event)
-  if (!config.app.netlifyBuildHookUrl) {
+  if (!netlifyBuildHookUrl) {
     return createError({ statusMessage: 'Netlify build hook URL not configured', status: 500 })
   }
 
-  return $fetch(config.app.netlifyBuildHookUrl, { method: 'POST' })
+  return $fetch(netlifyBuildHookUrl, { method: 'POST' })
     .then(data => ({ message: 'Success', storyblokWebhook: result.data, buildHook: data || 'Success' }))
 })

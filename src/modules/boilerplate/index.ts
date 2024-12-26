@@ -29,6 +29,7 @@ export interface ModuleOptions {
       aliasMap: Record<string, string[]>
     }
     netlifyBuildHookUrl?: string
+    netlifyBuildHookSecret?: string
   } | false
   tailwindcss?: {
     configFile: string
@@ -149,13 +150,17 @@ export default defineNuxtModule<ModuleOptions>({
       // Add prerendering
       await prerenderSbPages(options)
 
-      // Add server imports
-      addServerScanDir(resolve('./runtime/storyblok/server'))
+      const { prerender, netlifyBuildHookUrl, netlifyBuildHookSecret } = options.storyblok
+      if (prerender && netlifyBuildHookUrl && netlifyBuildHookSecret) {
+        // Add server imports
+        addServerScanDir(resolve('./runtime/storyblok/server'))
 
-      // Add Netlify build hook URL
-      nuxt.options.runtimeConfig.app = {
-        ...nuxt.options.runtimeConfig.app,
-        netlifyBuildHookUrl: options.storyblok.netlifyBuildHookUrl,
+        // Add Netlify build hook URL
+        nuxt.options.runtimeConfig.app = {
+          ...nuxt.options.runtimeConfig.app,
+          netlifyBuildHookUrl,
+          netlifyBuildHookSecret,
+        }
       }
     }
 
