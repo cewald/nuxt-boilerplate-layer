@@ -19,7 +19,7 @@ export const useDayJS = () => {
 
   const now = () => dayjs()
 
-  const dayjsFactory = (o: dayjs.ConfigType) => dayjs(o)
+  const dayjsFactory = (o?: dayjs.ConfigType) => dayjs(o)
 
   return { dayjs: dayjsFactory, now, currentDateInFormat, toDate, formatDate }
 }
