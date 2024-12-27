@@ -50,7 +50,11 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 ### Utils
 
 * `cloneDeep`
+* `randomBetween`
+* `sample`
+* `shuffle`
 * `lazyloadPicture`: lazyload picture elements using intersection-observer
+* `honeypot`: Return honeypot field name for form antispam
 
 ### Storyblok
 
