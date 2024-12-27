@@ -81,22 +81,20 @@ export default defineNuxtModule<ModuleOptions>({
     Object.assign(nuxt.options.appConfig, { i18n: options.i18n })
 
     /*
-    * Add /storyblok setup
+    * Warn if Storyblok is enabled but no API key is provided
     */
     if (options?.storyblok && !options?.storyblok?.apiKey) {
-      console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration.'
+      console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration. '
         + 'Storyblok features will not be installed.')
+      console.warn('If you want to disable the Storyblok features, '
+        + 'set "boilerplate.storyblok: false" in the module options.')
     }
 
+    /*
+    * Add Storyblok setup
+    */
     if (options.storyblok) {
       const { apiKey, region } = options.storyblok
-
-      // Warn if apiKey is missing
-      if (!apiKey) {
-        console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration.')
-        console.warn('If you want to disable the Storyblok features, '
-          + 'set "boilerplate.storyblok: false" in the module options.')
-      }
 
       // Fetch Storyblok SpaceId
       let spaceId
