@@ -39,6 +39,8 @@ const getFileDimenstions = (file: SbImage) => {
   return { width: parseInt(split[0] || '0'), height: parseInt(split[1] || '0') }
 }
 
+const isSVG = (file: SbImage) => /\.svg$/.test(file.filename)
+
 const hasPortraitImage = computed(() => !!sbImagePortrait
   && !!sbImagePortrait.id && sbImagePortrait.filename !== sbImage.filename)
 
@@ -48,8 +50,10 @@ const portraitSize = computed(() => hasPortraitImage.value && sbImagePortrait
   ? getFileDimenstions(sbImagePortrait)
   : getRatio(0, orgSize.value.height, portraitCropRatio || `${size.value.width}:${size.value.height}`))
 
-const getPath = (width: number = 0, height: number = 0, image = sbImage) =>
-  `${image.filename}/m/${width}x${height}`
+const getPath = (width: number = 0, height: number = 0, image = sbImage) => {
+  if (isSVG(image)) return image.filename
+  return `${image.filename}/m/${width}x${height}`
+}
 
 const getRatio = (width: number = 0, height: number = 0, ratio: string) => {
   const [ oWidth, oHeight ] = ratio.split(':').map(n => parseInt(n))
