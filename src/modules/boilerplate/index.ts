@@ -99,13 +99,16 @@ export default defineNuxtModule<ModuleOptions>({
       }
 
       // Fetch Storyblok SpaceId
-      const api = storyblokClient(apiKey || '')
-      const spaceId = await api.get('cdn/spaces/me')
-        .then(({ data }: { data: { space: { id: number } } }) => data.space.id)
-        .catch(() => {
-          console.error('Couldn\'t fetch Storyblok space-id.')
-          return undefined
-        })
+      let spaceId
+      if (apiKey) {
+        const api = storyblokClient(apiKey)
+        spaceId = await api.get('cdn/spaces/me')
+          .then(({ data }: { data: { space: { id: number } } }) => data.space.id)
+          .catch(() => {
+            console.error('Couldn\'t fetch Storyblok space-id.')
+            return undefined
+          })
+      }
 
       // Add configs to appConfig
       Object.assign(
