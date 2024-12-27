@@ -8,7 +8,7 @@ This is a personal-preference boilerplate for [Nuxt](https://nuxt.com/) projects
 
 ## Configs
 
-You can set all configruations in your `nuxt.config.ts` over the `boilerplate` config-name. A full list of configurations, you can see in the `module/index.ts` of the [main local module](https://github.com/cewald/nuxt-boilerplate-layer/blob/main/src/modules/boilerplate/index.ts#L18-L37) of the boilerplate-layer.
+You can set all configruations in your `nuxt.config.ts` over the `boilerplate` config-name. A full list of configurations, you can see in the `module/index.ts` of the [main local module](https://github.com/cewald/nuxt-boilerplate-layer/blob/main/src/modules/boilerplate/index.ts) of the boilerplate-layer.
 
 ## Features
 
@@ -28,6 +28,7 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 * `storyblok-js-client` (optional)
 * `zod`
 * `@vueuse/core`
+* `gemoji`
 * `@cewald/eslint-config`
 
 ### Composables
@@ -73,6 +74,10 @@ This module can automatically generate types from the components of your Storybl
 
 * `useStoryblokApiStore`: Pinia store for an initialized `StoryblokClient`
 * `useRichTextResolver`: Tooling to resolve structured-data Storyblok strings into HTML
+
+#### Utils
+
+* `getSbImageOrientation`: get image orientation by Storyblok image object
 
 #### Prerendering
 
