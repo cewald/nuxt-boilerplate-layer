@@ -1,5 +1,6 @@
 import { h, createTextVNode } from 'vue'
 import type { VNode } from 'vue'
+import { nameToEmoji } from 'gemoji'
 
 import {
   richTextResolver,
@@ -110,6 +111,12 @@ export const useSbRichTextResolver = (
           'a',
           { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
           node.children || node.text
+        )
+      },
+      [BlockTypes.EMOJI]: node => {
+        return h(
+          'span', { class: schemaMap[node.type as NodesKeys]?.[1] },
+          nameToEmoji[node.attrs?.name] || `:${node.attrs?.name}:`
         )
       },
     },
