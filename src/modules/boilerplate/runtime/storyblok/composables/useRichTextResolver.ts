@@ -43,6 +43,7 @@ export const useSbRichTextResolver = (
     [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
     [BlockTypes.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
     [BlockTypes.LIST_ITEM]: [ 'li', '' ],
+    [BlockTypes.EMOJI]: [ 'span', '' ],
   }
 
   for (const key in classes) {
@@ -115,7 +116,8 @@ export const useSbRichTextResolver = (
       },
       [BlockTypes.EMOJI]: node => {
         return h(
-          'span', { class: schemaMap[node.type as NodesKeys]?.[1] },
+          schemaMap[node.type as NodesKeys]?.[0] || 'span',
+          { class: schemaMap[node.type as NodesKeys]?.[1] },
           nameToEmoji[node.attrs?.name] || `:${node.attrs?.name}:`
         )
       },
