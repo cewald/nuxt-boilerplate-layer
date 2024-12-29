@@ -12,21 +12,21 @@ import type {
 export type SbStoryParams = ISbStoryParams
 export type SbStoriesParams = ISbStoriesParams
 
-export interface SbStory<Content = SbComponentType<string>> {
+export interface SbStory<Content = SbComponentType<string>, Rels = SbComponents, Links = SbComponents> {
   data: {
     cv: number
-    links: (SbStoryData<Content> | ISbLinkURLObject)[]
-    rels: SbStoryData<Content>[]
+    links: (SbStoryData<Links> | ISbLinkURLObject)[]
+    rels: SbStoryData<Rels>[]
     story: SbStoryData<Content>
   }
   headers: unknown
 }
 
-export interface SbStories<Content = SbComponentType<string>> {
+export interface SbStories<Content = SbComponentType<string>, Rels = SbComponents, Links = SbComponents> {
   data: {
     cv: number
-    links: (SbStoryData<Content> | ISbLinkURLObject)[]
-    rels: SbStoryData<Content>[]
+    links: (SbStoryData<Links> | ISbLinkURLObject)[]
+    rels: SbStoryData<Rels>[]
     stories: SbStoryData<Content>[]
   }
   perPage: number
