@@ -99,10 +99,9 @@ export const useSbRichTextResolver = (
           href = `mailto:${href}`
         }
 
-        console.error('TETSTEST')
         if (linktype === LinkTypes.STORY) {
           // Storyblok links are prefixed with the language code, but the NuxtLink component is handling it anyways
-          href = sbLanguageCodes.reduce((l, c) => l.replace(new RegExp(`^${c}/`), ''), href)
+          href = sbLanguageCodes.reduce((l, c) => l.replace(new RegExp(`^/${c}`), ''), href)
           return h(
             LinkComponent || 'a',
             { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
