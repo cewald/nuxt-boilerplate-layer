@@ -96,12 +96,16 @@ export default defineNuxtModule<ModuleOptions>({
     if (options.storyblok) {
       const { apiKey, region } = options.storyblok
 
-      // Fetch Storyblok SpaceId
+      // Fetch Storyblok spaceId and languageCodes
       let spaceId
+      const languageCodes: string[] = []
       if (apiKey) {
         const api = storyblokClient(apiKey)
         spaceId = await api.get('cdn/spaces/me')
-          .then(({ data }: { data: { space: { id: number } } }) => data.space.id)
+          .then(({ data }: { data: { space: { id: number, language_codes: string[] } } }) => {
+            languageCodes.push(...data.space.language_codes)
+            return data.space.id
+          })
           .catch(() => {
             console.error('Couldn\'t fetch Storyblok space-id.')
             return undefined
@@ -111,7 +115,7 @@ export default defineNuxtModule<ModuleOptions>({
       // Add configs to appConfig
       Object.assign(
         nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', spaceId, region } }
+        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region } }
       )
 
       // Add dynamic imports

@@ -8,13 +8,13 @@ const { tag = 'div', content, classes = {} } = defineProps<{
 }>()
 
 const $attrs = useAttrs()
-const { i18n } = useAppConfig()
+const { i18n, storyblok } = useAppConfig()
 
 const LinkComponent = i18n == true
   ? resolveComponent('NuxtLinkLocale')
   : resolveComponent('NuxtLink')
 
-const { render: richtextRender } = useSbRichTextResolver(classes, LinkComponent)
+const { render: richtextRender } = useSbRichTextResolver(classes, LinkComponent, storyblok.languageCodes)
 const RenderedRichtext = () => h(tag, { ...$attrs }, richtextRender(content))
 </script>
 

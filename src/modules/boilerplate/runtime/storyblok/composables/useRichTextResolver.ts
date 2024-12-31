@@ -30,7 +30,8 @@ export enum HeadingTypes {
 
 export const useSbRichTextResolver = (
   classes: RteClasses = {},
-  LinkComponent?: ReturnType<typeof resolveComponent>
+  LinkComponent?: ReturnType<typeof resolveComponent>,
+  sbLanguageCodes: string[] = []
 ) => {
   const schemaMap: RteSchema = {
     [MarkTypes.ITALIC]: [ 'em', 'font-italic' ],
@@ -90,7 +91,7 @@ export const useSbRichTextResolver = (
       },
       [MarkTypes.LINK]: node => {
         const { anchor, linktype, href: href1, ...rest } = node.attrs || {}
-        let { href } = node.attrs || {}
+        let { href } = node.attrs as { href: string } || {}
 
         if (anchor) {
           href = `${href}#${anchor}`
@@ -98,7 +99,10 @@ export const useSbRichTextResolver = (
           href = `mailto:${href}`
         }
 
+        console.error('TETSTEST')
         if (linktype === LinkTypes.STORY) {
+          // Storyblok links are prefixed with the language code, but the NuxtLink component is handling it anyways
+          href = sbLanguageCodes.reduce((l, c) => l.replace(new RegExp(`^${c}/`), ''), href)
           return h(
             LinkComponent || 'a',
             { ...rest, href, class: schemaMap[node.type as NodesKeys]?.[1] },
