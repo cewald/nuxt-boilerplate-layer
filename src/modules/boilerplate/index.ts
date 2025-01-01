@@ -171,7 +171,7 @@ export default defineNuxtModule<ModuleOptions>({
       }
 
       // Add prerendering
-      await prerenderSbPages(options)
+      await prerenderSbPages(options, nuxt)
 
       const { prerender, netlifyBuildHookUrl, netlifyBuildHookSecret } = options.storyblok
       if (prerender && netlifyBuildHookUrl && netlifyBuildHookSecret) {
