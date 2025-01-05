@@ -1,6 +1,7 @@
 import StoryblokClient from 'storyblok-js-client'
 import type { SourceFile } from 'ts-morph'
 import { Project, IndentationText, QuoteKind } from 'ts-morph'
+import { pascalCase } from 'change-case'
 
 export interface SbApiComponentResponse {
   component_groups: SbApiComponentGroup[]
@@ -131,15 +132,7 @@ export class SbComponentsToTypes {
   }
 
   protected getTypeNameByComponentName(name: string) {
-    return this.typePrefix + this.snakeToPascal(name)
-  }
-
-  protected snakeToPascal(snakeStr: string) {
-    return snakeStr
-      .toLowerCase()
-      .split('_')
-      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-      .join('')
+    return this.typePrefix + pascalCase(name)
   }
 
   protected mapComponentFieldToProperty(schema: SbApiComponentSchema) {
