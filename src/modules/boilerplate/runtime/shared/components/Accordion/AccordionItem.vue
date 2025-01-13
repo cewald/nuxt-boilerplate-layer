@@ -26,9 +26,11 @@ const emit = defineEmits<{
     <div
       :id="`accordion-header-${uName}`"
       role="button"
+      tabindex="0"
       :aria-expanded="isOpen"
       :aria-controls="`accordion-panel-${uName}`"
       @click="toggle()"
+      @keydown.enter="toggle()"
     >
       <slot name="title" />
     </div>
