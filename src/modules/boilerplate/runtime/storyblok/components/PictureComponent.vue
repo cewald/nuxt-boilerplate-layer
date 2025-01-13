@@ -182,7 +182,6 @@ onMounted(() => {
       :height="size.height"
       :class="imgClass || 'w-full max-w-full text-transparent'"
       :aria-label=" title || sbImage.title || sbImage.alt"
-      role="image"
     >
   </picture>
 </template>
