@@ -1,10 +1,16 @@
+import {
+  useIntervalFn,
+  useIntersectionObserver,
+  useElementHover,
+  usePreferredReducedMotion,
+  unrefElement,
+} from '@vueuse/core'
+import type { MaybeElement } from '@vueuse/core'
 import { scroll } from 'motion'
-import { useIntervalFn, useIntersectionObserver, useElementHover, usePreferredReducedMotion } from '@vueuse/core'
-import type { ComponentPublicInstance } from 'vue'
 
-export default function useScroller<T extends HTMLElement | ComponentPublicInstance>(
+export default function useScroller<T extends MaybeElement>(
   scroller: Ref<HTMLElement | null>,
-  scrollItems: Ref<T[] | null>,
+  scrollItems: Ref<T[]>,
   options: {
     scrollOptions?: ScrollIntoViewOptions | ScrollToOptions
     autoscroll?: boolean
@@ -32,18 +38,14 @@ export default function useScroller<T extends HTMLElement | ComponentPublicInsta
     if (active.value === index || !scroller.value || !scrollItems.value) return
     if (scrollItems.value[index]) {
       if (useScrollIntoView) {
-        const element: HTMLElement = scrollItems.value[index] instanceof HTMLElement
-          ? scrollItems.value[index]
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          : (scrollItems.value[index] as any).box
-        element.scrollIntoView(scrollOptions.value)
+        const element = unrefElement(scrollItems.value[index])
+        element?.scrollIntoView(scrollOptions.value)
       } else {
         const xOffset = scrollItems.value.reduce((p, c, i) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const e: HTMLElement = c instanceof HTMLElement ? c : (c as any).box
-          return i < index ? p + e.getClientRects()[0].width : p
+          const e = unrefElement(c)
+          return i < index && e ? p + e.getClientRects()[0].width : p
         }, 0)
-        scroller.value.scrollTo({ ...scrollOptions.value, left: xOffset })
+        unrefElement(scroller)?.scrollTo({ ...scrollOptions.value, left: xOffset })
       }
     }
   }
