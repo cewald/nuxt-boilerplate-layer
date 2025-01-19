@@ -9,7 +9,7 @@ import type { MaybeElement } from '@vueuse/core'
 import { scroll } from 'motion'
 
 export default function useScroller<T extends MaybeElement>(
-  scroller: Ref<HTMLElement | null>,
+  scroller: Ref<MaybeElement>,
   scrollItems: Ref<T[]>,
   options: {
     scrollOptions?: ScrollIntoViewOptions | ScrollToOptions
@@ -75,7 +75,7 @@ export default function useScroller<T extends MaybeElement>(
         const current = tresholds.value.reduce((p, c) => progress >= p && progress <= c ? p : c, 0)
         active.value = tresholds.value.findIndex(v => v === current)
       },
-      { axis: 'x', container: scroller.value }
+      { axis: 'x', container: scroller.value as HTMLElement }
     )
   })
 
@@ -120,7 +120,7 @@ export default function useScroller<T extends MaybeElement>(
     else stopAutoscroll()
   })
 
-  const scrollerHover = useElementHover(scroller)
+  const scrollerHover = useElementHover(unrefElement(scroller))
   watchEffect(() => {
     if (!autoscroll) return
     if (scrollerHover.value) stopAutoscroll()
