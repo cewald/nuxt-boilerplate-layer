@@ -5,11 +5,11 @@ import {
   usePreferredReducedMotion,
   unrefElement,
 } from '@vueuse/core'
-import type { MaybeElement } from '@vueuse/core'
+import type { MaybeElement, MaybeRefOrGetter } from '@vueuse/core'
 import { scroll } from 'motion'
 
 export default function useScroller<T extends MaybeElement>(
-  scroller: Ref<MaybeElement>,
+  scroller: Ref<MaybeRefOrGetter>,
   scrollItems: Ref<T[]>,
   options: {
     scrollOptions?: ScrollIntoViewOptions | ScrollToOptions
@@ -34,8 +34,10 @@ export default function useScroller<T extends MaybeElement>(
     ...scrollOptionsDefault,
   }))
 
-  const scrollTo = (index: number) => {
+  const scrollTo = (index: number, resetTimer = true) => {
     if (active.value === index || !scroller.value || !scrollItems.value) return
+    if (resetTimer) pause()
+
     if (scrollItems.value[index]) {
       if (useScrollIntoView) {
         const element = unrefElement(scrollItems.value[index])
@@ -48,21 +50,16 @@ export default function useScroller<T extends MaybeElement>(
         unrefElement(scroller)?.scrollTo({ ...scrollOptions.value, left: xOffset })
       }
     }
+
+    if (resetTimer) resume()
   }
 
-  const next = () => {
-    if (active.value === ((scrollItems.value?.length || 0) - 1)) {
-      return scrollTo(0)
-    }
-    scrollTo(active.value + 1)
-  }
+  const nextIndex = computed(() => active.value === ((scrollItems.value?.length || 0) - 1) ? 0 : active.value + 1)
+  const prevIndex = computed(() => active.value === 0 ? (scrollItems.value?.length || 0) - 1 : active.value - 1)
 
-  const prev = () => {
-    if (active.value === 0) {
-      return scrollTo((scrollItems.value?.length || 0) - 1)
-    }
-    scrollTo(active.value - 1)
-  }
+  const next = () => scrollTo(nextIndex.value)
+  const prev = () => scrollTo(prevIndex.value)
+  const autoNext = () => scrollTo(nextIndex.value, false)
 
   const count = computed(() => scrollItems.value?.length || 0)
   const tresholds = computed(() => Array.from({ length: count.value }, (v, i) => i * (100 / count.value)))
@@ -85,7 +82,7 @@ export default function useScroller<T extends MaybeElement>(
     // It seems as if the tryOnScopeDispose function inside the useIntervalFn is not working properly, when
     // used outside a setup function of a SFC.
     const controls = useIntervalFn(
-      next,
+      autoNext,
       interval,
       { immediate: autoscroll && autostart }
     )
@@ -127,7 +124,8 @@ export default function useScroller<T extends MaybeElement>(
     else startAutoscroll()
   })
 
-  return { active,
+  return {
+    active,
     scrollTo,
     prev,
     next,
