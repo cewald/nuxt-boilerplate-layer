@@ -117,7 +117,7 @@ export default function useScroller<T extends MaybeElement>(
     else stopAutoscroll()
   })
 
-  const scrollerHover = useElementHover(unrefElement(scroller))
+  const scrollerHover = useElementHover(scroller)
   watchEffect(() => {
     if (!autoscroll) return
     if (scrollerHover.value) stopAutoscroll()
