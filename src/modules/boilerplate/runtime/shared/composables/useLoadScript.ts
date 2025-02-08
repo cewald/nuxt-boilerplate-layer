@@ -1,4 +1,4 @@
-export const useLoadScript = (scriptUrl: string, windowKey?: string) => {
+export const useLoadScript = (scriptUrl: string, windowKey?: string, persist?: boolean) => {
   const isReady = ref(false)
   const script = ref(scriptUrl)
   const key = ref(windowKey)
@@ -19,6 +19,7 @@ export const useLoadScript = (scriptUrl: string, windowKey?: string) => {
     .then(status => isReady.value = status)
 
   onUnmounted(() => {
+    if (persist === true) return
     scriptTag.value.remove()
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (key.value) delete window[key.value as keyof Window]
