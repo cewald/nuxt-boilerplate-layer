@@ -12,6 +12,7 @@ const {
   sizes = '100w',
   imgClass = '',
   title,
+  alt,
 } = defineProps<{
   sbImage: SbImage
   sbImagePortrait?: SbImage
@@ -23,6 +24,7 @@ const {
   sizes?: string
   imgClass?: string
   title?: string
+  alt?: string
 }>()
 
 const { breakpoints: defaultBreakpoints, getMediaQuery } = useScreens()
@@ -158,7 +160,7 @@ onMounted(() => {
   lazyloadPicture(picture.value as HTMLPictureElement)
 })
 
-const description = computed(() => title || sbImage.name || sbImage.alt || sbImage.title)
+const description = computed(() => alt || sbImage.name || sbImage.alt)
 </script>
 
 <template>
@@ -185,6 +187,7 @@ const description = computed(() => title || sbImage.name || sbImage.alt || sbIma
       :class="imgClass || 'w-full max-w-full text-transparent'"
       :alt="description"
       :aria-label="description"
+      :title="title || sbImage.title"
     >
   </picture>
 </template>
