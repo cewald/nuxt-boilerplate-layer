@@ -11,6 +11,7 @@ const {
   portraitMediaQuery: portraitMediaQueryProp,
   sizes = '100w',
   imgClass = '',
+  title,
 } = defineProps<{
   sbImage: SbImage
   sbImagePortrait?: SbImage
@@ -156,6 +157,8 @@ onMounted(() => {
   if (!lazyload) return
   lazyloadPicture(picture.value as HTMLPictureElement)
 })
+
+const description = computed(() => title || sbImage.name || sbImage.alt || sbImage.title)
 </script>
 
 <template>
@@ -177,11 +180,11 @@ onMounted(() => {
         [`${!!lazyload ? 'data-' : ''}srcset`]: srcset,
       }"
       :sizes="sizes"
-      :alt="sbImage.alt || sbImage.title"
       :width="size.width"
       :height="size.height"
       :class="imgClass || 'w-full max-w-full text-transparent'"
-      :aria-label=" title || sbImage.title || sbImage.alt"
+      :alt="description"
+      :aria-label="description"
     >
   </picture>
 </template>
