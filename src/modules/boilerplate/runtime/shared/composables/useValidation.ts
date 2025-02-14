@@ -59,7 +59,11 @@ export default function<T extends ZodRawShape>
 
   const errorMessages = computed(() => {
     if (errors.value) {
-      return Object.values(errors.value).map(err => err.map(e => e.message)).flat()
+      const messages = new Map<string, string[]>()
+      for (const key in errors.value) {
+        messages.set(key, errors.value[key].map(err => err.message))
+      }
+      return messages
     }
     return null
   })
