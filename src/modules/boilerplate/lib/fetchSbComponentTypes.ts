@@ -39,6 +39,35 @@ export interface SbApiComponent<T = SbApiComponentSchema> {
   content_type_asset_preview: unknown | null
 }
 
+export interface SbApiDatasourcesResponse {
+  datasources: SbApiDatasource[]
+}
+
+export interface SbApiDatasource {
+  id: number
+  name: string
+  slug: string
+  dimensions: unknown[]
+  created_at: string
+  updated_at: string
+}
+
+export interface SbApiDatasourceEntriesResponse {
+  datasource_entries: SbApiDatasourceEntry[]
+}
+
+export interface SbApiDatasourceEntry {
+  id: number
+  name: string
+  value: string
+  dimensions_value: unknown
+}
+
+export interface SbApiDatasourceEntryExt extends SbApiDatasourceEntry {
+  datasourceId: number
+  datasourceSlug: string
+}
+
 const componentFieldTypes = [
   'text',
   'textarea',
@@ -68,6 +97,7 @@ export type SbApiComponentSchemaBase = {
 
 export type SbApiComponentSchemaOptions = SbApiComponentSchemaBase & {
   type: 'option' | 'options'
+  datasource_slug?: string
   options?: { uid: string, name: string, value: string }[]
 }
 
@@ -91,6 +121,8 @@ export class SbComponentsToTypes {
   protected typePrefix = 'SbComponent'
 
   protected components: SbApiComponent[] = []
+  protected datasources: SbApiDatasource[] = []
+  protected datasourceEntries: SbApiDatasourceEntryExt[] = []
 
   constructor(oauthToken: string, spaceId: number | string, region?: string) {
     this.spaceId = spaceId
@@ -116,11 +148,48 @@ export class SbComponentsToTypes {
       })
   }
 
+  protected async fetchDatasources() {
+    return await this.api.get(`spaces/${this.spaceId}/datasources`)
+      .then(({ data }: { data: SbApiDatasourcesResponse }) => {
+        this.datasources = data.datasources
+      })
+      .catch(error => {
+        console.error('Error fetching datasources:', error)
+        this.components = []
+      })
+  }
+
+  protected async fetchDatasourceEntries(id: number, slug: string) {
+    return await this.api.get(`spaces/${this.spaceId}/datasource_entries/?datasource_id=${id}`)
+      .then(({ data }: { data: SbApiDatasourceEntriesResponse }) => {
+        this.datasourceEntries.push(...data.datasource_entries
+          .map(entry => ({ ...entry, datasourceId: id, datasourceSlug: slug })))
+      })
+      .catch(error => {
+        console.error('Error fetching datasource-entries:', error)
+        this.components = []
+      })
+  }
+
   protected async getComponents() {
     if (this.components.length === 0) {
       await this.fetchComponents()
     }
     return this.components
+  }
+
+  protected async getDatasources() {
+    if (this.datasources.length === 0) {
+      await this.fetchDatasources()
+      const entryPromises = this.datasources.map(ds => this.fetchDatasourceEntries(ds.id, ds.slug))
+      await Promise.all(entryPromises)
+    }
+    return this.datasources
+  }
+
+  protected getDatasource(slug: string) {
+    const entries = this.datasourceEntries.filter(entry => entry.datasourceSlug === slug)
+    return entries.length > 0 ? this.datasourceEntries.filter(entry => entry.datasourceSlug === slug) : null
   }
 
   protected getComponentNames(components: SbApiComponent<SbApiComponentSchema>[]) {
@@ -147,12 +216,25 @@ export class SbComponentsToTypes {
         return 'string'
       case 'boolean':
         return 'boolean'
-      case 'option':
-        return (schema as SbApiComponentSchemaOptions)?.options?.map(o => `'${o.value}'`).join(' | ') || 'string'
-      case 'options':
+      case 'option': {
+        const s = schema as SbApiComponentSchemaOptions
+        if (s?.datasource_slug) {
+          return this.getDatasource(s.datasource_slug)
+            ?.map(e => `'${e.value}'`).join(' | ') || 'string'
+        }
+        return s?.options?.map(o => `'${o.value}'`).join(' | ') || 'string'
+      }
+      case 'options':{
+        const s = schema as SbApiComponentSchemaOptions
+        if (s?.datasource_slug) {
+          return '('
+            + (this.getDatasource(s.datasource_slug)?.map(e => `'${e.value}'`).join(' | ') || 'string')
+            + ')[]'
+        }
         return '('
-          + ((schema as SbApiComponentSchemaOptions)?.options?.map(o => `'${o.value}'`).join(' | ') || 'string')
+          + (s?.options?.map(o => `'${o.value}'`).join(' | ') || 'string')
           + ')[]'
+      }
       case 'richtext':
         return 'SbRichText'
       case 'asset':
@@ -183,7 +265,8 @@ export class SbComponentsToTypes {
                     .forEach(c => acc.add(c))
                   return acc
                 }, new Set<string>())
-              return `(${[ ...getComponentsWithTags ].join('\n  | ')})[]`
+              const value = getComponentsWithTags.size > 0 ? [ ...getComponentsWithTags ].join('\n  | ') : 'string'
+              return `(${value})[]`
             }
             case '': {
               const getComponents = blockSchema.component_whitelist
@@ -212,6 +295,7 @@ export class SbComponentsToTypes {
   }
 
   public async generateTypes() {
+    await this.getDatasources()
     const components = await this.getComponents()
 
     const baseImport = this.types.addImportDeclaration({
