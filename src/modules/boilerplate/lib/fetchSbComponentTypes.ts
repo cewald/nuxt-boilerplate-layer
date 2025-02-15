@@ -204,6 +204,25 @@ export class SbComponentsToTypes {
     return this.typePrefix + pascalCase(name)
   }
 
+  protected getComponentTagsTypes() {
+    const tagMap = new Map<string, SbApiComponent[]>()
+    this.components.forEach(c => {
+      if (c.internal_tags_list?.length > 0) {
+        c.internal_tags_list.forEach(tag => {
+          const existing = tagMap.get(tag.name) || []
+          tagMap.set(tag.name, [ ...existing, c ])
+        })
+      }
+    })
+
+    const tags: ReturnType<typeof this.commonTypeFactory> = []
+    tagMap.forEach((components, tag) => {
+      tags.push(...this.commonTypeFactory(components, 'Tag' + pascalCase(tag)))
+    })
+
+    return tags
+  }
+
   protected mapComponentFieldToProperty(schema: SbApiComponentSchema) {
     if (!componentFieldTypes.includes(schema.type) || schema.type === 'section') return
 
@@ -312,26 +331,12 @@ export class SbComponentsToTypes {
     const nestableComponents = components.filter(c => c.is_nestable)
     const contentTypeComponents = components.filter(c => !c.is_nestable)
 
-    const commonTypeFactory = (components: SbApiComponent[], name?: string) => (components.length > 0
-      ? [
-          {
-            isExported: true,
-            name: 'Sb' + (name || '') + 'ComponentNames',
-            type: this.getComponentNames(components).map(n => `'${n}'`).join('\n| '),
-          },
-          {
-            isExported: true,
-            name: 'Sb' + (name || '') + 'Components',
-            type: components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
-          },
-        ]
-      : [])
-
     const nameTypes = this.types
       .addTypeAliases([
-        ...commonTypeFactory(this.components),
-        ...commonTypeFactory(nestableComponents, 'Nestable'),
-        ...commonTypeFactory(contentTypeComponents, 'ContentType'),
+        ...this.commonTypeFactory(this.components),
+        ...this.commonTypeFactory(nestableComponents, 'Nestable'),
+        ...this.commonTypeFactory(contentTypeComponents, 'ContentType'),
+        ...this.getComponentTagsTypes(),
       ])
     nameTypes.forEach(type => type.replaceWithText(type.getText().replace(';', '')))
 
@@ -357,6 +362,23 @@ export class SbComponentsToTypes {
     })
 
     return this.types.getText()
+  }
+
+  protected commonTypeFactory(components: SbApiComponent[], name?: string) {
+    return (components.length > 0
+      ? [
+          {
+            isExported: true,
+            name: 'Sb' + (name || '') + 'ComponentNames',
+            type: this.getComponentNames(components).map(n => `'${n}'`).join('\n| '),
+          },
+          {
+            isExported: true,
+            name: 'Sb' + (name || '') + 'Components',
+            type: components.map(c => this.getTypeNameByComponentName(c.name)).join('\n| '),
+          },
+        ]
+      : [])
   }
 
   public addTypesToFile(filePath: string, types: string) {
