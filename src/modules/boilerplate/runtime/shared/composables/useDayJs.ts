@@ -1,4 +1,7 @@
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
+dayjs.extend(customParseFormat)
 
 export const useDayJS = () => {
   const { dayjs: dayjsConfig } = useAppConfig()
@@ -19,7 +22,7 @@ export const useDayJS = () => {
 
   const now = () => dayjs()
 
-  const dayjsFactory = (o?: dayjs.ConfigType) => dayjs(o)
+  const parse = (dateString: string, format = defaultDateFormat) => dayjs(dateString, format)
 
-  return { dayjs: dayjsFactory, now, currentDateInFormat, toDate, formatDate }
+  return { dayjs, parse, now, currentDateInFormat, toDate, formatDate }
 }
