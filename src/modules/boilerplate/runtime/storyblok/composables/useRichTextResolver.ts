@@ -12,21 +12,16 @@ import {
 import type {
   StoryblokRichTextOptions,
   StoryblokRichTextNodeResolver,
-  StoryblokRichTextNodeTypes,
 } from '@storyblok/richtext'
 
-export type NodesKeys = StoryblokRichTextNodeTypes | HeadingTypes
+export type HeadingTypes = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+export type MarkTypesType = (typeof MarkTypes)[keyof typeof MarkTypes]
+export type BlockTypesType = (typeof BlockTypes)[keyof typeof BlockTypes]
+export type LinkTypesType = (typeof LinkTypes)[keyof typeof LinkTypes]
+
+export type NodesKeys = HeadingTypes | MarkTypesType | BlockTypesType | LinkTypesType | HeadingTypes
 export type RteSchema = Partial<Record<NodesKeys, [string, string]>>
 export type RteClasses = Partial<Record<NodesKeys, string>>
-
-export enum HeadingTypes {
-  H1 = 'h1',
-  H2 = 'h2',
-  H3 = 'h3',
-  H4 = 'h4',
-  H5 = 'h5',
-  H6 = 'h6'
-}
 
 export const useSbRichTextResolver = (
   classes: RteClasses = {},
@@ -48,7 +43,7 @@ export const useSbRichTextResolver = (
   }
 
   for (const key in classes) {
-    if (Object.values(HeadingTypes).includes(key as HeadingTypes)) continue
+    if (Object.values(HeadingTypes).includes(key)) continue
 
     const tag = schemaMap[key as NodesKeys]?.[0]
     const classNames = classes[key as NodesKeys]
@@ -59,19 +54,16 @@ export const useSbRichTextResolver = (
 
   const tailwindResolvers: Partial<Record<NodesKeys, StoryblokRichTextNodeResolver<VNode>>> = {}
   for (const key in schemaMap) {
-    if (!schemaMap[key as StoryblokRichTextNodeTypes]) continue
+    if (!schemaMap[key as NodesKeys]) continue
     const resolver: StoryblokRichTextNodeResolver<VNode> = node => {
       return h(
-        schemaMap[key as StoryblokRichTextNodeTypes]?.[0] || 'div',
-        { ...node.attrs, class: schemaMap[key as StoryblokRichTextNodeTypes]?.[1] },
+        schemaMap[key as NodesKeys]?.[0] || 'div',
+        { ...node.attrs, class: schemaMap[key as NodesKeys]?.[1] },
         node.children || node.text
       )
     }
-    tailwindResolvers[key as StoryblokRichTextNodeTypes] = resolver
+    tailwindResolvers[key as NodesKeys] = resolver
   }
-
-  const test: string = 'blok'
-  schemaMap[test as NodesKeys] = [ 'div', '' ]
 
   const rteOptions: StoryblokRichTextOptions<VNode> = {
     renderFn: h,
