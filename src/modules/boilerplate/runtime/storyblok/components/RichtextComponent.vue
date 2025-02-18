@@ -7,7 +7,7 @@ const { tag = 'div', content, classes = {} } = defineProps<{
   content: SbRichText
 }>()
 
-const $attrs = useAttrs()
+const $attrs: Record<string, unknown> = useAttrs()
 const { i18n, storyblok } = useAppConfig()
 
 const LinkComponent = i18n == true

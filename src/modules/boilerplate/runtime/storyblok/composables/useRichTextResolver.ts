@@ -19,7 +19,7 @@ export type MarkTypesType = (typeof MarkTypes)[keyof typeof MarkTypes]
 export type BlockTypesType = (typeof BlockTypes)[keyof typeof BlockTypes]
 export type LinkTypesType = (typeof LinkTypes)[keyof typeof LinkTypes]
 
-export type NodesKeys = HeadingTypes | MarkTypesType | BlockTypesType | LinkTypesType | HeadingTypes
+export type NodesKeys = HeadingTypes | MarkTypesType | BlockTypesType | LinkTypesType
 export type RteSchema = Partial<Record<NodesKeys, [string, string]>>
 export type RteClasses = Partial<Record<NodesKeys, string>>
 
