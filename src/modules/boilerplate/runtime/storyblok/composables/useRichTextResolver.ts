@@ -4,9 +4,9 @@ import { nameToEmoji } from 'gemoji'
 
 import {
   richTextResolver,
-  MarkTypes,
-  BlockTypes,
-  LinkTypes,
+  MarkTypes as MarkTypesEnum,
+  BlockTypes as BlockTypesEnum,
+  LinkTypes as LinkTypesEnum,
 } from '@storyblok/richtext'
 
 import type {
@@ -14,14 +14,36 @@ import type {
   StoryblokRichTextNodeResolver,
 } from '@storyblok/richtext'
 
+/**
+ * The next types are copies from enums of the @storyblok/richtext package (MarkTypes, BlockTypes, TextTypes).
+ * unfortunately, it is not possible to transform enum values into a string literal union type, that we
+ * need in our code for sufficiant key validation. Thats way we have to copy the values here.
+ */
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const blockTypes = [
+  'doc', 'heading', 'paragraph', 'blockquote', 'ordered_list', 'bullet_list',
+  'list_item', 'code_block', 'horizontal_rule', 'hard_break', 'image',
+  'emoji', 'blok',
+] as const
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const markTypes = [
+  'bold', 'strong', 'strike', 'underline', 'italic', 'code', 'link',
+  'anchor', 'styled', 'superscript', 'subscript', 'textStyle', 'highlight',
+] as const
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const textTypes = [ 'text' ] as const
+
+export type MarkTypes = typeof markTypes[number]
+export type BlockTypes = typeof blockTypes[number]
+export type TextTypes = typeof textTypes[number]
+
 const headingTypes = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ] as const
-
 export type HeadingTypes = typeof headingTypes[number]
-export type MarkTypesType = (typeof MarkTypes)[keyof typeof MarkTypes]
-export type BlockTypesType = (typeof BlockTypes)[keyof typeof BlockTypes]
-export type LinkTypesType = (typeof LinkTypes)[keyof typeof LinkTypes]
 
-export type NodesKeys = HeadingTypes | MarkTypesType | BlockTypesType | LinkTypesType
+export type NodesKeys = HeadingTypes | MarkTypes | BlockTypes | TextTypes
 export type RteSchema = Partial<Record<NodesKeys, [string, string]>>
 export type RteClasses = Partial<Record<NodesKeys, string>>
 
@@ -31,17 +53,17 @@ export const useSbRichTextResolver = (
   sbLanguageCodes: string[] = []
 ) => {
   const schemaMap: RteSchema = {
-    [MarkTypes.ITALIC]: [ 'em', 'font-italic' ],
-    [MarkTypes.BOLD]: [ 'strong', 'font-semibold' ],
-    [MarkTypes.STRONG]: [ 'strong', 'font-semibold' ],
-    [MarkTypes.UNDERLINE]: [ 'u', 'underline-offset-8' ],
-    [MarkTypes.STRIKE]: [ 's', 'line-through' ],
-    [MarkTypes.LINK]: [ 'a', 'underline underline-offset-8' ],
-    [BlockTypes.PARAGRAPH]: [ 'p', 'mb-8' ],
-    [BlockTypes.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
-    [BlockTypes.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
-    [BlockTypes.LIST_ITEM]: [ 'li', '' ],
-    [BlockTypes.EMOJI]: [ 'span', '' ],
+    [MarkTypesEnum.ITALIC]: [ 'em', 'font-italic' ],
+    [MarkTypesEnum.BOLD]: [ 'strong', 'font-semibold' ],
+    [MarkTypesEnum.STRONG]: [ 'strong', 'font-semibold' ],
+    [MarkTypesEnum.UNDERLINE]: [ 'u', 'underline-offset-8' ],
+    [MarkTypesEnum.STRIKE]: [ 's', 'line-through' ],
+    [MarkTypesEnum.LINK]: [ 'a', 'underline underline-offset-8' ],
+    [BlockTypesEnum.PARAGRAPH]: [ 'p', 'mb-8' ],
+    [BlockTypesEnum.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
+    [BlockTypesEnum.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
+    [BlockTypesEnum.LIST_ITEM]: [ 'li', '' ],
+    [BlockTypesEnum.EMOJI]: [ 'span', '' ],
   }
 
   for (const key in classes) {
@@ -72,28 +94,28 @@ export const useSbRichTextResolver = (
     textFn: createTextVNode,
     resolvers: {
       ...tailwindResolvers,
-      [MarkTypes.STYLED]: node => {
+      [MarkTypesEnum.STYLED]: node => {
         return node.text as unknown as VNode
       },
-      [MarkTypes.TEXT_STYLE]: node => {
+      [MarkTypesEnum.TEXT_STYLE]: node => {
         return node.text as unknown as VNode
       },
-      [BlockTypes.HEADING]: node => {
+      [BlockTypesEnum.HEADING]: node => {
         const { level, ...rest } = node.attrs || {}
         const attributes = { ...rest, class: classes[`h${level}` as NodesKeys] }
         return h(`h${level}`, attributes, node.children)
       },
-      [MarkTypes.LINK]: node => {
+      [MarkTypesEnum.LINK]: node => {
         const { anchor, linktype, href: href1, ...rest } = node.attrs || {}
         let { href } = node.attrs as { href: string } || {}
 
         if (anchor) {
           href = `${href}#${anchor}`
-        } else if (linktype === LinkTypes.EMAIL) {
+        } else if (linktype === LinkTypesEnum.EMAIL) {
           href = `mailto:${href}`
         }
 
-        if (linktype === LinkTypes.STORY) {
+        if (linktype === LinkTypesEnum.STORY) {
           // Storyblok links are prefixed with the language code, but the NuxtLink component is handling it anyways
           href = sbLanguageCodes.reduce((l, c) => l.replace(new RegExp(`^/${c}`), ''), href)
           return h(
@@ -111,7 +133,7 @@ export const useSbRichTextResolver = (
           node.children || node.text
         )
       },
-      [BlockTypes.EMOJI]: node => {
+      [BlockTypesEnum.EMOJI]: node => {
         return h(
           schemaMap[node.type as NodesKeys]?.[0] || 'span',
           { class: schemaMap[node.type as NodesKeys]?.[1] },
