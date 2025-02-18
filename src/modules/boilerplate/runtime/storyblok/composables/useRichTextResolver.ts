@@ -14,7 +14,9 @@ import type {
   StoryblokRichTextNodeResolver,
 } from '@storyblok/richtext'
 
-export type HeadingTypes = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+const headingTypes = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ] as const
+
+export type HeadingTypes = typeof headingTypes[number]
 export type MarkTypesType = (typeof MarkTypes)[keyof typeof MarkTypes]
 export type BlockTypesType = (typeof BlockTypes)[keyof typeof BlockTypes]
 export type LinkTypesType = (typeof LinkTypes)[keyof typeof LinkTypes]
@@ -43,7 +45,7 @@ export const useSbRichTextResolver = (
   }
 
   for (const key in classes) {
-    if (Object.values(HeadingTypes).includes(key)) continue
+    if (Object.values(headingTypes).includes(key as HeadingTypes)) continue
 
     const tag = schemaMap[key as NodesKeys]?.[0]
     const classNames = classes[key as NodesKeys]
