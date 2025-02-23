@@ -45,18 +45,36 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
    * It will load stories from the Storyblok API and store them in the items ref.
    * But will not look after them in the store before.
    */
-  const load = async (params: SbStoriesParams = {}) => {
+  const load = async (params: SbStoriesParams = {}, crawlAll = false): Promise<SbStoryData<C>[]> => {
+    const page = crawlAll ? params?.page || 1 : undefined
+    const per_page = crawlAll ? params?.per_page || 100 : undefined
+
     return api?.getStories({
       ...requestDefaults.value,
       cv: cv.value,
       starts_with: path,
+      page,
+      per_page,
       ...params,
-    }).then(resp => {
+    }).then(async resp => {
       cv.value = resp?.data.cv
-      items.value = (resp as SbStories<C>).data.stories
+      const respItems = (resp as SbStories<C>).data.stories
+
+      if (crawlAll && items.value.length > 0 && page === 1) {
+        items.value = respItems
+      } else {
+        items.value.push(...respItems)
+      }
+
+      if (crawlAll && page && respItems.length > 0 && resp.total > items.value.length) {
+        return await load({ ...params, page: page + 1 }, crawlAll)
+      }
+
       return items.value
     })
   }
+
+  const loadAll = async (params: SbStoriesParams = {}) => load(params, true)
 
   const itemsBy = (value: string | string[], key: keyof typeof items.value[number] = 'slug') =>
     computed(() => items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
@@ -119,20 +137,20 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  return { load, loadBySlug, loadBySlugs, itemsBy }
+  return { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
 }
 
 export const SbStoreFactory = <Component extends SbComponentType<string>>(storeName: string, path?: string) => {
   return defineStore(storeName, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
-    const { load, loadBySlug, loadBySlugs, itemsBy }
+    const { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
       = SbStoreUtilityFactory<Component>({
         path,
         items: (items as unknown as Ref<SbStoryData<Component>[]>),
         notFound,
       })
 
-    return { items, notFound, load, loadBySlug, loadBySlugs, itemsBy }
+    return { items, notFound, load, loadAll, loadBySlug, loadBySlugs, itemsBy }
   })
 }
