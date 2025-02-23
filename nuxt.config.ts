@@ -15,10 +15,6 @@ export default defineNuxtConfig({
     },
   },
   srcDir: 'src',
-  devServer: {
-    /** @see https://github.com/nuxt/cli/issues/181 */
-    host: '0.0.0.0',
-  },
   experimental: {
     defaults: {
       nuxtLink: {
