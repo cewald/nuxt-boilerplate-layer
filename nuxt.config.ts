@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
+    'nuxt-lodash',
     '@nuxtjs/fontaine',
     '@pinia/nuxt',
   ],
@@ -41,6 +42,9 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     download: true,
+  },
+  lodash: {
+    alias: [ [ 'merge', 'deepMerge' ] ],
   },
   svgo: {
     componentPrefix: 'icon',

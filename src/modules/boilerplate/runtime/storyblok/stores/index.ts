@@ -31,14 +31,21 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   path = '',
   items,
   notFound,
+  components,
 }: {
   path?: string
+  components?: string[]
   items: Ref<SbStoryData<C>[]>
   notFound: Ref<string[]>
 }) => {
   const SbApiStore = useStoryblokApiStore()
   const { api } = SbApiStore
   const { cv, requestDefaults } = toRefs(SbApiStore)
+
+  // Component filter query for requests
+  const filter_query = components && components?.length > 0
+    ? { component: { in: components.join(',') } }
+    : undefined
 
   /**
    * This is just a proxy method of the Storyblok API getStories method.
@@ -55,7 +62,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       starts_with: path,
       page,
       per_page,
-      ...params,
+      ...useDeepMerge({ filter_query }, params),
     }).then(async resp => {
       cv.value = resp?.data.cv
       const respItems = (resp as SbStories<C>).data.stories
@@ -91,6 +98,13 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       ...requestDefaults.value,
       cv: cv.value,
     }).then(resp => {
+      if (components
+        && components.length > 0
+        && resp.data.story.content?.component
+        && !components.includes(resp.data.story.content.component)) {
+        throw new Error('Not found')
+      }
+
       cv.value = resp?.data.cv
       const story = (resp as SbStory<C>).data.story
       items.value?.push(story)
@@ -121,6 +135,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       cv: cv.value,
       by_slugs: searchForSlugs.join(','),
       starts_with: path,
+      filter_query,
     }).then(resp => {
       cv.value = resp?.data.cv
       const stories = (resp as SbStories<C>).data.stories
@@ -140,13 +155,21 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   return { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
 }
 
-export const SbStoreFactory = <Component extends SbComponentType<string>>(storeName: string, path?: string) => {
+export const SbStoreFactory = <Component extends SbComponentType<string>>(
+  storeName: string,
+  options: {
+    path?: string
+    components?: string[]
+  } = {}
+) => {
+  const { path, components } = options
   return defineStore(storeName, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
     const { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
       = SbStoreUtilityFactory<Component>({
         path,
+        components,
         items: (items as unknown as Ref<SbStoryData<Component>[]>),
         notFound,
       })
