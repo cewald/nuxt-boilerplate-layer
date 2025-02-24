@@ -1,4 +1,5 @@
 import StoryblokClient from 'storyblok-js-client'
+import type { SbComponentNames } from '../types/storyblok.components.content'
 
 let api: StoryblokClient
 
@@ -34,7 +35,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
   components,
 }: {
   path?: string
-  components?: string[]
+  components?: SbComponentNames[]
   items: Ref<SbStoryData<C>[]>
   notFound: Ref<string[]>
 }) => {
@@ -44,8 +45,8 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
 
   // Component filter query for requests
   const filter_query = components && components?.length > 0
-    ? { component: { in: components.join(',') } }
-    : undefined
+    ? { filter_query: { component: { in: components.join(',') } } }
+    : {}
 
   /**
    * This is just a proxy method of the Storyblok API getStories method.
@@ -62,7 +63,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       starts_with: path,
       page,
       per_page,
-      ...useDeepMerge({ filter_query }, params),
+      ...useDeepMerge(filter_query, params),
     }).then(async resp => {
       cv.value = resp?.data.cv
       const respItems = (resp as SbStories<C>).data.stories
@@ -101,7 +102,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       if (components
         && components.length > 0
         && resp.data.story.content?.component
-        && !components.includes(resp.data.story.content.component)) {
+        && !components.includes(resp.data.story.content.component as SbComponentNames)) {
         throw new Error('Not found')
       }
 
@@ -135,7 +136,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
       cv: cv.value,
       by_slugs: searchForSlugs.join(','),
       starts_with: path,
-      filter_query,
+      ...filter_query,
     }).then(resp => {
       cv.value = resp?.data.cv
       const stories = (resp as SbStories<C>).data.stories
@@ -159,7 +160,7 @@ export const SbStoreFactory = <Component extends SbComponentType<string>>(
   storeName: string,
   options: {
     path?: string
-    components?: string[]
+    components?: SbComponentNames[]
   } = {}
 ) => {
   const { path, components } = options
