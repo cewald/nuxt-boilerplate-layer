@@ -16,6 +16,10 @@ const { add } = modalStore
 onMounted(() => {
   add({ id, component, scrollLock })
 })
+
+defineOptions({
+  inheritAttrs: false,
+})
 </script>
 
 <template>
@@ -24,7 +28,10 @@ onMounted(() => {
       <Teleport :to="teleportTo">
         <component
           :is="component"
-          v-bind="componentBindings"
+          v-bind="{
+            ...componentBindings,
+            ...$attrs,
+          }"
           :id="id"
           role="dialog"
           aria-modal="true"
