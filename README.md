@@ -41,6 +41,7 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 * `useLocalizedRoute`: helper to modify and transform paths using `vue-i18n`
 * `useValidation`: validate a set of refs using a `zod` schema
 * `useModalStore`: store for modal-handling in combination with the `ModalWrapper` component
+* `useDataCompliance`: composable to safe simple-data compliance values for compliance-dialogs
 * `useScroller`: library to build accessible [scroller components](https://tailwindcss.com/docs/scroll-snap-type) using `scroll-snap-type`
 
 ### Components
