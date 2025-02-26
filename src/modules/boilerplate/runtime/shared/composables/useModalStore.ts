@@ -2,7 +2,7 @@ import { useScrollLock } from '@vueuse/core'
 
 export interface Modal {
   id: string
-  component: Component
+  component: Component | string
   scrollLock?: boolean
 }
 
