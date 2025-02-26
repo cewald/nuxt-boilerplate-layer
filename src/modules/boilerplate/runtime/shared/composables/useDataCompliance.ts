@@ -1,28 +1,40 @@
-export const useDataCompliance = () => {
-  const cookie = useCookie('data-compliance', { maxAge: 60 * 60 * 24 })
-  const visible = useState('data-compliance', () => false)
+export type ComplianceStates = 'accepted' | 'declined'
 
-  const toggleDialog = (value?: boolean) => visible.value = value ?? !visible.value
+export const useDataCompliance = () => {
+  const cookie = useCookie<ComplianceStates>('data-compliance', { maxAge: 60 * 60 * 24 })
+  const compliance = useState<ComplianceStates>('data-compliance', () => cookie.value)
 
   const accept = () => {
     cookie.value = 'accepted'
+    compliance.value = 'accepted'
   }
 
   const decline = () => {
     cookie.value = 'declined'
+    compliance.value = 'declined'
   }
 
-  const accepted = computed(() => cookie.value === 'accepted')
-  const declined = computed(() => cookie.value === 'declined')
+  const accepted = computed(() => compliance.value === 'accepted')
+  const declined = computed(() => compliance.value === 'declined')
+  const complied = computed(() => !!compliance.value)
 
-  const watchAccept = (handler: (v: typeof accepted) => void) => {
+  const watchCompliance = (handler: (v: typeof accepted, c: typeof complied) => void) => {
     const stop = watchEffect(() => {
-      handler(accepted)
+      handler(accepted, complied)
     })
     return stop
   }
 
-  return { cookie, accepted, declined, accept, decline, toggleDialog, dialogVisible: visible, watchAccept }
+  return {
+    cookie,
+    compliance,
+    complied,
+    accepted,
+    declined,
+    accept,
+    decline,
+    watchCompliance,
+  }
 }
 
 export default useDataCompliance
