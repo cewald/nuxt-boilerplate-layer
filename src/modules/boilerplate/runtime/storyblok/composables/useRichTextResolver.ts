@@ -59,6 +59,8 @@ export const useSbRichTextResolver = (
     [MarkTypesEnum.UNDERLINE]: [ 'u', 'underline-offset-8' ],
     [MarkTypesEnum.STRIKE]: [ 's', 'line-through' ],
     [MarkTypesEnum.LINK]: [ 'a', 'underline underline-offset-8' ],
+    [MarkTypesEnum.SUBSCRIPT]: [ 'sub', '' ],
+    [MarkTypesEnum.SUPERSCRIPT]: [ 'super', '' ],
     [BlockTypesEnum.PARAGRAPH]: [ 'p', 'mb-8' ],
     [BlockTypesEnum.OL_LIST]: [ 'ol', 'list-decimal mb-8 ml-8' ],
     [BlockTypesEnum.UL_LIST]: [ 'ul', 'list-disc mb-8 ml-8' ],
