@@ -70,6 +70,8 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
 
       if (crawlAll && items.value.length > 0 && page === 1) {
         items.value = respItems
+      } else if (!crawlAll) {
+        items.value = respItems
       } else {
         items.value.push(...respItems)
       }
