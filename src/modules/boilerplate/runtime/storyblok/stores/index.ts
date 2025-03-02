@@ -90,6 +90,39 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     computed(() => items.value?.filter(i => (Array.isArray(value) ? value.includes(i[key]) : i[key] === value)
       && i['lang'] === requestDefaults.value.language))
 
+  const loadByUid = async (uid: string) => {
+    const checkIfExists = itemsBy(uid, 'uuid')
+    if (checkIfExists.value.length > 0) return Promise.resolve(checkIfExists.value[0])
+
+    const checkIfNotFound = notFound.value?.find(s => s === uid)
+    if (checkIfNotFound) return Promise.reject(new Error('Not found'))
+
+    return api?.getStory(`${uid}`, {
+      ...requestDefaults.value,
+      find_by: 'uuid',
+      cv: cv.value,
+    }).then(resp => {
+      if (components
+        && components.length > 0
+        && resp.data.story.content?.component
+        && !components.includes(resp.data.story.content.component as SbComponentNames)) {
+        throw new Error('Not found')
+      }
+
+      cv.value = resp?.data.cv
+      const story = (resp as SbStory<C>).data.story
+      items.value?.push(story)
+      return story
+    }).catch(err => {
+      if (err.status !== 404) {
+        console.error('Storyblok returned an error:', JSON.stringify(err))
+      }
+
+      notFound.value?.push(uid)
+      return Promise.reject(new Error('Not found'))
+    })
+  }
+
   const loadBySlug = async (slug: string) => {
     const checkIfExists = itemsBy(slug)
     if (checkIfExists.value.length > 0) return Promise.resolve(checkIfExists.value[0])
@@ -155,7 +188,7 @@ export const SbStoreUtilityFactory = <C = SbComponentType<string>>({
     })
   }
 
-  return { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
+  return { load, loadAll, loadByUid, loadBySlug, loadBySlugs, itemsBy }
 }
 
 export const SbStoreFactory = <Component extends SbComponentType<string>>(
@@ -169,7 +202,7 @@ export const SbStoreFactory = <Component extends SbComponentType<string>>(
   return defineStore(storeName, () => {
     const items = ref<SbStoryData<Component>[]>([])
     const notFound = ref<string[]>([])
-    const { load, loadAll, loadBySlug, loadBySlugs, itemsBy }
+    const { load, loadAll, loadBySlug, loadByUid, loadBySlugs, itemsBy }
       = SbStoreUtilityFactory<Component>({
         path,
         components,
@@ -177,6 +210,6 @@ export const SbStoreFactory = <Component extends SbComponentType<string>>(
         notFound,
       })
 
-    return { items, notFound, load, loadAll, loadBySlug, loadBySlugs, itemsBy }
+    return { items, notFound, load, loadAll, loadByUid, loadBySlug, loadBySlugs, itemsBy }
   })
 }
