@@ -94,6 +94,7 @@ This module can automatically generate types from the components of your Storybl
 #### Utils
 
 * `getSbImageOrientation`: get image orientation by Storyblok image object
+* `isRichTextEmpty`: checks if a rich-text variable is possibly just an empty skeleton
 
 #### Prerendering
 
