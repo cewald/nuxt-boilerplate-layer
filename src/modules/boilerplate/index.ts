@@ -17,7 +17,6 @@ import {
   sbComponentsToTypesFactory,
   prerenderSbPages,
   clientFactory as storyblokClient,
-  storyblokInit,
 } from './lib'
 
 export interface ModuleOptions {
@@ -194,13 +193,6 @@ export default defineNuxtModule<ModuleOptions>({
       addPlugin({
         src: resolve('./runtime/storyblok/plugins/editor.ts'),
       })
-
-      if (editor) {
-        storyblokInit({
-          bridge: true,
-          accessToken: apiKey,
-        })
-      }
     }
 
     // Mock i18n methods if not installed

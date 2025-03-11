@@ -1,15 +1,22 @@
-import { storyblokEditable } from '@storyblok/js'
+import { storyblokInit, storyblokEditable } from '@storyblok/js'
 import { defineNuxtPlugin } from '#imports'
 
 export default defineNuxtPlugin(nuxtApp => {
+  const { storyblok } = useAppConfig()
+  const { editor, accessToken } = storyblok
+
+  if (editor) {
+    storyblokInit({
+      bridge: editor,
+      accessToken,
+    })
+  }
+
   nuxtApp.vueApp.directive<HTMLElement>('sb-editable', {
     getSSRProps() {
       return {}
     },
     beforeMount(el, binding) {
-      const { storyblok } = useAppConfig()
-      const { editor } = storyblok
-
       if (editor && binding.value) {
         const options = storyblokEditable(binding.value)
         if (Object.keys(options).length > 0) {

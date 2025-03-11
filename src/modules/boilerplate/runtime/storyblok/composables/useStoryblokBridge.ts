@@ -1,12 +1,12 @@
-import { useStoryblokBridge } from '@storyblok/js'
+import { useStoryblokBridge as useSbBridge } from '@storyblok/js'
 
-export const useSbBridge = (storyId: number, ref: Ref) => {
+export const useStoryblokBridge = (storyId: number, ref: Ref) => {
   const { storyblok } = useAppConfig()
   const { editor } = storyblok
 
   onMounted(async () => {
     if (editor && !ref.value) return
-    useStoryblokBridge(storyId, d => {
+    useSbBridge(storyId, d => {
       ref.value = d
     })
   })
