@@ -9,6 +9,7 @@ import {
   installModule,
   extendViteConfig,
   addServerScanDir,
+  addPlugin,
 } from '@nuxt/kit'
 
 import {
@@ -16,11 +17,13 @@ import {
   sbComponentsToTypesFactory,
   prerenderSbPages,
   clientFactory as storyblokClient,
+  storyblokInit,
 } from './lib'
 
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
+    editor?: boolean
     oauthToken?: string
     fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
@@ -50,6 +53,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     storyblok: {
+      editor: false,
       region: 'eu',
       fetchTypes: true,
       prerender: {
@@ -94,7 +98,7 @@ export default defineNuxtModule<ModuleOptions>({
     * Add Storyblok setup
     */
     if (options.storyblok) {
-      const { apiKey, region } = options.storyblok
+      const { apiKey, region, editor } = options.storyblok
 
       // Fetch Storyblok spaceId and languageCodes
       let spaceId
@@ -115,7 +119,7 @@ export default defineNuxtModule<ModuleOptions>({
       // Add configs to appConfig
       Object.assign(
         nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region } }
+        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editor } }
       )
 
       // Add dynamic imports
@@ -184,6 +188,18 @@ export default defineNuxtModule<ModuleOptions>({
           netlifyBuildHookUrl,
           netlifyBuildHookSecret,
         }
+      }
+
+      // Add Storyblok editor-directive plugin
+      addPlugin({
+        src: resolve('./runtime/storyblok/plugins/editor.ts'),
+      })
+
+      if (editor) {
+        storyblokInit({
+          bridge: true,
+          accessToken: apiKey,
+        })
       }
     }
 
