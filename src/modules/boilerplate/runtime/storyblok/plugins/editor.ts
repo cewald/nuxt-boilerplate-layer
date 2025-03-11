@@ -7,7 +7,10 @@ export default defineNuxtPlugin(nuxtApp => {
       return {}
     },
     beforeMount(el, binding) {
-      if (binding.value) {
+      const { storyblok } = useAppConfig()
+      const { editor } = storyblok
+
+      if (editor && binding.value) {
         const options = storyblokEditable(binding.value)
         if (Object.keys(options).length > 0) {
           el.setAttribute('data-blok-c', options['data-blok-c'] as string)
