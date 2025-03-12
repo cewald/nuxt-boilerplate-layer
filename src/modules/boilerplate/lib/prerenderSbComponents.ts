@@ -21,11 +21,12 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   }
 
   const { types, aliasMap } = options.storyblok.prerender
+  const { editor } = options.storyblok
 
   const api = clientFactory(options.storyblok.apiKey)
 
   const requestDefaults = {
-    version: import.meta.env.DEV === true ? 'draft' : 'published',
+    version: import.meta.env.DEV === true || editor ? 'draft' : 'published',
     cv: Date.now(),
   }
 

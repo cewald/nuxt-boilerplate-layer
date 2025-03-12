@@ -13,8 +13,20 @@ export default defineNuxtPlugin(nuxtApp => {
   }
 
   nuxtApp.vueApp.directive<HTMLElement>('sb-editable', {
-    getSSRProps() {
-      return {}
+    getSSRProps(binding) {
+      if (!editor || !binding.value) return {}
+      if (binding.value) {
+        const options = storyblokEditable(binding.value)
+        if (Object.keys(options).length) {
+          return {
+            attrs: {
+              'data-blok-c': options['data-blok-c'],
+              'data-blok-uid': options['data-blok-uid'],
+            },
+            class: 'storyblok__outline',
+          }
+        }
+      }
     },
     beforeMount(el, binding) {
       if (editor && binding.value) {

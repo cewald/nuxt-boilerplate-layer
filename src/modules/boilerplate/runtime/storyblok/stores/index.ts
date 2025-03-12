@@ -6,7 +6,7 @@ let api: StoryblokClient
 export const useStoryblokApiStore = defineStore('storyblok', () => {
   const cv = ref<number>(Date.now())
   const { storyblok } = useAppConfig()
-  const { accessToken, region } = storyblok
+  const { accessToken, region, editor } = storyblok
 
   const { locale, localeProperties, defaultLocale } = useI18n()
   const language = computed(() => locale.value === defaultLocale ? 'default' : localeProperties.value.language)
@@ -21,7 +21,7 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
 
   const requestDefaults = computed<SbStoryParams>(() => ({
     language: language.value?.toLowerCase(),
-    version: import.meta.env.DEV === true ? 'draft' : 'published',
+    version: import.meta.env.DEV === true || editor ? 'draft' : 'published',
     cv: cv.value,
   }))
 
