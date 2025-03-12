@@ -4,7 +4,7 @@ import type { SbComponents } from '../types/storyblok.components.content'
 export const useStoryblokBridge = <T extends SbComponents>(
   ref: Ref<SbStoryData<T> | null>,
   storyId?: number,
-  options: StoryblokBridgeConfigV2 = { preventClicks: true }
+  options?: StoryblokBridgeConfigV2
 ) => {
   const { storyblok } = useAppConfig()
   const { editor } = storyblok
@@ -24,7 +24,7 @@ export const useStoryblokBridge = <T extends SbComponents>(
 export const useStoryblokBridgeCallback = <T extends SbComponents>(
   cb: (r: SbStoryData<T>) => void,
   storyId?: number,
-  options: StoryblokBridgeConfigV2 = { preventClicks: true }
+  options?: StoryblokBridgeConfigV2
 ) => {
   const { storyblok } = useAppConfig()
   const { editor } = storyblok
