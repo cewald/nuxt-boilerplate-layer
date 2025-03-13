@@ -4,7 +4,12 @@ import type { ModuleOptions } from '../'
 import { clientFactory } from './'
 
 export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
-  if (!options?.storyblok || !options?.storyblok?.prerender || !options.storyblok?.apiKey) return
+  if (!options?.storyblok
+    || !options?.storyblok?.prerender
+    || !options.storyblok?.apiKey
+    || options?.storyblok?.editor) {
+    return
+  }
 
   /**
    * If we want to enable prerendering we need to set `crawlLinks` to `true`.
@@ -21,12 +26,10 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   }
 
   const { types, aliasMap } = options.storyblok.prerender
-  const { editor } = options.storyblok
-
   const api = clientFactory(options.storyblok.apiKey)
 
   const requestDefaults = {
-    version: import.meta.env.DEV === true || editor ? 'draft' : 'published',
+    version: import.meta.env.DEV === true ? 'draft' : 'published',
     cv: Date.now(),
   }
 
