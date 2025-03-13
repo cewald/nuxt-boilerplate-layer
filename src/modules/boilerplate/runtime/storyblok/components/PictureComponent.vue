@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useHead } from 'unhead'
-
 const {
   sbImage,
   sbImagePortrait,
