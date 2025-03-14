@@ -22,7 +22,7 @@ import {
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
-    editor?: boolean
+    editorMode?: boolean
     oauthToken?: string
     fetchTypes?: boolean
     region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
@@ -52,7 +52,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     storyblok: {
-      editor: false,
+      editorMode: false,
       region: 'eu',
       fetchTypes: true,
       prerender: {
@@ -97,7 +97,7 @@ export default defineNuxtModule<ModuleOptions>({
     * Add Storyblok setup
     */
     if (options.storyblok) {
-      const { apiKey, region, editor } = options.storyblok
+      const { apiKey, region, editorMode } = options.storyblok
 
       // Fetch Storyblok spaceId and languageCodes
       let spaceId
@@ -118,7 +118,7 @@ export default defineNuxtModule<ModuleOptions>({
       // Add configs to appConfig
       Object.assign(
         nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editor } }
+        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editorMode } }
       )
 
       // Add dynamic imports
@@ -190,7 +190,7 @@ export default defineNuxtModule<ModuleOptions>({
       }
 
       // Disable prerendering for for Storyblok editor mode
-      if (editor && nuxt.options.routeRules) {
+      if (editorMode && nuxt.options.routeRules) {
         for (const route in nuxt.options.routeRules) {
           const rule = nuxt.options.routeRules[route]
           if (rule.prerender === true) {

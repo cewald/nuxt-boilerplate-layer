@@ -7,7 +7,7 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   if (!options?.storyblok
     || !options?.storyblok?.prerender
     || !options.storyblok?.apiKey
-    || options?.storyblok?.editor) {
+    || options?.storyblok?.editorMode) {
     return
   }
 
