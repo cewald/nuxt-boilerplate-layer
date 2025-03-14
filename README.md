@@ -90,6 +90,7 @@ This module can automatically generate types from the components of your Storybl
 
 * `useStoryblokApiStore`: Pinia store for an initialized `StoryblokClient`
 * `useRichTextResolver`: Tooling to resolve structured-data Storyblok strings into HTML
+* `useSbImage`: Composable for image calculations based in Storyblok images
 * `useSbBridge`: Load Storyblok bridge as composable for Storyblok editor 
 
 #### Utils
