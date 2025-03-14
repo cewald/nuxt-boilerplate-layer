@@ -7,7 +7,7 @@ const {
   lazyload = false,
   portraitCropRatio,
   portraitMediaQuery: portraitMediaQueryProp,
-  sizes = '100w',
+  sizes = '100vw',
   imgClass = '',
   title,
   alt,
