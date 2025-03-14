@@ -7,13 +7,13 @@ export const useStoryblokBridge = <T extends SbComponents>(
   options?: StoryblokBridgeConfigV2
 ) => {
   const { storyblok } = useAppConfig()
-  const { editor } = storyblok
+  const { editorMode } = storyblok
 
   const route = useRoute()
   const currentStoryId = computed(() => route.query?._storyblok)
 
   onMounted(async () => {
-    if (!editor) return
+    if (!editorMode) return
     useSbBridge(storyId, d => {
       if (!ref) return
       ref.value = d
@@ -29,10 +29,10 @@ export const useStoryblokBridgeCallback = <T extends SbComponents>(
   options?: StoryblokBridgeConfigV2
 ) => {
   const { storyblok } = useAppConfig()
-  const { editor } = storyblok
+  const { editorMode } = storyblok
 
   onMounted(async () => {
-    if (!editor) return
+    if (!editorMode) return
     useSbBridge(storyId, cb, options)
   })
 }
