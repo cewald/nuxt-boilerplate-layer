@@ -189,6 +189,16 @@ export default defineNuxtModule<ModuleOptions>({
         }
       }
 
+      // Disable prerendering for for Storyblok editor mode
+      if (editor && nuxt.options.routeRules) {
+        for (const route in nuxt.options.routeRules) {
+          const rule = nuxt.options.routeRules[route]
+          if (rule.prerender === true) {
+            rule.prerender = false
+          }
+        }
+      }
+
       // Add Storyblok editor-directive plugin
       addPlugin({
         src: resolve('./runtime/storyblok/plugins/editor.ts'),
