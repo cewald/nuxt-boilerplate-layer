@@ -182,7 +182,7 @@ const description = computed(() => alt || sbImage.name || sbImage.alt)
       :sizes="sizes"
       :width="size.width"
       :height="size.height"
-      :class="imgClass || 'w-full max-w-full text-transparent'"
+      :class="imgClass || 'max-w-full text-transparent'"
       :alt="description"
       :aria-label="description"
       :title="title || sbImage.title"
