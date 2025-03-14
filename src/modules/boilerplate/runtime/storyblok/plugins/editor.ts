@@ -3,18 +3,18 @@ import { defineNuxtPlugin } from '#imports'
 
 export default defineNuxtPlugin(nuxtApp => {
   const { storyblok } = useAppConfig()
-  const { editor, accessToken } = storyblok
+  const { editorMode, accessToken } = storyblok
 
-  if (editor) {
+  if (editorMode) {
     storyblokInit({
-      bridge: editor,
+      bridge: editorMode,
       accessToken,
     })
   }
 
   nuxtApp.vueApp.directive<HTMLElement>('sb-editable', {
     getSSRProps(binding) {
-      if (!editor || !binding.value) return {}
+      if (!editorMode || !binding.value) return {}
       if (binding.value) {
         const options = storyblokEditable(binding.value)
         if (Object.keys(options).length) {
@@ -29,7 +29,7 @@ export default defineNuxtPlugin(nuxtApp => {
       }
     },
     beforeMount(el, binding) {
-      if (editor && binding.value) {
+      if (editorMode && binding.value) {
         const options = storyblokEditable(binding.value)
         if (Object.keys(options).length > 0) {
           el.setAttribute('data-blok-c', options['data-blok-c'] as string)
