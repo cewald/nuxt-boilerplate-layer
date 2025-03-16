@@ -123,10 +123,6 @@ If you are using Netlify and want to automatically update your prerendered conte
    })
    ```
 
-## License
-
-This project is licensed under the [GNU General Public License v3.0](LICENSE).
-
 ---
 
 ## Troubleshooting
@@ -139,3 +135,21 @@ Until it is solved, you can bypass this problem by using this syntax:
 ```js
 const { propType } = defineProps<{ propType: MyGlobalPropType }>()
 ```
+
+---
+
+## Development
+
+You can create a `/playground` folder, where you mount or checkout your project you want to test.
+
+If you want to use it in devcontainer, uncomment the `mount` configuration in the `.devcontainer/devcontainer.json` file, replace the path you want to mount and rebuild your container.
+
+In your target project you now have to replace the boilerplate-module path to `../`. 
+
+Now run `npm run dev` and your playground-project is using the current nuxt-boilerplate.
+
+---
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).

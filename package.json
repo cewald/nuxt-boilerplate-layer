@@ -31,7 +31,7 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "nuxi dev playground",
+    "dev": "nuxi dev playground  --no-fork",
     "dev:build": "nuxi build playground",
     "dev:prepare": "npm run build && npm run prepare && nuxi prepare playground",
     "dev:layer": "nuxt dev",
