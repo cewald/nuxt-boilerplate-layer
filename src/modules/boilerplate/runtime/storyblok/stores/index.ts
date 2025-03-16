@@ -23,6 +23,7 @@ export const useStoryblokApiStore = defineStore('storyblok', () => {
     language: language.value?.toLowerCase(),
     version: import.meta.env.DEV === true || editorMode ? 'draft' : 'published',
     cv: cv.value,
+    resolve_links: 'url',
   }))
 
   return { api, requestDefaults, cv, language }

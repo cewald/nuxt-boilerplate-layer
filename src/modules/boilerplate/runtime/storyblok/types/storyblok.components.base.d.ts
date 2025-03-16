@@ -66,6 +66,17 @@ export type SbLink = {
   anchor?: string
   email?: string
   target?: string
+  story?: SbLinkStory
+}
+
+export type SbLinkStory = {
+  name: string
+  id: number
+  uuid: string
+  slug: string
+  url: string
+  full_slug: string
+  _stopResolving: boolean
 }
 
 export type SbTable = {
