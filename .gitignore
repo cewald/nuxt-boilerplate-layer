@@ -24,6 +24,9 @@ logs
 .env.*
 !.env.example
 
+# Playground
+playground
+
 # Local Netlify folder
 .netlify
 
