@@ -29,12 +29,12 @@
   "portsAttributes": {
     "3000": {
       "label": "vue-dev",
-      "protocol": "https",
+      "protocol": "http",
       "elevateIfNeeded": false
     },
     "3001": {
       "label": "vue-preview",
-      "protocol": "https",
+      "protocol": "http",
       "elevateIfNeeded": false
     }
   }
