@@ -33,9 +33,6 @@ export interface ModuleOptions {
     netlifyBuildHookUrl?: string
     netlifyBuildHookSecret?: string
   } | false
-  tailwindcss?: {
-    configFile: string
-  }
   i18n?: boolean
   dayjs?: {
     defaultDateFormat: string
@@ -59,9 +56,6 @@ export default defineNuxtModule<ModuleOptions>({
         types: [],
         aliasMap: {},
       },
-    },
-    tailwindcss: {
-      configFile: 'tailwind.config.js',
     },
     i18n: true,
     dayjs: {
