@@ -4,7 +4,8 @@ import type { ModuleOptions } from '../'
 import { clientFactory } from './'
 
 export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
-  if (!options?.storyblok
+  if (nuxt.options.dev
+    || !options?.storyblok
     || !options?.storyblok?.prerender
     || !options.storyblok?.apiKey
     || options?.storyblok?.editorMode) {
