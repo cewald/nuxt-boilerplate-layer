@@ -29,6 +29,19 @@ const config: Config = {
     }),
 
     /**
+     * Add variants for first-/last-child & first-/last-of-type
+     */
+    plugin(({ matchVariant }) => {
+      matchVariant('nth', v => `&>*:${v}`, { values: {
+        'first': 'first-child',
+        'last': 'last-child',
+        'first-of-type': 'first-of-type',
+        'last-of-type': 'last-of-type',
+        // @todo: Add nth-of-type variants
+      } })
+    }),
+
+    /**
      * Add text-clamp-* utility
      * Based on: https://www.marcbacon.com/understanding-clamp/
      */
