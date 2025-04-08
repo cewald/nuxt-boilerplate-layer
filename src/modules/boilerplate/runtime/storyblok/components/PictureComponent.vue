@@ -11,6 +11,8 @@ const {
   imgClass = '',
   title,
   alt,
+  quality = 75,
+  format = 'webp',
 } = defineProps<{
   sbImage: SbImage
   sbImagePortrait?: SbImage
@@ -23,6 +25,8 @@ const {
   imgClass?: string
   title?: string
   alt?: string
+  quality?: number
+  format?: string
 }>()
 
 const { breakpoints: defaultBreakpoints, getMediaQuery } = useScreens()
@@ -50,9 +54,9 @@ const createSrcSet = (image: SbImage, dWidth: number, dRatio?: string) => {
   return breakpointValues.value
     .map(width => {
       if (width > dWidth) width = dWidth
-      if (!dRatio) return { path: getPath(width, undefined, image), width }
+      if (!dRatio) return { path: getPath(width, undefined, image, format, quality), width }
       const { height } = getRatio(width, 0, dRatio)
-      return { path: getPath(width, height, sbImage), width }
+      return { path: getPath(width, height, sbImage, format, quality), width }
     })
     .filter((b, i, arr) => arr.findIndex(a => a.path === b.path) === i)
     .map(b => `${b.path} ${b.width}w`)

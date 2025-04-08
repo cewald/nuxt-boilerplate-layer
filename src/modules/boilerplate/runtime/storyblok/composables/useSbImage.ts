@@ -9,9 +9,19 @@ export const useSbImage = () => {
     return { width: parseInt(split[0] || '0'), height: parseInt(split[1] || '0') }
   }
 
-  const getPath = (width: number = 0, height: number = 0, image: SbImage) => {
+  const getPath = (width: number = 0, height: number = 0, image: SbImage, format?: string, quality?: number) => {
     if (isSVG(image)) return image.filename
-    return `${image.filename}/m/${width}x${height}`
+    let filename = `${image.filename}/m/${width}x${height}`
+    if (format || filename) {
+      filename = `${filename}/filters`
+    }
+    if (format) {
+      filename = `${filename}:format(${format})`
+    }
+    if (quality) {
+      filename = `${filename}:quality(${quality})`
+    }
+    return filename
   }
 
   const getRatio = (width: number = 0, height: number = 0, ratio: string) => {
