@@ -13,6 +13,7 @@ const {
   alt,
   quality = 75,
   format = 'webp',
+  previewImageScale = 0.01,
 } = defineProps<{
   sbImage: SbImage
   sbImagePortrait?: SbImage
@@ -27,6 +28,7 @@ const {
   alt?: string
   quality?: number
   format?: string
+  previewImageScale?: number
 }>()
 
 const { breakpoints: defaultBreakpoints, getMediaQuery } = useScreens()
@@ -85,7 +87,7 @@ const mediaQuery = computed(() => {
 const previewImage = computed(() => {
   const { width } = size.value
   return sbImage.filename + '/m/'
-    + `${Math.ceil(width * 0.01)}x0/filters:quality(10):blur(10)`
+    + `${Math.ceil(width * previewImageScale)}x0/filters:quality(10):blur(10)`
 })
 
 onBeforeMount(() => {
