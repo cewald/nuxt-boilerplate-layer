@@ -16,13 +16,6 @@ export default defineNuxtConfig({
     },
   },
   srcDir: 'src',
-  experimental: {
-    defaults: {
-      nuxtLink: {
-        trailingSlash: 'remove',
-      },
-    },
-  },
   compatibilityDate: '2024-10-27',
   vite: {
     // Remove SASS deprecation message
