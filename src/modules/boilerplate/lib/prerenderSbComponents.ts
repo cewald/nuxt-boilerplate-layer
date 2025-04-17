@@ -39,7 +39,7 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   }).then(resp => {
     return resp.data.stories
       .filter(s => types.includes(s.content.component as string))
-      .map(s => `/${s.full_slug}`)
+      .map(s => `/${s.full_slug}/`)
   }).catch(e => {
     console.error(e)
     return []
