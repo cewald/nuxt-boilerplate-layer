@@ -22,6 +22,7 @@ import {
 export interface ModuleOptions {
   storyblok?: {
     apiKey?: string
+    draftMode?: boolean
     editorMode?: boolean
     oauthToken?: string
     fetchTypes?: boolean
@@ -49,6 +50,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     storyblok: {
+      draftMode: false,
       editorMode: false,
       region: 'eu',
       fetchTypes: true,
@@ -91,7 +93,7 @@ export default defineNuxtModule<ModuleOptions>({
     * Add Storyblok setup
     */
     if (options.storyblok) {
-      const { apiKey, region, editorMode } = options.storyblok
+      const { apiKey, region, editorMode, draftMode } = options.storyblok
 
       // Fetch Storyblok spaceId and languageCodes
       let spaceId
@@ -112,7 +114,7 @@ export default defineNuxtModule<ModuleOptions>({
       // Add configs to appConfig
       Object.assign(
         nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editorMode } }
+        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editorMode, draftMode } }
       )
 
       // Add dynamic imports

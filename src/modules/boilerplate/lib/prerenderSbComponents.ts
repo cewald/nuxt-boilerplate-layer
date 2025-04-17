@@ -30,7 +30,7 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   const api = clientFactory(options.storyblok.apiKey)
 
   const requestDefaults = {
-    version: import.meta.env.DEV === true ? 'draft' : 'published',
+    version: options.storyblok.draftMode ? 'draft' : 'published',
     cv: Date.now(),
   }
 
