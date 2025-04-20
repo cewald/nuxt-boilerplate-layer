@@ -4,9 +4,10 @@ import {
   useElementHover,
   usePreferredReducedMotion,
   unrefElement,
+  useScroll,
+  useElementSize,
 } from '@vueuse/core'
 import type { MaybeElement, MaybeRefOrGetter } from '@vueuse/core'
-import { scroll } from 'motion'
 
 export default function useScroller<T extends MaybeElement>(
   scroller: Ref<MaybeRefOrGetter>,
@@ -27,7 +28,8 @@ export default function useScroller<T extends MaybeElement>(
     autostart = true,
     interval = 4000,
     useScrollIntoView,
-    scrollOptions: scrollOptionsDefault } = options
+    scrollOptions: scrollOptionsDefault,
+  } = options
 
   const scrollOptions = computed<ScrollToOptions>(() => ({
     behavior: reducedMotions.value === 'reduce' ? 'instant' : 'smooth',
@@ -61,19 +63,11 @@ export default function useScroller<T extends MaybeElement>(
   const prev = () => scrollTo(prevIndex.value)
   const autoNext = () => scrollTo(nextIndex.value, false)
 
-  const count = computed(() => scrollItems.value?.length || 0)
-  const tresholds = computed(() => Array.from({ length: count.value }, (v, i) => i * (100 / count.value)))
-
-  onMounted(() => {
+  const { x } = useScroll(scroller)
+  const { width } = useElementSize(scroller)
+  watchEffect(() => {
     if (!scroller.value) return
-    scroll(
-      (scrollProgress: number) => {
-        const progress = scrollProgress * 100
-        const current = tresholds.value.reduce((p, c) => progress >= p && progress <= c ? p : c, 0)
-        active.value = tresholds.value.findIndex(v => v === current)
-      },
-      { axis: 'x', container: scroller.value as HTMLElement }
-    )
+    active.value = Math.round(x.value / width.value)
   })
 
   let { pause, resume } = { pause: () => { }, resume: () => { } }
