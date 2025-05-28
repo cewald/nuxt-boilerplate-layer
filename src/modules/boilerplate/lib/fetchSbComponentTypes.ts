@@ -288,6 +288,7 @@ export class SbComponentsToTypes {
               return `(${value})[]`
             }
             case '': {
+              if (!blockSchema.component_whitelist) return 'unknown[]'
               const getComponents = blockSchema.component_whitelist
                 .map(c => this.getTypeNameByComponentName(c))
                 .join('\n  | ')
