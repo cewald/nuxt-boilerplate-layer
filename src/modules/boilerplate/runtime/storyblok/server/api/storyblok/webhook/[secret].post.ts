@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const SbWebHook = z.object({
+export const SbWebHook = z.object({
   text: z.string(),
   action: z.enum([ 'published', 'unpublished', 'deleted', 'moved' ]),
   space_id: z.number(),

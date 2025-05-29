@@ -140,7 +140,8 @@ export default defineNuxtModule<ModuleOptions>({
       addTypeTemplate({
         filename: 'types/storyblok.components.base.d.ts',
         getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
-      })
+      }, { nuxt: true, nitro: true })
+      console.error('asasd')
 
       // Add dynamic content types
       const { fetchTypes, oauthToken } = options.storyblok
@@ -163,7 +164,7 @@ export default defineNuxtModule<ModuleOptions>({
         addTypeTemplate({
           filename: SbContentTypesFile,
           getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
-        })
+        }, { nuxt: true, nitro: true })
       } else {
         console.warn('The "storyblok.oauthToken" options '
           + 'are required in @cewald/nuxt-boilerplate-layer configuration.')
