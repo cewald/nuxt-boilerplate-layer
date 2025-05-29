@@ -141,7 +141,6 @@ export default defineNuxtModule<ModuleOptions>({
         filename: 'types/storyblok.components.base.d.ts',
         getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
       }, { nuxt: true, nitro: true })
-      console.error('asasd')
 
       // Add dynamic content types
       const { fetchTypes, oauthToken } = options.storyblok
