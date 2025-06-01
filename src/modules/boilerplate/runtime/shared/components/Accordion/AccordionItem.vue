@@ -22,7 +22,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <component :is="tag">
+  <component
+    :is="tag"
+    class="group/a-item"
+  >
     <div
       :id="`accordion-header-${uName}`"
       role="button"
