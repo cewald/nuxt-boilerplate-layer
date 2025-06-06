@@ -100,13 +100,13 @@ export default defineNuxtModule<ModuleOptions>({
       const languageCodes: string[] = []
       if (apiKey) {
         const api = storyblokClient(apiKey)
-        spaceId = await api.get('cdn/spaces/me')
+        spaceId = await api.get('cdn/spaces/me', { version: 'published' })
           .then(({ data }: { data: { space: { id: number, language_codes: string[] } } }) => {
             languageCodes.push(...data.space.language_codes)
             return data.space.id
           })
-          .catch(() => {
-            console.error('Couldn\'t fetch Storyblok space-id.')
+          .catch(e => {
+            console.error('Couldn\'t fetch Storyblok space-id:', e.message)
             return undefined
           })
       }
