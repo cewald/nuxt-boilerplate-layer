@@ -1,7 +1,6 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
     'nuxt-lodash',
@@ -24,17 +23,6 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2024-10-27',
-  vite: {
-    // Remove SASS deprecation message
-    // @see https://github.com/vitejs/vite/issues/18164
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
-      },
-    },
-  },
   eslint: {
     config: {
       stylistic: true,

@@ -18,7 +18,7 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 * `@nuxtjs/fontaine`
 * `@nuxtjs/google-fonts`
 * `@nuxtjs/i18n` (optional)
-* `@nuxtjs/tailwindcss`
+* `@nuxtjs/tailwindcss` (optional)
 * `nuxt-lodash`
 * `@pinia/nuxt`
 * `nuxt-svgo`

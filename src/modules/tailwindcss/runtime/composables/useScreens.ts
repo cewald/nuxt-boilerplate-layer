@@ -1,5 +1,9 @@
-import { useMediaQuery as useMediaQueryCore, type ConfigurableWindow } from '@vueuse/core'
 import { toValue } from 'vue'
+import {
+  useMediaQuery as useMediaQueryCore,
+  useBreakpoints as useBreakpointsCore,
+  type ConfigurableWindow,
+} from '@vueuse/core'
 
 export function useScreens() {
   const { screens } = useAppConfig()
@@ -23,7 +27,11 @@ export function useScreens() {
 
   const breakpoints = computed(() => Object.keys(screens).map(key => parseInt(screens[key as keyof typeof screens])))
 
-  return { screens, breakpoints, getMediaQuery, useMediaQuery }
+  const useBreakpoints = (options: Parameters<typeof useBreakpointsCore>[1]) => {
+    return useBreakpointsCore(screens, options)
+  }
+
+  return { screens, breakpoints, getMediaQuery, useMediaQuery, useBreakpoints }
 }
 
 export default useScreens
