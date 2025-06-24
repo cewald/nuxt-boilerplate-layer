@@ -59,6 +59,7 @@
     "@pinia/nuxt": "^0.11.0",
     "@storyblok/js": "^4.0.0",
     "@storyblok/richtext": "^3.0.0",
+    "@types/semver": "^7.7.0",
     "@vueuse/core": "^13.0.0",
     "change-case": "^5.4.4",
     "dayjs": "^1.11.13",

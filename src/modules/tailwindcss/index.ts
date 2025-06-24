@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { defineNuxtModule, createResolver, addImportsDir, installModule } from '@nuxt/kit'
+import { major } from 'semver'
 import type { Config } from 'tailwindcss'
 
 /**
@@ -7,7 +10,7 @@ import type { Config } from 'tailwindcss'
  * @see https://tailwindcss.com/docs/configuration#referencing-in-javascript
  */
 export default defineNuxtModule<{
-  version?: '3' | '4' | boolean
+  enabled?: boolean
   screens?: Record<string, string>
 }>({
   meta: {
@@ -15,15 +18,24 @@ export default defineNuxtModule<{
     configKey: 'tailwindCSSCustom',
   },
   defaults: {
-    version: '3',
+    enabled: true,
     screens: {},
   },
   async setup(o, nuxt) {
-    if (!o.version) return
+    if (!o.enabled) return
 
     const { resolve } = createResolver(import.meta.url)
 
-    if (o.version === '3') {
+    const tailwindCssVersion = await import('tailwindcss/package.json').then(r => {
+      return major(r.version)
+    }).catch(() => {
+      console.warn('"tailwindcss" is not installed. Please install it to use TailwindCSSCustom module.')
+      return false
+    })
+
+    if (!tailwindCssVersion) return
+
+    if (tailwindCssVersion === 3) {
       await installModule('@nuxtjs/tailwindcss')
 
       const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
@@ -36,7 +48,7 @@ export default defineNuxtModule<{
 
       if (!twConfig) return
 
-      // @ts-expect-error We cant anticipate the package, because of configs and package versions
+      // @ts-ignore
       const resolveConfig = await import('tailwindcss/resolveConfig').then(m => m.default || m).catch(() => false)
       if (typeof resolveConfig === 'boolean') return
 
@@ -45,7 +57,7 @@ export default defineNuxtModule<{
 
       Object.assign(nuxt.options.appConfig, twScreens)
 
-      // @ts-expect-error We cant anticipate the type of `c` here, because of configs and auto-created types
+      // @ts-ignore
       nuxt.hook('tailwindcss:config', c => {
         /**
          * Add boilerplate files to TailwindCSS config to be able to purge unused classes
@@ -58,7 +70,7 @@ export default defineNuxtModule<{
           c.content.push(boilerplatePath)
         }
       })
-    } else if (o.version === '4') {
+    } else if (tailwindCssVersion === 4) {
       /**
        * In TailwindCSS 4 we have CSS only configuration so we cant read a config file.
        * We need to add the screens manually to the appConfig to be able to use useScreens().
