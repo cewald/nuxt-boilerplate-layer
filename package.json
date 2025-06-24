@@ -46,7 +46,7 @@
     "typecheck": "npx nuxi typecheck"
   },
   "devDependencies": {
-    "@cewald/eslint-config": "^1.4.5",
+    "@cewald/eslint-config": "^1.5.0",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@nuxt/devtools": "^2.0.0",
@@ -82,7 +82,7 @@
     "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@cewald/eslint-config": "^1.4.5",
+    "@cewald/eslint-config": "^1.5.0",
     "@nuxt/eslint": "^1.0.0",
     "@nuxt/kit": "^3.13.2",
     "@nuxtjs/fontaine": "^0.5.0",
