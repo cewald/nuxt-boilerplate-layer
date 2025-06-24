@@ -7,7 +7,7 @@
     "ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
   },
   "mounts": [
-    "source=/Users/ewald/Coding/twodo,target=/workspaces/nuxt-boilerplate/playground,type=bind,consistency=cached"
+    "source=/Users/ewald/Coding/path-to-local-project,target=/workspaces/nuxt-boilerplate/playground,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
