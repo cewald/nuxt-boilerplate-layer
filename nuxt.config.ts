@@ -23,6 +23,9 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2024-10-27',
+  boilerplate: {
+    storyblok: false,
+  },
   eslint: {
     config: {
       stylistic: true,
