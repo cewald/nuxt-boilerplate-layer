@@ -1,6 +1,5 @@
 import { defineNuxtModule, createResolver, addImportsDir, installModule } from '@nuxt/kit'
 import type { Config } from 'tailwindcss'
-import resolveConfig from 'tailwindcss/resolveConfig'
 
 /**
  * Export tailwind configs to appConfig to be able to read TailwindCSS variables as screen sizes
@@ -23,6 +22,7 @@ export default defineNuxtModule<{
     if (!o.version) return
 
     const { resolve } = createResolver(import.meta.url)
+
     if (o.version === '3') {
       await installModule('@nuxtjs/tailwindcss')
 
@@ -36,15 +36,20 @@ export default defineNuxtModule<{
 
       if (!twConfig) return
 
+      // @ts-expect-error We cant anticipate the package, because of configs and package versions
+      const resolveConfig = await import('tailwindcss/resolveConfig').then(m => m.default || m).catch(() => false)
+      if (typeof resolveConfig === 'boolean') return
+
       const fullConfig = resolveConfig(twConfig)
       const twScreens = { screens: fullConfig.theme.screens }
 
       Object.assign(nuxt.options.appConfig, twScreens)
 
-      /**
-       * Add boilerplate files to TailwindCSS config to be able to purge unused classes
-       */
+      // @ts-expect-error We cant anticipate the type of `c` here, because of configs and auto-created types
       nuxt.hook('tailwindcss:config', c => {
+        /**
+         * Add boilerplate files to TailwindCSS config to be able to purge unused classes
+         */
         if (!c.content) return
         const boilerplatePath = resolve('../boilerplate/**/*.{vue,js,jsx,mjs,ts,tsx}')
         if ('files' in c.content) {
@@ -68,6 +73,7 @@ export default defineNuxtModule<{
           ...o.screens,
         },
       }
+
       Object.assign(nuxt.options.appConfig, twScreens)
     }
 
