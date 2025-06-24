@@ -93,7 +93,7 @@ export const useSbRichTextResolver = (
 
   const rteOptions: StoryblokRichTextOptions<VNode> = {
     renderFn: h,
-    textFn: createTextVNode,
+    textFn: createTextVNode as StoryblokRichTextOptions<VNode>['textFn'],
     resolvers: {
       ...tailwindResolvers,
       [MarkTypesEnum.STYLED]: node => {

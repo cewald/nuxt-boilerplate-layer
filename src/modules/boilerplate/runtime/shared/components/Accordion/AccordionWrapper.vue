@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { uniqueNames = [], tag = 'ul' } = defineProps<{
-  uniqueNames: string[]
+  uniqueNames?: string[]
   tag?: string
 }>()
 
