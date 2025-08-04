@@ -18,7 +18,8 @@
   "type": "module",
   "main": "./nuxt.config.ts",
   "files": [
-    "src",
+    "app",
+    "modules",
     "nuxt.config.ts",
     "vite-env.d.ts",
     "tsconfig.json",
