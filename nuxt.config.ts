@@ -14,7 +14,6 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
-  srcDir: 'src',
   experimental: {
     defaults: {
       nuxtLink: {
