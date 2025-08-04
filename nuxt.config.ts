@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
-    'nuxt-lodash',
+    '@chettapong/nuxt-lodash',
     '@nuxtjs/fontaine',
     '@pinia/nuxt',
   ],
