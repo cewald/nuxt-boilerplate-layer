@@ -1,7 +1,7 @@
 import config from '@cewald/eslint-config'
 import withNuxt from './.nuxt/eslint.config.mjs'
 
-const corporateConfig = config({ tailwindcss: true })
+const corporateConfig = config({ config: './.nuxt/tailwind/postcss.mjs' })
 export default withNuxt([ ...corporateConfig, {
   files: [
     'playground/app.{js,ts,jsx,tsx,vue}',

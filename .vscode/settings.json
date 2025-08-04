@@ -6,9 +6,9 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.experimental.useFlatConfig": true,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
+  "tailwindCSS.experimental.configFile": "./.nuxt/tailwind/postcss.mjs"
 }
