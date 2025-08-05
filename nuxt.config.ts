@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     'nuxt-svgo',
-    'nuxt-lodash',
+    '@chettapong/nuxt-lodash',
     '@nuxtjs/fontaine',
     '@pinia/nuxt',
   ],
@@ -14,7 +14,6 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
-  srcDir: 'src',
   experimental: {
     defaults: {
       nuxtLink: {
@@ -23,9 +22,6 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2024-10-27',
-  boilerplate: {
-    storyblok: false,
-  },
   eslint: {
     config: {
       stylistic: true,

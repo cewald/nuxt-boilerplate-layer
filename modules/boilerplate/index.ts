@@ -189,7 +189,7 @@ export default defineNuxtModule<ModuleOptions>({
       if (editorMode && nuxt.options.routeRules) {
         for (const route in nuxt.options.routeRules) {
           const rule = nuxt.options.routeRules[route]
-          if (rule.prerender === true) {
+          if (rule?.prerender === true) {
             rule.prerender = false
           }
         }
