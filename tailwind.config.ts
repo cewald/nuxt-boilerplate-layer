@@ -3,7 +3,7 @@ import plugin from 'tailwindcss/plugin'
 import type { ThemeConfig } from 'tailwindcss/types/config'
 
 const config: Config = {
-  content: [ './src/**/*.{vue,js,ts,jsx,tsx,scss}' ],
+  content: [ './{app,modules}/**/*.{vue,js,ts,jsx,tsx,scss}' ],
   plugins: [
     /**
      * Add custom basic utilities
