@@ -2,7 +2,7 @@ import { useStoryblokBridge as useSbBridge, type StoryblokBridgeConfigV2 } from 
 import type { SbComponents } from '../types/storyblok.components.content'
 
 export const useStoryblokBridge = <T extends SbComponents>(
-  ref: Ref<SbStoryData<T> | null>,
+  ref: Ref<SbStoryData<T> | null | undefined>,
   storyId: number,
   options?: StoryblokBridgeConfigV2
 ) => {
