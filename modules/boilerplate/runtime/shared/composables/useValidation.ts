@@ -10,7 +10,7 @@ export default function<T extends ZodRawShape>
   type SchemaKeys = keyof SchemaType
 
   const isValid = ref(true)
-  const errors = ref<Record<string, z.ZodIssue[]> | null>(null)
+  const errors = ref<Record<string, z.core.$ZodIssue[]> | null>(null)
   const initialData = { ...toValue(data) }
   const isTouched = ref(false)
 
@@ -35,8 +35,8 @@ export default function<T extends ZodRawShape>
     if (!success) {
       const errCollector: Record<string, z.ZodIssue[]> = {}
       error.issues.forEach(issue => {
-        issue.path.forEach(path => {
-          if (!errCollector[path]) {
+        (issue.path as string[]).forEach(path => {
+          if (!errCollector?.[path]) {
             errCollector[path] = [ issue ]
           } else {
             errCollector[path].push(issue)
@@ -61,16 +61,28 @@ export default function<T extends ZodRawShape>
     if (errors.value) {
       const messages = new Map<string, string[]>()
       for (const key in errors.value) {
-        messages.set(key, errors.value[key].map(err => err.message))
+        if (!errors?.value?.[key]) continue
+        messages.set(key, errors?.value?.[key]?.map(err => err.message))
       }
       return messages
     }
     return null
   })
 
-  function isRequired(key: SchemaKeys) {
-    const keySchema = schema.shape
-    return !keySchema[key].isOptional()
+  /**
+   * isOptional() got deprecated in Zod v4, so we need to use a workaround
+   * to check if a field is required or not. We pick the field from the schema
+   * and check if it is optional by trying to parse an undefined value.
+   * @see https://github.com/settlemint/asset-tokenization-kit/pull/2882
+   */
+  function isRequired(field: SchemaKeys) {
+    const mask = { [field as keyof SchemaKeys]: true as const } as { [K in SchemaKeys]: true }
+    const fieldSchema = schema.pick(mask)
+    const isOptional = fieldSchema.safeParse({
+      [field]: undefined,
+    }).success
+
+    return !isOptional
   }
 
   return {

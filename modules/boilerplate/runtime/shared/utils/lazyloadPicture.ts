@@ -1,6 +1,6 @@
 export const lazyloadPicture = (picture: HTMLPictureElement, callback?: (p: typeof picture) => void) => {
-  const observer = new IntersectionObserver(([ { isIntersecting } ]) => {
-    if (isIntersecting) {
+  const observer = new IntersectionObserver(elements => {
+    if (elements?.[0]?.isIntersecting) {
       ([ ...picture.children ] as (HTMLSourceElement | HTMLImageElement)[]).forEach(e => {
         e.src = e.dataset.srcset as string
         e.srcset = e.dataset.srcset as string

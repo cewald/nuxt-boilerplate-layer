@@ -47,7 +47,7 @@ export default function useScroller<T extends MaybeElement>(
       } else {
         const xOffset = scrollItems.value.reduce((p, c, i) => {
           const e = unrefElement(c)
-          return i < index && e ? p + e.getClientRects()[0].width : p
+          return i < index && e ? p + (e.getClientRects()?.[0]?.width || 0) : p
         }, 0)
         unrefElement(scroller)?.scrollTo({ ...scrollOptions.value, left: xOffset })
       }
@@ -105,9 +105,9 @@ export default function useScroller<T extends MaybeElement>(
     pause()
   }
 
-  useIntersectionObserver(scroller, ([ { isIntersecting } ]) => {
+  useIntersectionObserver(scroller, elements => {
     if (!autoscroll) return
-    if (isIntersecting) startAutoscroll()
+    if (elements[0]?.isIntersecting) startAutoscroll()
     else stopAutoscroll()
   })
 

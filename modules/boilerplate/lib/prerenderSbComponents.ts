@@ -52,7 +52,7 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
   routes.forEach(r => {
     for (const route in aliasMap) {
       if (r.startsWith(route)) {
-        aliasMap[route].forEach(alias => {
+        aliasMap[route]?.forEach(alias => {
           routes.push(r.replace(route, alias))
         })
       }

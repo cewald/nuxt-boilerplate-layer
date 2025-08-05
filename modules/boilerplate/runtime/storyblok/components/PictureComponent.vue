@@ -82,8 +82,8 @@ const portraitSrcset = computed(() => {
 const mediaQuery = computed(() => {
   const regex = /^(\()(max|min)(-\w+:\s)(\d+)(\w+\))$/mg
   const results = regex.exec(portraitMediaQuery)
-  if (!results) return undefined
-  const size = parseInt(results[4]) + 1
+  if (!results || !results?.[4]) return undefined
+  const size = parseInt(results?.[4]) + 1
   const minMax = results[2] === 'max' ? 'min' : results[2]
   return portraitMediaQuery.replace(regex, `$1${minMax}$3${size}$5`)
 })
