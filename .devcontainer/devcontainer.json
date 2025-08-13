@@ -6,7 +6,7 @@
     "ghcr.io/jckimble/devcontainer-features/ngrok:3": {}
   },
   "mounts": [
-    "source=/path/to/local/project,target=/workspaces/nuxt-boilerplate/playground,type=bind,consistency=cached"
+    "source=/Users/ewald/Coding/kuku,target=/workspaces/nuxt-boilerplate/playground,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
