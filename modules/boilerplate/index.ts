@@ -237,7 +237,7 @@ export default defineNuxtModule<ModuleOptions>({
     extendViteConfig(c => {
       c.optimizeDeps = c.optimizeDeps || {}
       c.optimizeDeps.include = c.optimizeDeps.include || []
-      c.optimizeDeps.include.push('dayjs', 'fast-deep-equal')
+      c.optimizeDeps.include.push('dayjs', 'dayjs/plugin/customParseFormat', 'fast-deep-equal')
     })
 
     /**
