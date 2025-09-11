@@ -1,11 +1,14 @@
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+
+dayjs.extend(customParseFormat)
 
 export const useDayJS = () => {
   const { dayjs: dayjsConfig } = useAppConfig()
   const defaultDateFormat = dayjsConfig.defaultDateFormat || 'YYYY-MM-DD'
 
-  const toDate = (date: string) => {
-    return dayjs(date)
+  const toDate = (...args: Parameters<typeof dayjs>) => {
+    return dayjs(...args)
   }
 
   const formatDate = (date: string | dayjs.Dayjs, format: string = defaultDateFormat) => {

@@ -52,7 +52,6 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 
 ### Utils
 
-* `cloneDeep`
 * `randomBetween`
 * `sample`
 * `shuffle`
