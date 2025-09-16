@@ -89,6 +89,12 @@ export default defineNuxtModule<{
         },
       }
 
+      const tailwindcssPlugin = await import('@tailwindcss/vite').then(m => m.default || m).catch(() => null)
+      if (tailwindcssPlugin) {
+        nuxt.options.vite.plugins = nuxt.options.vite.plugins || []
+        nuxt.options.vite.plugins.push(tailwindcssPlugin())
+      }
+
       Object.assign(nuxt.options.appConfig, twScreens)
     }
 
