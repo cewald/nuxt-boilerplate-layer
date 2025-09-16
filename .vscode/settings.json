@@ -5,10 +5,15 @@
   },
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.configFile": "./.nuxt/tailwind/postcss.mjs",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.formatOnSave": false,
+  "prettier.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
-  },
-  "tailwindCSS.experimental.configFile": "./.nuxt/tailwind/postcss.mjs"
+  }
 }
