@@ -89,7 +89,7 @@ export default defineNuxtModule<{
         },
       }
 
-      const tailwindcssPlugin = await import('@tailwindcss/vite').then(m => m.default || m).catch(() => null)
+      const tailwindcssPlugin = await import('@tailwindcss/vite').then(m => m.default).catch(() => null)
       if (tailwindcssPlugin) {
         nuxt.options.vite.plugins = nuxt.options.vite.plugins || []
         nuxt.options.vite.plugins.push(tailwindcssPlugin())
