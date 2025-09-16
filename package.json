@@ -47,7 +47,7 @@
     "typecheck": "npx nuxi typecheck"
   },
   "devDependencies": {
-    "@cewald/eslint-config": "^2.0.3",
+    "@cewald/eslint-config": "^2.1.1",
     "@chettapong/nuxt-lodash": "^2.5.4",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
