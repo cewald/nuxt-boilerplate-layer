@@ -15,8 +15,7 @@ export const useLoadScript = (scriptUrl: string, windowKey?: string, persist?: b
     })
   }
 
-  const loadScript = () => _loadScript(script.value, key.value)
-    .then(status => isReady.value = status)
+  const loadScript = () => _loadScript(script.value, key.value).then(status => (isReady.value = status))
 
   onUnmounted(() => {
     if (persist === true) return

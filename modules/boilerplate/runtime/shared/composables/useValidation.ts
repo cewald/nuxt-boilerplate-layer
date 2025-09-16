@@ -1,11 +1,7 @@
 import type { z, ZodObject, ZodRawShape, ZodType } from 'zod'
 import deepEqual from 'fast-deep-equal'
 
-export default function<T extends ZodRawShape>
-(
-  schema: ZodObject<T>,
-  data: MaybeRefOrGetter<Record<string, unknown>>
-) {
+export default function <T extends ZodRawShape>(schema: ZodObject<T>, data: MaybeRefOrGetter<Record<string, unknown>>) {
   type SchemaType = z.infer<ZodType<T>>
   type SchemaKeys = keyof SchemaType
 
@@ -18,12 +14,16 @@ export default function<T extends ZodRawShape>
     errors.value = null
   }
 
-  watch(() => toValue(data), () => {
-    isTouched.value = !deepEqual(toValue(data), initialData)
+  watch(
+    () => toValue(data),
+    () => {
+      isTouched.value = !deepEqual(toValue(data), initialData)
 
-    if (isValid.value) return
-    validate()
-  }, { deep: true })
+      if (isValid.value) return
+      validate()
+    },
+    { deep: true },
+  )
 
   const validate = () => {
     clearErrors()
@@ -35,9 +35,9 @@ export default function<T extends ZodRawShape>
     if (!success) {
       const errCollector: Record<string, z.ZodIssue[]> = {}
       error.issues.forEach(issue => {
-        (issue.path as string[]).forEach(path => {
+        ;(issue.path as string[]).forEach(path => {
           if (!errCollector?.[path]) {
-            errCollector[path] = [ issue ]
+            errCollector[path] = [issue]
           } else {
             errCollector[path].push(issue)
           }
@@ -62,7 +62,10 @@ export default function<T extends ZodRawShape>
       const messages = new Map<string, string[]>()
       for (const key in errors.value) {
         if (!errors?.value?.[key]) continue
-        messages.set(key, errors?.value?.[key]?.map(err => err.message))
+        messages.set(
+          key,
+          errors?.value?.[key]?.map(err => err.message),
+        )
       }
       return messages
     }

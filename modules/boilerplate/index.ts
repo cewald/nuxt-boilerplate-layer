@@ -20,20 +20,22 @@ import {
 } from './lib'
 
 export interface ModuleOptions {
-  storyblok?: {
-    apiKey?: string
-    draftMode?: boolean
-    editorMode?: boolean
-    oauthToken?: string
-    fetchTypes?: boolean
-    region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
-    prerender?: {
-      types: string[]
-      aliasMap: Record<string, string[]>
-    }
-    netlifyBuildHookUrl?: string
-    netlifyBuildHookSecret?: string
-  } | false
+  storyblok?:
+    | {
+        apiKey?: string
+        draftMode?: boolean
+        editorMode?: boolean
+        oauthToken?: string
+        fetchTypes?: boolean
+        region?: 'eu' | 'us' | 'ca' | 'cn' | 'ap'
+        prerender?: {
+          types: string[]
+          aliasMap: Record<string, string[]>
+        }
+        netlifyBuildHookUrl?: string
+        netlifyBuildHookSecret?: string
+      }
+    | false
   i18n?: boolean
   dayjs?: {
     defaultDateFormat: string
@@ -73,25 +75,27 @@ export default defineNuxtModule<ModuleOptions>({
     if (options.i18n) {
       await installModule('@nuxtjs/i18n')
 
-      addImportsDir([ 'composables' ]
-        .map(name => resolve('./runtime/i18n/' + name)))
+      addImportsDir(['composables'].map(name => resolve('./runtime/i18n/' + name)))
     }
 
     Object.assign(nuxt.options.appConfig, { i18n: options.i18n })
 
     /*
-    * Warn if Storyblok is enabled but no API key is provided
-    */
+     * Warn if Storyblok is enabled but no API key is provided
+     */
     if (options?.storyblok && !options?.storyblok?.apiKey) {
-      console.warn('The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration. '
-        + 'Storyblok features will not be installed.')
-      console.warn('If you want to disable the Storyblok features, '
-        + 'set "boilerplate.storyblok: false" in the module options.')
+      console.warn(
+        'The "storyblok.apiKey" option is required in @cewald/nuxt-boilerplate-layer configuration. ' +
+          'Storyblok features will not be installed.',
+      )
+      console.warn(
+        'If you want to disable the Storyblok features, ' + 'set "boilerplate.storyblok: false" in the module options.',
+      )
     }
 
     /*
-    * Add Storyblok setup
-    */
+     * Add Storyblok setup
+     */
     if (options.storyblok) {
       const { apiKey, region, editorMode, draftMode } = options.storyblok
 
@@ -100,22 +104,22 @@ export default defineNuxtModule<ModuleOptions>({
       const languageCodes: string[] = []
       if (apiKey) {
         const api = storyblokClient(apiKey)
-        spaceId = await api.get('cdn/spaces/me', { version: 'published' })
-          .then(({ data }: { data: { space: { id: number, language_codes: string[] } } }) => {
+        spaceId = await api
+          .get('cdn/spaces/me', { version: 'published' })
+          .then(({ data }: { data: { space: { id: number; language_codes: string[] } } }) => {
             languageCodes.push(...data.space.language_codes)
             return data.space.id
           })
           .catch(e => {
-            console.error('Couldn\'t fetch Storyblok space-id:', e.message)
+            console.error("Couldn't fetch Storyblok space-id:", e.message)
             return undefined
           })
       }
 
       // Add configs to appConfig
-      Object.assign(
-        nuxt.options.appConfig,
-        { storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editorMode, draftMode } }
-      )
+      Object.assign(nuxt.options.appConfig, {
+        storyblok: { accessToken: apiKey || '', spaceId, languageCodes, region, editorMode, draftMode },
+      })
 
       // Add dynamic imports
       const sbImports = [
@@ -127,8 +131,7 @@ export default defineNuxtModule<ModuleOptions>({
         addImports({ name, as: 'Sb' + as, from: 'storyblok-js-client' })
       }
 
-      addImportsDir([ 'composables', 'stores', 'utils' ]
-        .map(name => resolve('./runtime/storyblok/' + name)))
+      addImportsDir(['composables', 'stores', 'utils'].map(name => resolve('./runtime/storyblok/' + name)))
 
       addComponentsDir({
         path: resolve('./runtime/storyblok/components'),
@@ -137,36 +140,39 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       // Add basic types
-      addTypeTemplate({
-        filename: 'types/storyblok.components.base.d.ts',
-        getContents: () => transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
-      }, { nuxt: true, nitro: true })
+      addTypeTemplate(
+        {
+          filename: 'types/storyblok.components.base.d.ts',
+          getContents: () =>
+            transformTypesToGlobal(resolve('./runtime/storyblok/types/storyblok.components.base.d.ts')),
+        },
+        { nuxt: true, nitro: true },
+      )
 
       // Add dynamic content types
       const { fetchTypes, oauthToken } = options.storyblok
       if (fetchTypes && oauthToken && spaceId) {
-        const SbComponents = await sbComponentsToTypesFactory(
-          oauthToken,
-          spaceId,
-          region
-        )
-        const SbComponentTypes = await SbComponents.generateTypes()
-          .catch(error => {
-            console.error('Error fetching Storyblok components:', error)
-            return '// Types couldn\'t be loaded from Storyblok Management API.'
-          })
+        const SbComponents = await sbComponentsToTypesFactory(oauthToken, spaceId, region)
+        const SbComponentTypes = await SbComponents.generateTypes().catch(error => {
+          console.error('Error fetching Storyblok components:', error)
+          return "// Types couldn't be loaded from Storyblok Management API."
+        })
 
         const SbContentTypesFile = 'types/storyblok.components.content.d.ts'
         const SbContentTypesPath = resolve('./runtime/storyblok/' + SbContentTypesFile)
         SbComponents.addTypesToFile(SbContentTypesPath, SbComponentTypes)
 
-        addTypeTemplate({
-          filename: SbContentTypesFile,
-          getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
-        }, { nuxt: true, nitro: true })
+        addTypeTemplate(
+          {
+            filename: SbContentTypesFile,
+            getContents: () => transformTypesToGlobal(SbContentTypesPath, true),
+          },
+          { nuxt: true, nitro: true },
+        )
       } else {
-        console.warn('The "storyblok.oauthToken" options '
-          + 'are required in @cewald/nuxt-boilerplate-layer configuration.')
+        console.warn(
+          'The "storyblok.oauthToken" options ' + 'are required in @cewald/nuxt-boilerplate-layer configuration.',
+        )
       }
 
       // Add prerendering
@@ -205,15 +211,14 @@ export default defineNuxtModule<ModuleOptions>({
     if (!options.i18n) {
       addImportsSources({
         from: resolve('./lib/mocks/i18n'),
-        imports: [ 'useI18n', '$t' ],
+        imports: ['useI18n', '$t'],
       })
     }
 
     /*
      * Add /shared setup
      */
-    addImportsDir([ 'composables', 'utils' ]
-      .map(name => resolve('./runtime/shared/' + name)))
+    addImportsDir(['composables', 'utils'].map(name => resolve('./runtime/shared/' + name)))
 
     addComponentsDir({
       path: resolve('./runtime/shared/components'),
