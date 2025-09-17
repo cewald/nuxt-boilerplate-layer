@@ -1,13 +1,13 @@
-import {
-  useIntervalFn,
-  useIntersectionObserver,
-  useElementHover,
-  usePreferredReducedMotion,
-  unrefElement,
-  useScroll,
-  useElementSize,
-} from '@vueuse/core'
 import type { MaybeElement, MaybeRefOrGetter } from '@vueuse/core'
+import {
+  unrefElement,
+  useElementHover,
+  useElementSize,
+  useIntersectionObserver,
+  useIntervalFn,
+  usePreferredReducedMotion,
+  useScroll,
+} from '@vueuse/core'
 
 export default function useScroller<T extends MaybeElement>(
   scroller: Ref<MaybeRefOrGetter>,

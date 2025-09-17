@@ -1,15 +1,15 @@
-import { h, createTextVNode } from 'vue'
-import type { VNode } from 'vue'
 import { nameToEmoji } from 'gemoji'
+import type { VNode } from 'vue'
+import { createTextVNode, h } from 'vue'
 
 import {
-  richTextResolver,
-  MarkTypes as MarkTypesEnum,
   BlockTypes as BlockTypesEnum,
   LinkTypes as LinkTypesEnum,
+  MarkTypes as MarkTypesEnum,
+  richTextResolver,
 } from '@storyblok/richtext'
 
-import type { StoryblokRichTextOptions, StoryblokRichTextNodeResolver } from '@storyblok/richtext'
+import type { StoryblokRichTextNodeResolver, StoryblokRichTextOptions } from '@storyblok/richtext'
 
 /**
  * The next types are copies from enums of the @storyblok/richtext package (MarkTypes, BlockTypes, TextTypes).

@@ -1,22 +1,22 @@
 import {
-  defineNuxtModule,
+  addComponentsDir,
   addImports,
-  createResolver,
   addImportsDir,
   addImportsSources,
-  addComponentsDir,
-  addTypeTemplate,
-  installModule,
-  extendViteConfig,
-  addServerScanDir,
   addPlugin,
+  addServerScanDir,
+  addTypeTemplate,
+  createResolver,
+  defineNuxtModule,
+  extendViteConfig,
+  installModule,
 } from '@nuxt/kit'
 
 import {
-  transformTypesToGlobal,
-  sbComponentsToTypesFactory,
   prerenderSbPages,
+  sbComponentsToTypesFactory,
   clientFactory as storyblokClient,
+  transformTypesToGlobal,
 } from './lib'
 
 export interface ModuleOptions {

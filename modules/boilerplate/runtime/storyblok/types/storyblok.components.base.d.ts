@@ -1,12 +1,12 @@
+import type { LinkTypes, StoryblokRichTextNode } from '@storyblok/richtext'
 import type { VNode } from 'vue'
-import type { StoryblokRichTextNode, LinkTypes } from '@storyblok/richtext'
 
 import type {
   ISbComponentType,
-  ISbStoryData,
   ISbLinkURLObject,
-  ISbStoryParams,
   ISbStoriesParams,
+  ISbStoryData,
+  ISbStoryParams,
 } from 'storyblok-js-client'
 
 export type SbStoryParams = ISbStoryParams

@@ -1,7 +1,7 @@
+import { pascalCase } from 'change-case'
 import StoryblokClient from 'storyblok-js-client'
 import type { SourceFile } from 'ts-morph'
-import { Project, IndentationText, QuoteKind } from 'ts-morph'
-import { pascalCase } from 'change-case'
+import { IndentationText, Project, QuoteKind } from 'ts-morph'
 
 export interface SbApiComponentResponse {
   component_groups: SbApiComponentGroup[]

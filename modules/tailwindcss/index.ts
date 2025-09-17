@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { defineNuxtModule, createResolver, addImportsDir, installModule } from '@nuxt/kit'
+import { addImportsDir, createResolver, defineNuxtModule, installModule } from '@nuxt/kit'
 import { major } from 'semver'
 import type { Config } from 'tailwindcss'
 

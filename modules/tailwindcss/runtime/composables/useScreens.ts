@@ -1,9 +1,9 @@
-import { toValue } from 'vue'
 import {
-  useMediaQuery as useMediaQueryCore,
   useBreakpoints as useBreakpointsCore,
+  useMediaQuery as useMediaQueryCore,
   type ConfigurableWindow,
 } from '@vueuse/core'
+import { toValue } from 'vue'
 
 export function useScreens() {
   const { screens } = useAppConfig()

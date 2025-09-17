@@ -1,5 +1,5 @@
-import type { z, ZodObject, ZodRawShape, ZodType } from 'zod'
 import deepEqual from 'fast-deep-equal'
+import type { z, ZodObject, ZodRawShape, ZodType } from 'zod'
 
 export default function <T extends ZodRawShape>(schema: ZodObject<T>, data: MaybeRefOrGetter<Record<string, unknown>>) {
   type SchemaType = z.infer<ZodType<T>>
