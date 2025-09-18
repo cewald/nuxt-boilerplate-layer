@@ -14,17 +14,13 @@
         "bradlc.vscode-tailwindcss",
         "csstools.postcss",
         "dbaeumer.vscode-eslint",
-        "tamasfe.even-better-toml",
-        "vue.volar",
-        "wix.vscode-import-cost"
+        "esbenp.prettier-vscode",
+        "vue.volar"
       ]
     }
   },
   "postCreateCommand": "npm i && npx nuxi prepare",
-  "forwardPorts": [
-    3000,
-    3001
-  ],
+  "forwardPorts": [3000, 3001],
   "portsAttributes": {
     "3000": {
       "label": "vue-dev",

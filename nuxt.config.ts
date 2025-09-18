@@ -22,16 +22,11 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: '2024-10-27',
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
   googleFonts: {
     download: true,
   },
   lodash: {
-    alias: [ [ 'merge', 'deepMerge' ] ],
+    alias: [['merge', 'deepMerge']],
   },
   svgo: {
     componentPrefix: 'icon',

@@ -1,7 +1,13 @@
 <script lang="ts" setup>
 import type { Component } from 'vue'
 
-const { mid: id, component, scrollLock = true, teleportTo = '#teleports' } = defineProps<{
+const {
+  mid: id,
+  component,
+  scrollLock = true,
+  teleportTo = '#teleports',
+  componentBindings,
+} = defineProps<{
   mid: string
   component: Component | string
   componentBindings?: object

@@ -42,18 +42,20 @@ const portraitMediaQuery = portraitMediaQueryProp || getMediaQuery('md', 'max')
 
 const { getFileDimenstions, getPath, getRatio } = useSbImage()
 
-const hasPortraitImage = computed(() => !!sbImagePortrait
-  && !!sbImagePortrait.id && sbImagePortrait.filename !== sbImage.filename)
+const hasPortraitImage = computed(
+  () => !!sbImagePortrait && !!sbImagePortrait.id && sbImagePortrait.filename !== sbImage.filename,
+)
 
 const orgSize = computed(() => getFileDimenstions(sbImage))
 const size = computed(() => orgSize.value)
-const portraitSize = computed(() => hasPortraitImage.value && sbImagePortrait
-  ? getFileDimenstions(sbImagePortrait)
-  : getRatio(0, orgSize.value.height, portraitCropRatio || `${size.value.width}:${size.value.height}`))
+const portraitSize = computed(() =>
+  hasPortraitImage.value && sbImagePortrait
+    ? getFileDimenstions(sbImagePortrait)
+    : getRatio(0, orgSize.value.height, portraitCropRatio || `${size.value.width}:${size.value.height}`),
+)
 
 const breakpointValues = computed(() => {
-  return [ 210, 480, ...defaultBreakpoints.value, ...breakpoints ]
-    .sort((a, b) => a - b)
+  return [210, 480, ...defaultBreakpoints.value, ...breakpoints].sort((a, b) => a - b)
 })
 
 const createSrcSet = (image: SbImage, dWidth: number, dRatio?: string) => {
@@ -69,8 +71,7 @@ const createSrcSet = (image: SbImage, dWidth: number, dRatio?: string) => {
     .join(', ')
 }
 
-const srcset = computed(() =>
-  createSrcSet(sbImage, size.value.width))
+const srcset = computed(() => createSrcSet(sbImage, size.value.width))
 
 const portraitSrcset = computed(() => {
   if (hasPortraitImage.value && sbImagePortrait) {
@@ -80,7 +81,7 @@ const portraitSrcset = computed(() => {
 })
 
 const mediaQuery = computed(() => {
-  const regex = /^(\()(max|min)(-\w+:\s)(\d+)(\w+\))$/mg
+  const regex = /^(\()(max|min)(-\w+:\s)(\d+)(\w+\))$/gm
   const results = regex.exec(portraitMediaQuery)
   if (!results || !results?.[4]) return undefined
   const size = parseInt(results?.[4]) + 1
@@ -91,15 +92,12 @@ const mediaQuery = computed(() => {
 const previewImage = computed(() => {
   const { width } = size.value
   const filters = `filters:quality(${previewImageQuality}):blur(${previewImageBlur}):format(${format})`
-  return sbImage.filename + '/m/'
-    + `${Math.ceil(width * previewImageScale)}x0/${filters}`
+  return sbImage.filename + '/m/' + `${Math.ceil(width * previewImageScale)}x0/${filters}`
 })
 
 onBeforeMount(() => {
   useHead({
-    link: [
-      { key: 'preconnect-sb', rel: 'preconnect', href: 'https://a.storyblok.com' },
-    ],
+    link: [{ key: 'preconnect-sb', rel: 'preconnect', href: 'https://a.storyblok.com' }],
   })
 
   if (preload) {
@@ -126,12 +124,7 @@ onBeforeMount(() => {
     } else {
       useHead({
         link: [
-          { rel: 'preload',
-            href: sbImage.filename + '/m/',
-            as: 'image',
-            imagesrcset: srcset.value,
-            imagesizes: sizes,
-          },
+          { rel: 'preload', href: sbImage.filename + '/m/', as: 'image', imagesrcset: srcset.value, imagesizes: sizes },
         ],
       })
     }
@@ -157,7 +150,7 @@ const description = computed(() => alt || sbImage.name || sbImage.alt)
       :media="portraitMediaQuery"
       :width="portraitSize.width"
       :height="portraitSize.height"
-    >
+    />
     <img
       v-bind="{
         src: !!lazyload ? previewImage : undefined,
@@ -171,6 +164,6 @@ const description = computed(() => alt || sbImage.name || sbImage.alt)
       :alt="description"
       :aria-label="description"
       :title="title || sbImage.title"
-    >
+    />
   </picture>
 </template>

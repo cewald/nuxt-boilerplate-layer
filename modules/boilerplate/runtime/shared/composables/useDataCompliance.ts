@@ -1,9 +1,6 @@
 export type ComplianceStates = 'accepted' | 'declined'
 
-export const useDataCompliance = (options?: {
-  maxAge?: number
-  key?: string
-}) => {
+export const useDataCompliance = (options?: { maxAge?: number; key?: string }) => {
   const { maxAge = 60 * 60 * 24 * 14, key = 'data-compliance' } = options || {}
 
   const cookie = useCookie<ComplianceStates>(key, { maxAge })

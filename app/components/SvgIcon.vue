@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const {
-  filled = true,
-  fontControlled = false,
-} = defineProps<{
+const { filled = true, fontControlled = false } = defineProps<{
   filled?: boolean
   fontControlled?: boolean
   icon: object

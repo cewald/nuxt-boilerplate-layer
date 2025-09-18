@@ -12,6 +12,6 @@ const model = defineModel<undefined>()
       aria-hidden="true"
       autocomplete="off"
       tabindex="-1"
-    >
+    />
   </div>
 </template>

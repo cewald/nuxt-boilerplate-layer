@@ -4,7 +4,7 @@ import type { SbComponents } from '../types/storyblok.components.content'
 export const useStoryblokBridge = <T extends SbComponents>(
   ref: Ref<SbStoryData<T> | null | undefined>,
   storyId: number,
-  options?: StoryblokBridgeConfigV2
+  options?: StoryblokBridgeConfigV2,
 ) => {
   const { storyblok } = useAppConfig()
   const { editorMode } = storyblok
@@ -14,10 +14,14 @@ export const useStoryblokBridge = <T extends SbComponents>(
 
   onMounted(async () => {
     if (!editorMode) return
-    useSbBridge(storyId, d => {
-      if (!ref) return
-      ref.value = d
-    }, options)
+    useSbBridge(
+      storyId,
+      d => {
+        if (!ref) return
+        ref.value = d
+      },
+      options,
+    )
   })
 
   return { currentStoryId }
@@ -26,7 +30,7 @@ export const useStoryblokBridge = <T extends SbComponents>(
 export const useStoryblokBridgeCallback = <T extends SbComponents>(
   cb: (r: SbStoryData<T>) => void,
   storyId: number,
-  options?: StoryblokBridgeConfigV2
+  options?: StoryblokBridgeConfigV2,
 ) => {
   const { storyblok } = useAppConfig()
   const { editorMode } = storyblok

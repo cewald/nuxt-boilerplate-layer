@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const SbWebHook = z.object({
   text: z.string(),
-  action: z.enum([ 'published', 'unpublished', 'deleted', 'moved' ]),
+  action: z.enum(['published', 'unpublished', 'deleted', 'moved']),
   space_id: z.number(),
   story_id: z.number(),
   full_slug: z.string(),
@@ -26,6 +26,9 @@ export default defineEventHandler(async event => {
     return createError({ statusMessage: 'Netlify build hook URL not configured', status: 500 })
   }
 
-  return $fetch(netlifyBuildHookUrl, { method: 'POST' })
-    .then(data => ({ message: 'Success', storyblokWebhook: result.data, buildHook: data || 'Success' }))
+  return $fetch(netlifyBuildHookUrl, { method: 'POST' }).then(data => ({
+    message: 'Success',
+    storyblokWebhook: result.data,
+    buildHook: data || 'Success',
+  }))
 })
