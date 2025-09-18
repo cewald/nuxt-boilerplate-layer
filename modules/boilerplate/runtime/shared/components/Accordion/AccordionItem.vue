@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { uName, open = false, tag = 'li' } = defineProps<{
+const {
+  uName,
+  open = false,
+  tag = 'li',
+} = defineProps<{
   uName: string
   open?: boolean
   tag?: string

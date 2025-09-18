@@ -18,14 +18,11 @@ export const transformTypesToGlobal = (filePath: string, ignoreImports = false) 
 
   globalMod.replaceWithText(globalMod.getText().replace('declare namespace', 'declare'))
 
-  const types = source.getStatements()
-    .filter(s => [
-      SyntaxKind.InterfaceDeclaration,
-      SyntaxKind.TypeAliasDeclaration,
-    ].includes(s.getKind()))
+  const types = source
+    .getStatements()
+    .filter(s => [SyntaxKind.InterfaceDeclaration, SyntaxKind.TypeAliasDeclaration].includes(s.getKind()))
     .map(s => {
-      const st = s.asKind(SyntaxKind.InterfaceDeclaration)
-        || s.asKind(SyntaxKind.TypeAliasDeclaration)
+      const st = s.asKind(SyntaxKind.InterfaceDeclaration) || s.asKind(SyntaxKind.TypeAliasDeclaration)
       return st ? st.setIsExported(false) : s
     })
 

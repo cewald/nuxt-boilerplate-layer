@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { h, useAttrs } from 'vue'
 
-const { tag = 'div', content, classes = {} } = defineProps<{
+const {
+  tag = 'div',
+  content,
+  classes = {},
+} = defineProps<{
   tag?: keyof HTMLElementTagNameMap
   classes?: RteClasses
   content: SbRichText
@@ -10,9 +14,7 @@ const { tag = 'div', content, classes = {} } = defineProps<{
 const $attrs: Record<string, unknown> = useAttrs()
 const { i18n, storyblok } = useAppConfig()
 
-const LinkComponent = i18n == true
-  ? resolveComponent('NuxtLinkLocale')
-  : resolveComponent('NuxtLink')
+const LinkComponent = i18n == true ? resolveComponent('NuxtLinkLocale') : resolveComponent('NuxtLink')
 
 const { render: richtextRender } = useSbRichTextResolver(classes, LinkComponent, storyblok.languageCodes)
 const RenderedRichtext = () => h(tag, { ...$attrs }, richtextRender(content))
@@ -24,6 +26,6 @@ const RenderedRichtext = () => h(tag, { ...$attrs }, richtextRender(content))
 
 <style scoped>
 * :deep(p:last-child) {
-    @apply mb-0;
+  @apply mb-0;
 }
 </style>

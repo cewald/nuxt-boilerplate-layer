@@ -1,5 +1,5 @@
-import { storyblokInit, storyblokEditable } from '@storyblok/js'
 import { defineNuxtPlugin } from '#imports'
+import { storyblokEditable, storyblokInit } from '@storyblok/js'
 
 export default defineNuxtPlugin(nuxtApp => {
   const { storyblok } = useAppConfig()

@@ -1,13 +1,13 @@
-import {
-  useIntervalFn,
-  useIntersectionObserver,
-  useElementHover,
-  usePreferredReducedMotion,
-  unrefElement,
-  useScroll,
-  useElementSize,
-} from '@vueuse/core'
 import type { MaybeElement, MaybeRefOrGetter } from '@vueuse/core'
+import {
+  unrefElement,
+  useElementHover,
+  useElementSize,
+  useIntersectionObserver,
+  useIntervalFn,
+  usePreferredReducedMotion,
+  useScroll,
+} from '@vueuse/core'
 
 export default function useScroller<T extends MaybeElement>(
   scroller: Ref<MaybeRefOrGetter>,
@@ -18,7 +18,7 @@ export default function useScroller<T extends MaybeElement>(
     interval?: number
     autostart?: boolean
     useScrollIntoView?: boolean
-  } = { }
+  } = {},
 ) {
   const active = ref(0)
   const reducedMotions = usePreferredReducedMotion()
@@ -56,8 +56,8 @@ export default function useScroller<T extends MaybeElement>(
     if (resetTimer) resume()
   }
 
-  const nextIndex = computed(() => active.value === ((scrollItems.value?.length || 0) - 1) ? 0 : active.value + 1)
-  const prevIndex = computed(() => active.value === 0 ? (scrollItems.value?.length || 0) - 1 : active.value - 1)
+  const nextIndex = computed(() => (active.value === (scrollItems.value?.length || 0) - 1 ? 0 : active.value + 1))
+  const prevIndex = computed(() => (active.value === 0 ? (scrollItems.value?.length || 0) - 1 : active.value - 1))
 
   const next = () => scrollTo(nextIndex.value)
   const prev = () => scrollTo(prevIndex.value)
@@ -70,16 +70,12 @@ export default function useScroller<T extends MaybeElement>(
     active.value = Math.round(x.value / width.value)
   })
 
-  let { pause, resume } = { pause: () => { }, resume: () => { } }
+  let { pause, resume } = { pause: () => {}, resume: () => {} }
   onMounted(() => {
     // We need to use it that way, otherwise useIntervalFn will break the SSR during build and gets stuck
     // It seems as if the tryOnScopeDispose function inside the useIntervalFn is not working properly, when
     // used outside a setup function of a SFC.
-    const controls = useIntervalFn(
-      autoNext,
-      interval,
-      { immediate: autoscroll && autostart }
-    )
+    const controls = useIntervalFn(autoNext, interval, { immediate: autoscroll && autostart })
 
     pause = controls.pause
     resume = controls.resume

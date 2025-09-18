@@ -5,7 +5,9 @@ on:
     branches:
       - main
       - alpha
+      - beta
       - next
+      - next-major
   workflow_dispatch:
 
 permissions:

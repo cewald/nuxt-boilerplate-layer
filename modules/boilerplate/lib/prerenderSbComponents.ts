@@ -4,11 +4,13 @@ import type { ModuleOptions } from '../'
 import { clientFactory } from './'
 
 export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
-  if (nuxt.options.dev
-    || !options?.storyblok
-    || !options?.storyblok?.prerender
-    || !options.storyblok?.apiKey
-    || options?.storyblok?.editorMode) {
+  if (
+    nuxt.options.dev ||
+    !options?.storyblok ||
+    !options?.storyblok?.prerender ||
+    !options.storyblok?.apiKey ||
+    options?.storyblok?.editorMode
+  ) {
     return
   }
 
@@ -34,16 +36,17 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
     cv: Date.now(),
   }
 
-  const routes: string[] = await api.getStories({
-    ...requestDefaults as unknown as Record<string, unknown>,
-  }).then(resp => {
-    return resp.data.stories
-      .filter(s => types.includes(s.content.component as string))
-      .map(s => `/${s.full_slug}/`)
-  }).catch(e => {
-    console.error(e)
-    return []
-  })
+  const routes: string[] = await api
+    .getStories({
+      ...(requestDefaults as unknown as Record<string, unknown>),
+    })
+    .then(resp => {
+      return resp.data.stories.filter(s => types.includes(s.content.component as string)).map(s => `/${s.full_slug}/`)
+    })
+    .catch(e => {
+      console.error(e)
+      return []
+    })
 
   /**
    * `addPrerenderRoutes` ignores route aliases

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { defineNuxtModule, createResolver, addImportsDir, installModule } from '@nuxt/kit'
+import { addImportsDir, createResolver, defineNuxtModule, installModule } from '@nuxt/kit'
 import { major } from 'semver'
 import type { Config } from 'tailwindcss'
 
@@ -26,12 +26,14 @@ export default defineNuxtModule<{
 
     const { resolve } = createResolver(import.meta.url)
 
-    const tailwindCssVersion = await import('tailwindcss/package.json').then(r => {
-      return major(r.version)
-    }).catch(() => {
-      console.warn('"tailwindcss" is not installed. Please install it to use TailwindCSSCustom module.')
-      return false
-    })
+    const tailwindCssVersion = await import('tailwindcss/package.json')
+      .then(r => {
+        return major(r.version)
+      })
+      .catch(() => {
+        console.warn('"tailwindcss" is not installed. Please install it to use TailwindCSSCustom module.')
+        return false
+      })
 
     if (!tailwindCssVersion) return
 
@@ -40,7 +42,8 @@ export default defineNuxtModule<{
 
       const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
       const twConfig: Config = await import(twConfigPath)
-        .then(m => m.default).catch(e => {
+        .then(m => m.default)
+        .catch(e => {
           console.debug(`Cannot read TailwindCSS config file at "${twConfigPath}": ` + e.message)
           console.debug('Please make sure you have a valid TailwindCSS config file at the root of your project.')
           return false
@@ -86,12 +89,18 @@ export default defineNuxtModule<{
         },
       }
 
+      const tailwindcssPlugin = await import('@tailwindcss/vite').then(m => m.default).catch(() => null)
+      if (tailwindcssPlugin) {
+        nuxt.options.vite.plugins = nuxt.options.vite.plugins || []
+        nuxt.options.vite.plugins.push(tailwindcssPlugin())
+      }
+
       Object.assign(nuxt.options.appConfig, twScreens)
     }
 
     /**
      * Add TailwindCSS custom screens to the TailwindCSS config
      */
-    addImportsDir([ 'composables' ].map(name => resolve('./runtime/' + name)))
+    addImportsDir(['composables'].map(name => resolve('./runtime/' + name)))
   },
 })
