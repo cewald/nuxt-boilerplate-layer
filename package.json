@@ -32,10 +32,9 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "nuxi dev playground  --no-fork",
+    "dev": "npm run prepare && nuxi dev playground  --no-fork",
     "dev:build": "nuxi build playground",
-    "dev:prepare": "npm run build && npm run prepare && nuxi prepare playground",
-    "dev:layer": "nuxt dev",
+    "dev:layer": "npm run prepare && nuxt dev",
     "prepare:husky": "husky || exit 0",
     "prepare": "npm run prepare:husky && nuxt prepare",
     "postinstall": "npm run prepare",
