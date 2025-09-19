@@ -14,8 +14,11 @@ export default defineNuxtModule<{
   screens?: Record<string, string>
 }>({
   meta: {
-    name: 'TailwindCSSCustom',
-    configKey: 'tailwindCSSCustom',
+    name: '@cewald/nuxt-boilerplate-tailwindcss',
+    configKey: 'boilerplateTailwindcss',
+    compatibility: {
+      nuxt: '>=4.0.0',
+    },
   },
   defaults: {
     enabled: true,
@@ -31,7 +34,9 @@ export default defineNuxtModule<{
         return major(r.version)
       })
       .catch(() => {
-        console.warn('"tailwindcss" is not installed. Please install it to use TailwindCSSCustom module.')
+        console.warn(
+          '"tailwindcss" is not installed. Please install it to use @cewald/nuxt-boilerplate-tailwindcss module.',
+        )
         return false
       })
 

@@ -1,5 +1,4 @@
 import { useStoryblokBridge as useSbBridge, type StoryblokBridgeConfigV2 } from '@storyblok/js'
-import type { SbComponents } from '../types/storyblok.components.content'
 
 export const useStoryblokBridge = <T extends SbComponents>(
   ref: Ref<SbStoryData<T> | null | undefined>,

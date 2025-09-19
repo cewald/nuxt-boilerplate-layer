@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, useAttrs } from 'vue'
+import { useSbRichTextResolver, type RteClasses } from '../composables/useSbRichTextResolver'
 
 const {
   tag = 'div',

@@ -31,4 +31,4 @@ playground
 .netlify
 
 # Our types
-src/modules/boilerplate/runtime/storyblok/types/storyblok.components.content.d.ts
+modules/storyblok/types/storyblok.components.content.d.ts

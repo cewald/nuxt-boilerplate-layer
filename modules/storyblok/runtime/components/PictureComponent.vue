@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useSbImage } from '../composables/useSbImage'
+
 const {
   sbImage,
   sbImagePortrait,

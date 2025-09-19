@@ -38,7 +38,6 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 - `useDayJs`: `dayjs` lib composable
 - `useHideWhileScrolling`: hide elements while scrolling is in progress
 - `useLoadScript`: helper to load and init external scripts
-- `useLocalizedRoute`: helper to modify and transform paths using `vue-i18n`
 - `useValidation`: validate a set of refs using a `zod` schema
 - `useModalStore`: store for modal-handling in combination with the `ModalWrapper` component
 - `useDataCompliance`: composable to safe simple-data compliance values for compliance-dialogs

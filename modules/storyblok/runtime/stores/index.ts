@@ -1,5 +1,4 @@
 import StoryblokClient from 'storyblok-js-client'
-import type { SbComponentNames } from '../types/storyblok.components.content'
 
 let api: StoryblokClient
 

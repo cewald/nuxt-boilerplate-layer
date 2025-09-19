@@ -4,13 +4,7 @@ import type { ModuleOptions } from '../'
 import { clientFactory } from './'
 
 export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
-  if (
-    nuxt.options.dev ||
-    !options?.storyblok ||
-    !options?.storyblok?.prerender ||
-    !options.storyblok?.apiKey ||
-    options?.storyblok?.editorMode
-  ) {
+  if (nuxt.options.dev || !options || !options?.prerender || !options?.apiKey || options?.editorMode) {
     return
   }
 
@@ -28,11 +22,11 @@ export const prerenderSbPages = async (options: ModuleOptions, nuxt: Nuxt) => {
     nuxt.options.nitro.prerender.crawlLinks = true
   }
 
-  const { types, aliasMap } = options.storyblok.prerender
-  const api = clientFactory(options.storyblok.apiKey)
+  const { types, aliasMap } = options.prerender
+  const api = clientFactory(options.apiKey)
 
   const requestDefaults = {
-    version: options.storyblok.draftMode ? 'draft' : 'published',
+    version: options.draftMode ? 'draft' : 'published',
     cv: Date.now(),
   }
 
