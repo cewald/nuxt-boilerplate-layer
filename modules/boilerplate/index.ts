@@ -11,6 +11,7 @@ import {
 
 export interface ModuleOptions {
   i18n?: boolean
+  nuxtImage?: boolean
   dayjs?: {
     defaultDateFormat: string
   }
@@ -29,6 +30,7 @@ export default defineNuxtModule<ModuleOptions>({
     dayjs: {
       defaultDateFormat: 'YYYY-MM-DD',
     },
+    nuxtImage: false,
   },
   async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
@@ -40,6 +42,13 @@ export default defineNuxtModule<ModuleOptions>({
       await installModule('@nuxtjs/i18n')
 
       addImportsDir(['composables'].map(name => resolve('./runtime/i18n/' + name)))
+    }
+
+    /**
+     * Install @nuxtjs/i18n
+     */
+    if (options.nuxtImage) {
+      await installModule('@nuxt/image')
     }
 
     Object.assign(nuxt.options.appConfig, { i18n: options.i18n })

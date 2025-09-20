@@ -18,7 +18,8 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 - `@nuxtjs/fontaine`
 - `@nuxtjs/google-fonts`
 - `@nuxtjs/i18n` (optional)
-- `@nuxtjs/tailwindcss` (optional)
+- `@nuxt/image` (optional)
+- `@nuxtjs/tailwindcss` (optional) – it wont be enabled for TailwindCSS v4+, thus it uses its uses its own `vite` plugin
 - `@chettapong/nuxt-lodash` (`nuxt-lodash` isn't maintained anymore and not compatible with Nuxt 4)
 - `@pinia/nuxt`
 - `nuxt-svgo`
