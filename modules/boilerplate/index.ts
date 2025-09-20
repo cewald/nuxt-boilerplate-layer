@@ -45,7 +45,7 @@ export default defineNuxtModule<ModuleOptions>({
     }
 
     /**
-     * Install @nuxtjs/i18n
+     * Install @nuxt/image
      */
     if (options.nuxtImage) {
       await installModule('@nuxt/image')
