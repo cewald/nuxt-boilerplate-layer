@@ -26,6 +26,6 @@ const RenderedRichtext = () => h(tag, { ...$attrs }, richtextRender(content))
 
 <style scoped>
 * :deep(p:last-child) {
-  @apply mb-0;
+  margin-bottom: 0;
 }
 </style>
