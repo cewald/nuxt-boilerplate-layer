@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { addImportsDir, createResolver, defineNuxtModule, installModule } from '@nuxt/kit'
+import { addImportsDir, createResolver, defineNuxtModule } from '@nuxt/kit'
 import { major } from 'semver'
 import type { Config } from 'tailwindcss'
 
@@ -18,6 +18,11 @@ export default defineNuxtModule<{
     configKey: 'boilerplateTailwindcss',
     compatibility: {
       nuxt: '>=4.0.0',
+    },
+  },
+  moduleDependencies: {
+    '@nuxtjs/tailwindcss': {
+      optional: true,
     },
   },
   defaults: {
@@ -43,7 +48,18 @@ export default defineNuxtModule<{
     if (!tailwindCssVersion) return
 
     if (tailwindCssVersion === 3) {
-      await installModule('@nuxtjs/tailwindcss')
+      /**
+       * Check if @nuxtjs/tailwindcss module is installed
+       */
+      nuxt.hook('modules:done', async () => {
+        const hasNuxtModule = nuxt.options._installedModules.some(m => m.meta.name === '@nuxtjs/tailwindcss')
+        if (!hasNuxtModule) {
+          console.warn(
+            'You are using tailwindcss@3.*.* and the "@nuxtjs/tailwindcss" module is not installed.',
+            'Please install it to use @cewald/nuxt-boilerplate-tailwindcss module properly.',
+          )
+        }
+      })
 
       const twConfigPath = resolve(nuxt.options.rootDir, 'tailwind.config.js')
       const twConfig: Config = await import(twConfigPath)

@@ -6,7 +6,6 @@ import {
   createResolver,
   defineNuxtModule,
   extendViteConfig,
-  installModule,
 } from '@nuxt/kit'
 
 export interface ModuleOptions {
@@ -25,41 +24,39 @@ export default defineNuxtModule<ModuleOptions>({
       nuxt: '>=4.0.0',
     },
   },
+  moduleDependencies: {
+    '@nuxtjs/i18n': {
+      optional: true,
+    },
+    '@nuxt/image': {
+      optional: true,
+    },
+  },
   defaults: {
-    i18n: true,
     dayjs: {
       defaultDateFormat: 'YYYY-MM-DD',
     },
-    nuxtImage: false,
   },
   async setup(options, nuxt) {
     const { resolve } = createResolver(import.meta.url)
 
-    /**
-     * Install @nuxtjs/i18n
-     */
-    if (options.i18n) {
-      await installModule('@nuxtjs/i18n')
+    nuxt.hook('modules:done', async () => {
+      /**
+       * Install @nuxtjs/i18n composables if module is installed
+       */
+      const hasI18nModule = nuxt.options._installedModules.some(m => m.meta.name === '@nuxtjs/i18n')
+      if (hasI18nModule) {
+        addImportsDir(['composables'].map(name => resolve('./runtime/i18n/' + name)))
+      } else {
+        // Mock i18n methods if not installed
+        addImportsSources({
+          from: resolve('./lib/mocks/i18n'),
+          imports: ['useI18n', '$t'],
+        })
+      }
 
-      addImportsDir(['composables'].map(name => resolve('./runtime/i18n/' + name)))
-    }
-
-    /**
-     * Install @nuxt/image
-     */
-    if (options.nuxtImage) {
-      await installModule('@nuxt/image')
-    }
-
-    Object.assign(nuxt.options.appConfig, { i18n: options.i18n })
-
-    // Mock i18n methods if not installed
-    if (!options.i18n) {
-      addImportsSources({
-        from: resolve('./lib/mocks/i18n'),
-        imports: ['useI18n', '$t'],
-      })
-    }
+      Object.assign(nuxt.options.appConfig, { i18n: hasI18nModule })
+    })
 
     /*
      * Add shared setup
