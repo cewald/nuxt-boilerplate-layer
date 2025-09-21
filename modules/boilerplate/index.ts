@@ -9,8 +9,6 @@ import {
 } from '@nuxt/kit'
 
 export interface ModuleOptions {
-  i18n?: boolean
-  nuxtImage?: boolean
   dayjs?: {
     defaultDateFormat: string
   }
