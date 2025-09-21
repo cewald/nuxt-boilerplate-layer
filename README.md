@@ -19,10 +19,16 @@ You can set all configruations in your `nuxt.config.ts` over the `boilerplate` c
 - `@nuxtjs/google-fonts`
 - `@nuxtjs/i18n` (optional)
 - `@nuxt/image` (optional)
-- `@nuxtjs/tailwindcss` (optional) – it wont be enabled for TailwindCSS v4+, thus it uses its uses its own `vite` plugin
+- `@nuxtjs/tailwindcss` (optional)
+  - if you use TailwindCSS v3 you have to include the `@nuxtjs/tailwindcss` in the modules of your nuxt.config.ts yourself
+  - it wont be enabled for TailwindCSS v4+, thus it uses its own `vite` plugin
 - `@chettapong/nuxt-lodash` (`nuxt-lodash` isn't maintained anymore and not compatible with Nuxt 4)
 - `@pinia/nuxt`
 - `nuxt-svgo`
+
+#### Optional modules
+
+`@nuxt/kit` is not able to install modules anymore. Optional modules are installed as dependencies in the package-manager already, but you have to include them in the modules array of the `nuxt.config.ts` yourself.
 
 ### Installed packages (peer-deps)
 
