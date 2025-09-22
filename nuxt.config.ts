@@ -29,7 +29,8 @@ export default defineNuxtConfig({
     alias: [['merge', 'deepMerge']],
   },
   svgo: {
-    componentPrefix: 'icon',
-    customComponent: 'SvgIcon',
+    autoImportPath: '@/assets/svg',
+    componentPrefix: 'Svg',
+    customComponent: 'Svg',
   },
 })
