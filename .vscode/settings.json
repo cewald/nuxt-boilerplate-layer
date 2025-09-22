@@ -1,18 +1,11 @@
 {
-  "files.associations": {
-    "*.css": "postcss",
-    "*.scss": "postcss"
-  },
+  "tailwindCSS.experimental.configFile": "./app/assets/styles/main.css",
   "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore",
-  "tailwindCSS.experimental.configFile": "./.nuxt/tailwind/postcss.mjs",
   "typescript.tsdk": "node_modules/typescript/lib",
   "prettier.enable": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "[vue]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   }

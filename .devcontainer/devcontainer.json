@@ -10,13 +10,7 @@
   ],
   "customizations": {
     "vscode": {
-      "extensions": [
-        "bradlc.vscode-tailwindcss",
-        "csstools.postcss",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "vue.volar"
-      ]
+      "extensions": ["bradlc.vscode-tailwindcss", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "vue.volar"]
     }
   },
   "postCreateCommand": "npm i && npx nuxi prepare",
