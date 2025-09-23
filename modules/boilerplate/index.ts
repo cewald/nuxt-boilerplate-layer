@@ -67,9 +67,14 @@ export default defineNuxtModule<ModuleOptions>({
     })
 
     /**
-     * Add zod and its types + folder for auto-imports
+     * Add zod and its types + folder for auto-imports.
+     * There is a name collision the types of Zod that are also auto-imported
+     * as "z". To prevent this, the types are imported as "Z" (capitalized).
      */
-    addImports({ name: 'z', from: 'zod' })
+    addImports([
+      { name: 'z', as: 'z', from: 'zod', type: false },
+      { name: 'z', as: 'Z', from: 'zod', type: true },
+    ])
 
     nuxt.hook('prepare:types', ({ references }) => {
       references.push({ types: 'zod' })
