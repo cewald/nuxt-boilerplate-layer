@@ -74,7 +74,7 @@
     "pinia": "^3.0.3",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",
-    "semantic-release": "^24.2.7",
+    "semantic-release": "^25.0.1",
     "storyblok-js-client": "^7.1.1",
     "tailwindcss": "^4.1.13",
     "ts-morph": "^27.0.0",
