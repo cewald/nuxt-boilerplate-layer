@@ -87,12 +87,17 @@ export default defineNuxtModule<ModuleOptions>({
      */
     addVitePlugin(() => ({
       name: 'nuxt:optimizeDeps-config',
-      config() {
-        return {
-          optimizeDeps: {
-            include: ['fast-deep-equal'],
-          },
+      configEnvironment(name) {
+        if (name === 'client') {
+          return {
+            optimizeDeps: {
+              include: ['fast-deep-equal'],
+            },
+          }
         }
+      },
+      applyToEnvironment(environment) {
+        return environment.name === 'client'
       },
     }))
 
