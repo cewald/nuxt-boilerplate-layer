@@ -5,7 +5,7 @@ import {
   addImportsSources,
   createResolver,
   defineNuxtModule,
-  extendViteConfig,
+  addVitePlugin,
 } from '@nuxt/kit'
 
 export interface ModuleOptions {
@@ -83,13 +83,18 @@ export default defineNuxtModule<ModuleOptions>({
     addImportsDir(resolve(nuxt.options.srcDir, 'schemas'))
 
     /**
-     * This is to prevent an ESM import error for thos libs
+     * This is to prevent an ESM import error for those libs
      */
-    extendViteConfig(c => {
-      c.optimizeDeps = c.optimizeDeps || {}
-      c.optimizeDeps.include = c.optimizeDeps.include || []
-      c.optimizeDeps.include.push('dayjs', 'dayjs/plugin/customParseFormat', 'fast-deep-equal')
-    })
+    addVitePlugin(() => ({
+      name: 'nuxt:optimizeDeps-config',
+      config() {
+        return {
+          optimizeDeps: {
+            include: ['fast-deep-equal'],
+          },
+        }
+      },
+    }))
 
     /**
      * Add dayjs to appConfig
