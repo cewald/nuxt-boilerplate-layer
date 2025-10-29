@@ -1,4 +1,6 @@
-import type { MaybeElement, MaybeRefOrGetter } from '@vueuse/core'
+import type { MaybeElement } from '@vueuse/core'
+import type { MaybeRefOrGetter } from 'vue'
+
 import {
   unrefElement,
   useElementHover,
